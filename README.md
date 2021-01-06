@@ -2,6 +2,13 @@
 
 Hayden Miller, Isaiah Jenkins, Chelsea Punzalan
 
+### Previews
+
+![Alt text](/Home.png?raw=true)
+![Alt text](/Filter.png?raw=true)
+![Alt text](/RestaurantPage.png?raw=true)
+![Alt text](/MyFavorites.png?raw=true)
+
 ## Build Instructions
 
 ### Download Expo Client
@@ -32,7 +39,7 @@ npm install `<dependency>`
 * "sprintf-js"
 
 ### Download Repository
-git clone https://github.com/sfdevshop/BoozyApp.git
+git clone https://github.com/Jenkins1128/BoozyApp.git
 
 ### Create an Expo Project and Migrate FinalFrontEnd folder from Repository
 1. “expo init BoozyApp” in terminal.
