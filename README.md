@@ -2,13 +2,6 @@
 
 Hayden Miller, Isaiah Jenkins, Chelsea Punzalan
 
-### Previews
-
-![Alt text](/Home.png?raw=true)
-![Alt text](/Filter.png?raw=true)
-![Alt text](/RestaurantPage.png?raw=true)
-![Alt text](/MyFavorites.png?raw=true)
-
 ## Build Instructions
 
 ### Download Expo Client
