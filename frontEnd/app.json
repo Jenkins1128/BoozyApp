@@ -1,14 +1,7 @@
 {
   "expo": {
-    "name": "Blank Template",
+    "name": "Boozy",
     "slug": "Boozy",
-    "privacy": "public",
-    "sdkVersion": "40.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,11 +17,16 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.boozy.boozyapp",
-      "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyD7I9DZp_EbeuB1mYUHrEQs1_8VLlzARC0"
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
       }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     }
   }
 }
