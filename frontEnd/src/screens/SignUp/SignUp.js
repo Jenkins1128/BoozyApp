@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateEmail, updatePassword, reset, signUpAsync, selectSignUpState } from './signUpSlice';
+import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpState } from './signUpSlice';
 import background from '../../images/background.jpg';
 import SignUpHeader from './SignUpHeader';
 import SignUpInput from './SignUpInput';
@@ -11,12 +11,14 @@ const SignUp = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!isEmpty(state) && state.requestStatus === 'fulfilled') {
-			dispatch(reset());
-			login();
-		} else if (!isEmpty(state) && state.requestStatus === 'rejected') {
-			dispatch(reset());
-			showErrorAlert('Username already exists...');
+		if (!isEmpty(state)) {
+			if (state.requestStatus === 'fulfilled') {
+				dispatch(resetStatus());
+				login();
+			} else if (state.requestStatus === 'rejected') {
+				dispatch(resetStatus());
+				showErrorAlert('Username already exists...');
+			}
 		}
 	}, [state]);
 

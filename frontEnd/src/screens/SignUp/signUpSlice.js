@@ -28,8 +28,8 @@ export const signUpSlice = createSlice({
 		updatePassword: (state, { payload }) => {
 			state.currentState = { ...state.currentState, password: payload.password };
 		},
-		reset: (state) => {
-			state.currentState = {};
+		resetStatus: (state) => {
+			state.currentState.requestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
@@ -46,7 +46,7 @@ export const signUpSlice = createSlice({
 	}
 });
 
-export const { updateEmail, updatePassword, reset } = signUpSlice.actions;
+export const { updateEmail, updatePassword, resetStatus } = signUpSlice.actions;
 export const selectSignUpState = (state) => state.signup.currentState;
 
 export default signUpSlice.reducer;

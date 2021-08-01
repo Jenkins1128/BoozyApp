@@ -27,8 +27,8 @@ const loginSlice = createSlice({
 		updatePassword: (state, { payload }) => {
 			state.currentState = { ...state.currentState, password: payload.password };
 		},
-		reset: (state) => {
-			state.currentState = {};
+		resetStatus: (state) => {
+			state.currentState.requestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
@@ -45,7 +45,7 @@ const loginSlice = createSlice({
 	}
 });
 
-export const { updateEmail, updatePassword, reset } = loginSlice.actions;
+export const { updateEmail, updatePassword, resetStatus } = loginSlice.actions;
 export const selectLogInState = (state) => state.login.currentState;
 
 export default loginSlice.reducer;

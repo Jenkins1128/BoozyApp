@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateEmail, updatePassword, reset, loginAsync, selectLogInState } from './loginSlice';
+import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './loginSlice';
 import background from '../../images/background.jpeg';
 
 import LogInHeader from './LogInHeader';
@@ -12,12 +12,14 @@ const LogIn = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!isEmpty(state) && state.requestStatus === 'fulfilled') {
-			dispatch(reset());
-			goToHome();
-		} else if (!isEmpty(state) && state.requestStatus === 'rejected') {
-			dispatch(reset());
-			showErrorAlert('Username or password is incorrect.');
+		if (!isEmpty(state)) {
+			if (state.requestStatus === 'fulfilled') {
+				dispatch(resetStatus());
+				goToHome();
+			} else if (state.requestStatus === 'rejected') {
+				dispatch(resetStatus());
+				showErrorAlert('Username or password is incorrect.');
+			}
 		}
 	}, [state]);
 
