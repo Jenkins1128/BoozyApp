@@ -12,14 +12,15 @@ const LogIn = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!isEmpty(state)) {
-			if (state.requestStatus === 'fulfilled') {
-				dispatch(resetStatus());
-				goToHome();
-			} else if (state.requestStatus === 'rejected') {
-				dispatch(resetStatus());
-				showErrorAlert('Username or password is incorrect.');
-			}
+		if (isEmpty(state)) {
+			return;
+		}
+		if (state.requestStatus === 'fulfilled') {
+			dispatch(resetStatus());
+			goToHome();
+		} else if (state.requestStatus === 'rejected') {
+			dispatch(resetStatus());
+			showErrorAlert('Username or password is incorrect.');
 		}
 	}, [state]);
 
@@ -43,16 +44,11 @@ const LogIn = ({ navigation }) => {
 	};
 
 	const login = () => {
-		if (!isEmpty(state) && state.email.trim().length > 0 && state.password.trim().length > 0) {
-			const data = {
-				url: 'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/login',
-				email: state.email,
-				password: state.password
-			};
-			dispatch(loginAsync(data));
-		} else {
+		if (isEmpty(state) || !state.email.trim().length || !state.password.trim().length) {
 			showErrorAlert('Please fill out all the fields.');
+			return;
 		}
+		dispatch(loginAsync({ email: state.email, password: state.password }));
 	};
 
 	return (

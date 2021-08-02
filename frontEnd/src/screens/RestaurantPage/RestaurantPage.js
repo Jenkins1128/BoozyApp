@@ -45,7 +45,8 @@ export default class RestaurantPage extends React.Component {
 	}
 
 	onFocusFunction = () => {
-		const { params } = this.props.navigation.state;
+		const { params } = this.props.route;
+		console.log('params', params);
 		this.state.restaurantId = params ? params.id : '';
 		this.state.restaurantName = params ? params.name : '';
 		this.state.restaurantImage = params ? params.img : 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png';

@@ -6,11 +6,11 @@ const initialState = {
 };
 
 export const signUpAsync = createAsyncThunk('signUpAsync/status', async (data, { rejectWithValue }) => {
-	console.log(data);
+	const { email, password } = data;
 	try {
-		const response = await axios.post(data.url, {
-			email: data.email,
-			password: data.password
+		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/register', {
+			email,
+			password
 		});
 		return response.status;
 	} catch (err) {

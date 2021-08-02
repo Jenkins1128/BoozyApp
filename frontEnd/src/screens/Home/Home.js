@@ -1,12 +1,14 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
-import { StyleSheet, Image, Text, TextInput, ScrollView, TouchableOpacity, View, Dimensions, Animated, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, Image, Text, TextInput, TouchableOpacity, View, Dimensions, Animated, Alert, FlatList } from 'react-native';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import Restaurant from '../Restaurant/Restaurant';
 import logo from '../../images/logo.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentLocationDataAsync, reset, resetStatus, selectHomeState, setPrice1, setPrice2, setPrice3, setPrice4, updateCuisine, updateInitialPosition, updateLocation, updateMarkerPosition, updateRestaurantsArray } from './homeSlice';
+import { getCurrentLocationDataAsync, reset, resetHomeRequestStatus, selectHomeState, setPrice1, setPrice2, setPrice3, setPrice4, updateCuisine, updateInitialPosition, updateLocation, updateMarkerPosition, updateRestaurantsArray } from './homeSlice';
+import { selectRestaurantState, viewRestaurantsAsync, resetRestaurantRequestStatus } from './viewRestaurantsSlice';
+import { getDataFromFilterAsync, resetDataFromFilterRequestStatus, selectDataFromFilterState } from './getDataFromFilterSlice';
 
 let mapref = null;
 const { width, height } = Dimensions.get('window');
@@ -17,8 +19,10 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const bounceValue = new Animated.Value(250);
 let isHidden = true;
 
-const Home = () => {
+const Home = ({ navigation }) => {
 	const state = useSelector(selectHomeState);
+	const restaurantState = useSelector(selectRestaurantState);
+	const filteredRestaurantData = useSelector(selectDataFromFilterState);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -28,33 +32,81 @@ const Home = () => {
 				setErrorMsg('Permission to access location was denied');
 				return;
 			}
-
 			const location = await Location.getCurrentPositionAsync({});
 			const position = { latitude: parseFloat(location.coords.latitude), longitude: parseFloat(location.coords.longitude) };
-
 			dispatch(updateInitialPosition({ initialPosition: position }));
 			dispatch(updateMarkerPosition({ markerPosition: position }));
-			console.log(state.initialPosition.latitude, state.initialPosition.longitude);
-			dispatch(getCurrentLocationDataAsync(`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/${state.initialPosition.latitude}/${state.initialPosition.longitude}`));
+			dispatch(getCurrentLocationDataAsync({ latitude: position.latitude, longitude: position.longitude }));
 		})();
 	}, []);
 
+	//Get current location data
 	useEffect(() => {
-		//console.log(state);
-		if (state.restaurantsArray.length > 0) {
-			populateRestaurants();
+		switch (state.locationDataRequestStatus) {
+			case 'idle':
+				return;
+			case 'rejected':
+				showErrorAlert('Unable to get location. Please check your network.');
+				return;
+			case 'fulfilled':
+				if (!isHidden) {
+					showFilterOverlay();
+				}
+				populateRestaurants(state.restaurantsArray);
+				break;
 		}
+		dispatch(resetHomeRequestStatus());
 	}, [state]);
-	// if (!isEmpty(state)) {
-	// 	if (state.locationDataRequestStatus === 'fulfilled') {
-	// 		populateRestaurants(state.data);
-	// 		dispatch(resetStatus());
-	// 	} else if (state.locationDataRequestStatus === 'rejected') {
-	// 		showErrorAlert('Unable to get current location data. Please check your network.');
-	// 		dispatch(resetStatus());
-	// 	}
-	// }
-	// }, [state]);
+
+	//Get to filtered locaiton data
+	useEffect(() => {
+		switch (filteredRestaurantData.dataFromFilterRequestStatus) {
+			case 'idle':
+				return;
+			case 'rejected':
+				showErrorAlert('Unable to fulfill filter. Please check your network.');
+				return;
+			case 'fulfilled':
+				if (!isHidden) {
+					showFilterOverlay();
+				}
+				console.log('filteredRestaurantData', filteredRestaurantData.restaurantsArray);
+				if (!filteredRestaurantData.restaurantsArray.length) {
+					showErrorAlert('No places found for filter.');
+				} else {
+					dispatch(updateRestaurantsArray({ restaurantsArray: filteredRestaurantData.restaurantsArray }));
+					populateRestaurants(filteredRestaurantData.restaurantsArray);
+				}
+				break;
+		}
+		dispatch(resetDataFromFilterRequestStatus());
+	}, [filteredRestaurantData]);
+
+	//Navigation to Restaurant Page
+	useEffect(() => {
+		switch (restaurantState.restaurantRequestStatus) {
+			case 'idle':
+				return;
+			case 'rejected':
+				showErrorAlert('Unable to get restaurant data. Please check your network.');
+				return;
+			case 'fulfilled':
+				console.log('restaurantState', restaurantState);
+				navigation.navigate('Restaurant', {
+					id: restaurantState.restaurantInfo.restaurantsArray[0]['id'],
+					name: restaurantState.restaurantInfo.restaurantsArray[0]['name'],
+					img: restaurantState.restaurantInfo.restaurantsArray[0]['img'],
+					phone: restaurantState.restaurantInfo.restaurantsArray[0]['phone'],
+					rating: restaurantState.restaurantInfo.restaurantsArray[0]['rating'],
+					reviews: restaurantState.restaurantInfo.restaurantsArray[0]['revCount'],
+					allCategories: restaurantState.restaurantInfo.allCategories,
+					alreadyFavorited: restaurantState.restaurantInfo.alreadyFavorited,
+					alreadyRated: restaurantState.restaurantInfo.alreadyRated
+				});
+				break;
+		}
+		dispatch(resetRestaurantRequestStatus());
+	}, [restaurantState]);
 
 	const isEmpty = (currentState) => {
 		for (const x in currentState) {
@@ -67,8 +119,8 @@ const Home = () => {
 		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
 	};
 
-	const populateRestaurants = () => {
-		mapref.fitToCoordinates(state.restaurantsArray.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
+	const populateRestaurants = (restaurantsArray) => {
+		mapref.fitToCoordinates(restaurantsArray.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
 	};
 
 	const showFilterOverlay = () => {
@@ -86,105 +138,17 @@ const Home = () => {
 		isHidden = !isHidden;
 	};
 
-	// const getDataFromFilter = () => {
-
-	// 	if (!state.location || state.location.trim().length === 0) {
-	// 		this.setState({ location: '' });
-	// 	}
-	// 	if (!state.cuisine || state.cuisine.trim().length === 0) {
-	// 		this.setState({ cuisine: null });
-	// 	}
-	// 	if (!state.priceType) {
-	// 		this.setState({ price_type: 6 });
-	// 	}
-
-	// 	axios
-	// 		.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/' + this.state.location + '/' + this.state.price_type + '/' + this.state.cuisine, {})
-	// 		.then((response) => {
-	// 			this.populateFilteredRestaurants(response.data);
-	// 		})
-	// 		.catch(function (error) {
-	// 			console.log(error);
-	// 		});
-	// }
-
-	// 	populateFilteredRestaurants(response) {
-	// 	this.showFilterOverlay();
-	// 	this.setState({
-	// 		restaurantsArray: response
-	// 	});
-	// 	this.mapref.fitToCoordinates(response.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
-	// }
-
-	// viewRestaurants(key) {
-	// 	const axios = require('axios').default;
-	// 	axios
-	// 		.post(
-	// 			`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites`,
-	// 			{
-	// 				restaurantId: this.state.restaurantsArray[key]['id'],
-	// 				name: this.state.restaurantsArray[key]['name']
-	// 			},
-	// 			{
-	// 				headers: {
-	// 					Accept: 'application/json, text/plain, */*',
-	// 					'Content-Type': 'application/json'
-	// 				}
-	// 			}
-	// 		)
-	// 		.then((response) => {
-	// 			this.state.alreadyFavorited = response.data[0]['contains'];
-	// 			axios
-	// 				.get(
-	// 					'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/' + this.state.restaurantsArray[key]['id'] + '/review',
-	// 					{},
-	// 					{
-	// 						headers: {
-	// 							Accept: 'application/json, text/plain, */*',
-	// 							'Content-Type': 'application/json'
-	// 						}
-	// 					}
-	// 				)
-	// 				.then((response) => {
-	// 					this.state.alreadyRated = response.data[0]['contains'];
-
-	// 					this.setState({ allCategories: '' });
-	// 					for (var i = 0; i < this.state.restaurantsArray[key]['categories'].length; i++) {
-	// 						if (i == 0) {
-	// 							this.state.allCategories += this.state.restaurantsArray[key]['categories'][i]['title'];
-	// 						} else {
-	// 							this.state.allCategories += ', ' + this.state.restaurantsArray[key]['categories'][i]['title'];
-	// 						}
-	// 					}
-	// 					this.props.navigation.navigate('Restaurant', {
-	// 						id: this.state.restaurantsArray[key]['id'],
-	// 						name: this.state.restaurantsArray[key]['name'],
-	// 						img: this.state.restaurantsArray[key]['img'],
-	// 						phone: this.state.restaurantsArray[key]['phone'],
-	// 						rating: this.state.restaurantsArray[key]['rating'],
-	// 						reviews: this.state.restaurantsArray[key]['revCount'],
-	// 						allCategories: this.state.allCategories,
-	// 						alreadyFavorited: this.state.alreadyFavorited,
-	// 						alreadyRated: this.state.alreadyRated
-	// 					});
-	// 				})
-	// 				.catch(function (error) {
-	// 					console.log(error);
-	// 				});
-	// 		})
-	// 		.catch(function (error) {
-	// 			console.log(error);
-	// 		});
-	// }
-
-	const goToHome = () => {
-		navigation.navigate('Home');
+	const getDataFromFilter = () => {
+		dispatch(getDataFromFilterAsync({ location: state.location, priceType: state.priceType, cuisine: state.cuisine }));
 	};
 
-	let restaurants = state.restaurantsArray.map((val, key) => {
-		/*() => this.viewRestaurants(key) */
-		return <Restaurant key={key} keyval={key} val={val} viewRestaurant={() => console.log('test')} />;
-	});
+	const viewRestaurants = (index) => {
+		dispatch(viewRestaurantsAsync({ index, state }));
+	};
+
+	const restaurant = ({ item, index }) => {
+		return <Restaurant key={index} keyval={index} val={item} viewRestaurant={() => viewRestaurants(index)} />;
+	};
 
 	return (
 		<View style={styles.container}>
@@ -201,13 +165,7 @@ const Home = () => {
 					return (
 						<Marker key={index} coordinate={{ latitude: marker.lat, longitude: marker.long }}>
 							<Image style={{ width: 30, height: 40 }} source={logo} />
-							{/* this.viewRestaurants(index); */}
-							<Callout
-								style={styles.callout}
-								onPress={() => {
-									() => console.log('test');
-								}}
-							>
+							<Callout style={styles.callout} onPress={() => viewRestaurants(index)}>
 								<Text>{marker.name}</Text>
 								<Text>{marker.address}</Text>
 							</Callout>
@@ -215,43 +173,48 @@ const Home = () => {
 					);
 				})}
 			</MapView>
-			<Text style={styles.searchNearbyText}>Search for happy hours nearby.</Text>
-			<View style={styles.searchBarBackground}>
-				<Feather name='search' style={styles.searchIconStyle} />
-				{/* this.getDataFromFilter.bind(this); */}
-				<TextInput
-					style={styles.inputStyle}
-					multiline={false}
-					returnKeyType='next'
-					onKeyPress={(ev) => {
-						if (ev.nativeEvent.key == 'Enter') {
-						}
-					}}
-					onChangeText={(location) => dispatch(updateLocation({ location: location }))}
-					value={state.location}
-					placeholder='Enter City or Zip code'
-				/>
-				{/* this.showFilterOverlay(); */}
-				<TouchableOpacity onPress={showFilterOverlay} style={styles.filterButton}>
-					<MaterialIcons name='filter-list' style={styles.filterIconStyle} />
+			<View style={styles.searchContainer}>
+				<View style={styles.searchNearbyTextContainer}>
+					<Text style={styles.searchNearbyText}>Search for happy hours nearby.</Text>
+				</View>
+
+				<View style={styles.searchBarBackground}>
+					<Feather name='search' style={styles.searchIconStyle} />
+					<TextInput
+						style={styles.inputStyle}
+						multiline={false}
+						returnKeyType='next'
+						onKeyPress={(ev) => {
+							if (ev.nativeEvent.key == 'Enter') {
+								getDataFromFilter();
+							}
+						}}
+						onChangeText={(location) => dispatch(updateLocation({ location: location }))}
+						value={state.location}
+						placeholder='Enter City or Zip code'
+					/>
+					<TouchableOpacity onPress={showFilterOverlay}>
+						<MaterialIcons name='filter-list' style={styles.filterIconStyle} />
+					</TouchableOpacity>
+				</View>
+				<TouchableOpacity onPress={getDataFromFilter} style={styles.searchButton}>
+					<Text style={styles.searchtext}>search</Text>
 				</TouchableOpacity>
 			</View>
-			{/* this.getDataFromFilter.bind(this) */}
-			<TouchableOpacity onPress={() => console.log('test')} style={styles.searchButton}>
-				<Text style={styles.searchtext}>search</Text>
-			</TouchableOpacity>
-			<ScrollView style={styles.scrollContainer}>{restaurants}</ScrollView>
+			<View style={styles.scrollContainer}>
+				<FlatList data={state.restaurantsArray} keyExtractor={(item, i) => i.toString()} renderItem={restaurant} />
+			</View>
+
+			{/* 			
 			<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
 				<Text style={{ fontSize: 20, fontWeight: 'bold', color: '#EB8873' }}>Filters</Text>
 				<TouchableOpacity onPress={() => dispatch(reset())} style={styles.resetButton}>
 					<Text style={styles.resetText}>Reset</Text>
 				</TouchableOpacity>
-				{/* this.showFilterOverlay.bind(this) */}
-				<TouchableOpacity onPress={() => console.log('test')} style={styles.cancelButton}>
+				<TouchableOpacity onPress={showFilterOverlay} style={styles.cancelButton}>
 					<Text style={styles.cancelText}>Cancel</Text>
 				</TouchableOpacity>
-				{/* this.getDataFromFilter.bind(this) */}
-				<TouchableOpacity onPress={() => console.log('test')} style={styles.applyButton}>
+				<TouchableOpacity onPress={getDataFromFilter} style={styles.applyButton}>
 					<Text style={styles.applyText}>Apply</Text>
 				</TouchableOpacity>
 				<TextInput style={styles.locationStyle} multiline={false} returnKeyType='next' onChangeText={(location) => dispatch(updateLocation({ location: location }))} value={state.location} placeholder='Enter City or Zip code' />
@@ -268,333 +231,12 @@ const Home = () => {
 				<TouchableOpacity onPress={() => dispatch(setPrice4())} style={styles.$$$$Button}>
 					<Text style={{ color: state.$$$$color, fontWeight: 'bold', fontSize: 16 }}>$$$$</Text>
 				</TouchableOpacity>
-			</Animated.View>
+			</Animated.View> */}
 		</View>
 	);
 };
 
 export default Home;
-
-//export default class Home extends React.Component {
-// constructor(props) {
-// 	super(props);
-// 	this.state = {
-// 		location: '',
-// 		cuisine: null,
-// 		price_type: 6,
-// 		$color: 'white',
-// 		$$color: 'white',
-// 		$$$color: 'white',
-// 		$$$$color: 'white',
-// 		allCategories: '',
-// 		alreadyFavorited: false,
-// 		alreadyRated: false,
-// 		restaurantsArray: [],
-// 		initialPosition: {
-// 			latitude: 0,
-// 			longitude: 0
-// 		},
-// 		markerPosition: {
-// 			latitude: 0,
-// 			longitude: 0
-// 		}
-// 	};
-// 	this.mapref = null;
-// 	this.getRestaurantData = this.getRestaurantData.bind(this);
-// 	this.populateRestaurants = this.populateRestaurants.bind(this);
-// }
-
-// componentDidMount() {
-// 	console.log('CALLED');
-// 	//console.log(this.props.route.params.TabNav);
-// 	navigator.geolocation.getCurrentPosition(
-// 		(position) => {
-// 			var lat = parseFloat(position.coords.latitude);
-// 			var long = parseFloat(position.coords.longitude);
-
-// 			var initialRegion = {
-// 				latitude: lat,
-// 				longitude: long,
-// 				latitudeDelta: LATITUDE_DELTA,
-// 				longitudeDelta: LONGITUDE_DELTA
-// 			};
-
-// 			this.setState({ initialPosition: initialRegion });
-// 			this.setState({ markerPosition: initialRegion });
-// 		},
-// 		(error) => alert(JSON.stringify(error)),
-// 		{ enableHighAccuracy: true, timeout: 20000 }
-// 	);
-
-// 	this.currentLocationData();
-// }
-
-// getDataFromFilter() {
-// 	const axios = require('axios').default;
-
-// 	if (!this.state.location || this.state.location.trim().length === 0) {
-// 		this.setState({ location: '' });
-// 	}
-// 	if (!this.state.cuisine || this.state.cuisine.trim().length === 0) {
-// 		this.setState({ cuisine: null });
-// 	}
-// 	if (!this.state.price_type) {
-// 		this.setState({ price_type: 6 });
-// 	}
-
-// 	axios
-// 		.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/' + this.state.location + '/' + this.state.price_type + '/' + this.state.cuisine, {})
-// 		.then((response) => {
-// 			this.populateFilteredRestaurants(response.data);
-// 		})
-// 		.catch(function (error) {
-// 			console.log(error);
-// 		});
-// }
-
-// currentLocationData() {
-// 	const axios = require('axios').default;
-
-// 	axios
-// 		.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/' + this.state.initialPosition.latitude + '/' + this.state.initialPosition.longitude, {})
-// 		.then((response) => {
-// 			this.populateRestaurants(response.data);
-// 		})
-// 		.catch(function (error) {
-// 			console.log(error);
-// 		});
-// }
-
-// showFilterOverlay() {
-// 	const toValue = 400;
-// 	if (isHidden) {
-// 		toValue = 0;
-// 	}
-// 	Animated.spring(bounceValue, {
-// 		toValue: toValue,
-// 		velocity: 5,
-// 		tension: 2,
-// 		friction: 8,
-// 		useNativeDriver: true
-// 	}).start();
-// 	isHidden = !isHidden;
-// }
-
-// populateRestaurants(response) {
-// 	this.setState({
-// 		restaurantsArray: response
-// 	});
-// 	this.mapref.fitToCoordinates(response.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
-// }
-
-// populateFilteredRestaurants(response) {
-// 	this.showFilterOverlay();
-// 	this.setState({
-// 		restaurantsArray: response
-// 	});
-// 	this.mapref.fitToCoordinates(response.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
-// }
-
-// viewRestaurants(key) {
-// 	const axios = require('axios').default;
-// 	axios
-// 		.post(
-// 			`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites`,
-// 			{
-// 				restaurantId: this.state.restaurantsArray[key]['id'],
-// 				name: this.state.restaurantsArray[key]['name']
-// 			},
-// 			{
-// 				headers: {
-// 					Accept: 'application/json, text/plain, */*',
-// 					'Content-Type': 'application/json'
-// 				}
-// 			}
-// 		)
-// 		.then((response) => {
-// 			this.state.alreadyFavorited = response.data[0]['contains'];
-// 			axios
-// 				.get(
-// 					'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/' + this.state.restaurantsArray[key]['id'] + '/review',
-// 					{},
-// 					{
-// 						headers: {
-// 							Accept: 'application/json, text/plain, */*',
-// 							'Content-Type': 'application/json'
-// 						}
-// 					}
-// 				)
-// 				.then((response) => {
-// 					this.state.alreadyRated = response.data[0]['contains'];
-
-// 					this.setState({ allCategories: '' });
-// 					for (var i = 0; i < this.state.restaurantsArray[key]['categories'].length; i++) {
-// 						if (i == 0) {
-// 							this.state.allCategories += this.state.restaurantsArray[key]['categories'][i]['title'];
-// 						} else {
-// 							this.state.allCategories += ', ' + this.state.restaurantsArray[key]['categories'][i]['title'];
-// 						}
-// 					}
-// 					this.props.navigation.navigate('Restaurant', {
-// 						id: this.state.restaurantsArray[key]['id'],
-// 						name: this.state.restaurantsArray[key]['name'],
-// 						img: this.state.restaurantsArray[key]['img'],
-// 						phone: this.state.restaurantsArray[key]['phone'],
-// 						rating: this.state.restaurantsArray[key]['rating'],
-// 						reviews: this.state.restaurantsArray[key]['revCount'],
-// 						allCategories: this.state.allCategories,
-// 						alreadyFavorited: this.state.alreadyFavorited,
-// 						alreadyRated: this.state.alreadyRated
-// 					});
-// 				})
-// 				.catch(function (error) {
-// 					console.log(error);
-// 				});
-// 		})
-// 		.catch(function (error) {
-// 			console.log(error);
-// 		});
-// }
-
-// goToHome() {
-// 	this.props.navigation.navigate('Home');
-// }
-
-// reset() {
-// 	this.setState({ location: '' });
-// 	this.setState({ cuisine: '' });
-// 	this.setState({ price_type: 6 });
-// 	this.setState({ $color: 'white' });
-// 	this.setState({ $$color: 'white' });
-// 	this.setState({ $$$color: 'white' });
-// 	this.setState({ $$$$color: 'white' });
-// }
-
-// setPrice1() {
-// 	this.setState({ price_type: 1 });
-// 	this.setState({ $color: 'yellow' });
-// 	this.setState({ $$color: 'white' });
-// 	this.setState({ $$$color: 'white' });
-// 	this.setState({ $$$$color: 'white' });
-// }
-
-// setPrice2() {
-// 	this.setState({ price_type: 2 });
-// 	this.setState({ $$color: 'yellow' });
-// 	this.setState({ $color: 'white' });
-// 	this.setState({ $$$color: 'white' });
-// 	this.setState({ $$$$color: 'white' });
-// }
-
-// setPrice3() {
-// 	this.setState({ price_type: 3 });
-// 	this.setState({ $$$color: 'yellow' });
-// 	this.setState({ $$color: 'white' });
-// 	this.setState({ $color: 'white' });
-// 	this.setState({ $$$$color: 'white' });
-// }
-
-// setPrice4() {
-// 	this.setState({ price_type: 4 });
-// 	this.setState({ $$$$color: 'yellow' });
-// 	this.setState({ $$color: 'white' });
-// 	this.setState({ $$$color: 'white' });
-// 	this.setState({ $color: 'white' });
-// }
-
-//render() {
-// let restaurants = this.state.restaurantsArray.map((val, key) => {
-// 	return <Restaurant key={key} keyval={key} val={val} viewRestaurant={() => this.viewRestaurants(key)} />;
-// });
-
-// return (
-// 	<View style={styles.container}>
-// 		<MapView
-// 			ref={(ref) => {
-// 				this.mapref = ref;
-// 			}}
-// 			initialCamera={{ center: this.state.initialPosition, zoom: 10, pitch: 0, heading: 0, altitude: 10 }}
-// 			provider={PROVIDER_GOOGLE}
-// 			style={styles.mapStyle}
-// 		>
-// 			<Marker coordinate={this.state.markerPosition}></Marker>
-// 			{this.state.restaurantsArray.map((marker, index) => {
-// 				return (
-// 					<Marker key={index} coordinate={{ latitude: marker.lat, longitude: marker.long }}>
-// 						<Image style={{ width: 30, height: 40 }} source={logo} />
-// 						<Callout
-// 							style={styles.callout}
-// 							onPress={() => {
-// 								this.viewRestaurants(index);
-// 							}}
-// 						>
-// 							<Text>{marker.name}</Text>
-// 							<Text>{marker.address}</Text>
-// 						</Callout>
-// 					</Marker>
-// 				);
-// 			})}
-// 		</MapView>
-// 		<Text style={styles.searchNearbyText}>Search for happy hours nearby.</Text>
-// 		<View style={styles.searchBarBackground}>
-// 			<Feather name='search' style={styles.searchIconStyle} />
-// 			<TextInput
-// 				style={styles.inputStyle}
-// 				multiline={false}
-// 				returnKeyType='next'
-// 				onKeyPress={(ev) => {
-// 					if (ev.nativeEvent.key == 'Enter') {
-// 						this.getDataFromFilter.bind(this);
-// 					}
-// 				}}
-// 				onChangeText={(location) => this.setState({ location })}
-// 				value={this.state.location}
-// 				placeholder='Enter City or Zip code'
-// 			/>
-// 			<TouchableOpacity
-// 				onPress={() => {
-// 					this.showFilterOverlay();
-// 				}}
-// 				style={styles.filterButton}
-// 			>
-// 				<MaterialIcons name='filter-list' style={styles.filterIconStyle} />
-// 			</TouchableOpacity>
-// 		</View>
-// 		<TouchableOpacity onPress={this.getDataFromFilter.bind(this)} style={styles.searchButton}>
-// 			<Text style={styles.searchtext}>search</Text>
-// 		</TouchableOpacity>
-// 		<ScrollView style={styles.scrollContainer}>{restaurants}</ScrollView>
-
-// 		<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
-// 			<Text style={{ fontSize: 20, fontWeight: 'bold', color: '#EB8873' }}>Filters</Text>
-// 			<TouchableOpacity onPress={this.reset.bind(this)} style={styles.resetButton}>
-// 				<Text style={styles.resetText}>Reset</Text>
-// 			</TouchableOpacity>
-// 			<TouchableOpacity onPress={this.showFilterOverlay.bind(this)} style={styles.cancelButton}>
-// 				<Text style={styles.cancelText}>Cancel</Text>
-// 			</TouchableOpacity>
-// 			<TouchableOpacity onPress={this.getDataFromFilter.bind(this)} style={styles.applyButton}>
-// 				<Text style={styles.applyText}>Apply</Text>
-// 			</TouchableOpacity>
-// 			<TextInput style={styles.locationStyle} multiline={false} returnKeyType='next' onChangeText={(location) => this.setState({ location })} value={this.state.location} placeholder='Enter City or Zip code' />
-// 			<TextInput style={styles.cuisineStyle} multiline={false} returnKeyType='next' onChangeText={(cuisine) => this.setState({ cuisine })} value={this.state.cuisine} placeholder='Enter cuisine' />
-// 			<TouchableOpacity onPress={this.setPrice1.bind(this)} style={styles.$Button}>
-// 				<Text style={{ color: this.state.$color, fontWeight: 'bold', fontSize: 16 }}>$</Text>
-// 			</TouchableOpacity>
-// 			<TouchableOpacity onPress={this.setPrice2.bind(this)} style={styles.$$Button}>
-// 				<Text style={{ color: this.state.$$color, fontWeight: 'bold', fontSize: 16 }}>$$</Text>
-// 			</TouchableOpacity>
-// 			<TouchableOpacity onPress={this.setPrice3.bind(this)} style={styles.$$$Button}>
-// 				<Text style={{ color: this.state.$$$color, fontWeight: 'bold', fontSize: 16 }}>$$$</Text>
-// 			</TouchableOpacity>
-// 			<TouchableOpacity onPress={this.setPrice4.bind(this)} style={styles.$$$$Button}>
-// 				<Text style={{ color: this.state.$$$$color, fontWeight: 'bold', fontSize: 16 }}>$$$$</Text>
-// 			</TouchableOpacity>
-// 		</Animated.View>
-// 	</View>
-// );
-//}
-//}
 
 const styles = StyleSheet.create({
 	container: {
@@ -603,52 +245,58 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
-	callout: {
+	mapStyle: {
+		flex: 3,
+		width: Dimensions.get('window').width,
+		height: Dimensions.get('window').height / 2
+	},
+	searchContainer: {
 		flex: 1,
-		position: 'relative'
+		width: '100%',
+		padding: 20
 	},
-	searchButton: {
-		position: 'absolute',
-		bottom: 320,
-		right: 40,
-		color: '#E91E63'
-	},
-	filterButton: {
-		position: 'absolute',
-		top: 7,
-		right: 0
-	},
-	searchtext: {
-		color: '#E91E63',
-		position: 'absolute',
-		top: -40,
-		right: 10
-	},
-	searchBarBackground: {
-		position: 'absolute',
-		top: 500,
-		width: 350,
-		backgroundColor: '#F0EEEE',
-		height: 50,
-		borderRadius: 15,
-		marginHorizontal: 15,
-		flexDirection: 'row'
+	searchNearbyTextContainer: {
+		marginBottom: 10
 	},
 	searchNearbyText: {
-		position: 'absolute',
-		top: 465,
-		left: 35,
 		color: '#EB8873',
 		fontFamily: 'Arial',
 		fontWeight: 'bold',
 		fontSize: 18
 	},
+	searchBarBackground: {
+		backgroundColor: '#F0EEEE',
+		height: 50,
+		width: '90%',
+		borderRadius: 15,
+		alignSelf: 'center',
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'space-evenly'
+	},
 	searchIconStyle: {
 		fontSize: 35,
-		alignSelf: 'center',
-		marginHorizontal: 15,
 		color: '#E91E63'
 	},
+	inputStyle: {
+		fontSize: 18
+	},
+	searchButton: {
+		alignSelf: 'flex-end',
+		marginTop: 5,
+		marginRight: 20,
+		color: '#E91E63'
+	},
+
+	searchtext: {
+		color: '#E91E63'
+	},
+
+	callout: {
+		flex: 1,
+		position: 'relative'
+	},
+
 	subView: {
 		position: 'absolute',
 		bottom: 0,
@@ -660,8 +308,6 @@ const styles = StyleSheet.create({
 	},
 	filterIconStyle: {
 		fontSize: 35,
-		alignSelf: 'center',
-		marginHorizontal: 15,
 		color: '#E91E63'
 	},
 	homeIconStyle: {
@@ -671,28 +317,16 @@ const styles = StyleSheet.create({
 		marginHorizontal: 15,
 		color: 'white'
 	},
-	inputStyle: {
+
+	locationStyle: {
 		flex: 1,
 		fontSize: 18
 	},
-	locationStyle: {
-		flex: 1,
-		fontSize: 18,
-		position: 'absolute',
-		top: 50
-	},
 	cuisineStyle: {
 		flex: 1,
-		fontSize: 18,
-		position: 'absolute',
-		top: 100
+		fontSize: 18
 	},
-	mapStyle: {
-		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').height / 2,
-		position: 'absolute',
-		top: 0
-	},
+
 	header: {
 		backgroundColor: '#E91E63',
 		justifyContent: 'center',
@@ -706,11 +340,8 @@ const styles = StyleSheet.create({
 		padding: 32
 	},
 	scrollContainer: {
-		flexGrow: 1,
-		marginBottom: 100,
-		position: 'absolute',
-		top: 600,
-		height: 300
+		flex: 2,
+		width: '100%'
 	},
 	textInput: {
 		alignSelf: 'stretch',
@@ -721,10 +352,6 @@ const styles = StyleSheet.create({
 		borderTopColor: '#ededed'
 	},
 	addButton: {
-		position: 'absolute',
-		zIndex: 11,
-		right: 20,
-		bottom: 90,
 		backgroundColor: '#E91E63',
 		width: 90,
 		height: 90,
@@ -739,60 +366,41 @@ const styles = StyleSheet.create({
 	},
 	footer: {
 		backgroundColor: '#EB8873',
-		position: 'absolute',
 		alignContent: 'center',
-		height: 55,
-		bottom: 0,
-		left: 0,
-		right: 0,
-		zIndex: 10
+		height: 55
 	},
 	cancelButton: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#FFFFFF',
 		padding: 10,
-		borderRadius: 20,
-		top: 10,
-		left: 10
+		borderRadius: 20
 	},
 	resetButton: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#FFFFFF',
 		padding: 10,
-		borderRadius: 20,
-		top: 10,
-		right: 10
+		borderRadius: 20
 	},
 	applyButton: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#EB8873',
 		padding: 10,
-		borderRadius: 20,
-		bottom: 20
+		borderRadius: 20
 	},
 	$Button: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
 		backgroundColor: '#EB8873',
 		borderRadius: 30,
 		width: 45,
-		height: 45,
-		bottom: 70,
-		left: 60
+		height: 45
 	},
 	$$Button: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
-		bottom: 70,
-		left: 140,
 		backgroundColor: '#EB8873',
 		borderRadius: 20,
 		borderRadius: 30,
@@ -800,11 +408,8 @@ const styles = StyleSheet.create({
 		height: 45
 	},
 	$$$Button: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
-		bottom: 70,
-		left: 220,
 		backgroundColor: '#EB8873',
 		borderRadius: 20,
 		borderRadius: 30,
@@ -812,11 +417,8 @@ const styles = StyleSheet.create({
 		height: 45
 	},
 	$$$$Button: {
-		position: 'absolute',
 		justifyContent: 'center',
 		alignItems: 'center',
-		bottom: 70,
-		left: 300,
 		backgroundColor: '#EB8873',
 		borderRadius: 20,
 		borderRadius: 30,

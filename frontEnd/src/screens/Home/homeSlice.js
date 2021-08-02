@@ -25,10 +25,10 @@ const initialState = {
 	}
 };
 
-export const getCurrentLocationDataAsync = createAsyncThunk('getCurrentLocationDataAsync/status', async (url, { rejectWithValue }) => {
-	console.log(url);
+export const getCurrentLocationDataAsync = createAsyncThunk('getCurrentLocationDataAsync/status', async (data, { rejectWithValue }) => {
+	const { latitude, longitude } = data;
 	try {
-		const response = await axios.get(url);
+		const response = await axios.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/' + latitude + '/' + longitude);
 		return response.data;
 	} catch (err) {
 		return rejectWithValue(err.response.data);
@@ -82,7 +82,7 @@ export const homeSlice = createSlice({
 			state.currentState = {
 				...state.currentState,
 				location: '',
-				cuisine: '',
+				cuisine: null,
 				priceType: 6,
 				$color: 'white',
 				$$color: 'white',
@@ -130,15 +130,12 @@ export const homeSlice = createSlice({
 				$$$$color: 'yellow'
 			};
 		},
-		resetStatus: (state) => {
+		resetHomeRequestStatus: (state) => {
 			state.currentState.locationDataRequestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(getCurrentLocationDataAsync.pending, (state) => {
-				state.currentState = { ...state.currentState, locationDataRequestStatus: 'pending' };
-			})
 			.addCase(getCurrentLocationDataAsync.fulfilled, (state, { payload }) => {
 				state.currentState = { ...state.currentState, locationDataRequestStatus: 'fulfilled', restaurantsArray: payload };
 			})
@@ -167,7 +164,7 @@ export const {
 	setPrice2,
 	setPrice3,
 	setPrice4,
-	resetStatus
+	resetHomeRequestStatus
 } = homeSlice.actions;
 
 export const selectHomeState = (state) => state.home.currentState;

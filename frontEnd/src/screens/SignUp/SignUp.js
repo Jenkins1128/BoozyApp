@@ -11,14 +11,17 @@ const SignUp = ({ navigation }) => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (!isEmpty(state)) {
-			if (state.requestStatus === 'fulfilled') {
-				dispatch(resetStatus());
-				login();
-			} else if (state.requestStatus === 'rejected') {
-				dispatch(resetStatus());
-				showErrorAlert('Username already exists...');
-			}
+		if (isEmpty(state)) {
+			return;
+		}
+		if (state.requestStatus === 'rejected') {
+			dispatch(resetStatus());
+			showErrorAlert('Username already exists...');
+			return;
+		}
+		if (state.requestStatus === 'fulfilled') {
+			dispatch(resetStatus());
+			login();
 		}
 	}, [state]);
 
@@ -38,16 +41,11 @@ const SignUp = ({ navigation }) => {
 	};
 
 	const signup = () => {
-		if (!isEmpty(state) && state.email.trim().length > 0 && state.password.trim().length > 0) {
-			const data = {
-				url: 'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/register',
-				email: state.email,
-				password: state.password
-			};
-			dispatch(signUpAsync(data));
-		} else {
+		if (isEmpty(state) || !state.email.trim().length || !state.password.trim().length) {
 			showErrorAlert('Please fill out all fields.');
+			return;
 		}
+		dispatch(signUpAsync({ email: state.email, password: state.password }));
 	};
 
 	const goToHome = () => {
