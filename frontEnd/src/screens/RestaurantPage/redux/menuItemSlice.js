@@ -23,11 +23,11 @@ const postMenuItemSlice = createSlice({
 	name: 'postMenuItemAsync',
 	initialState,
 	reducers: {
-		updatePrice: (state) => {
-			state.currentState = { ...state.currentState, price: '' };
+		updatePrice: (state, { payload }) => {
+			state.currentState = { ...state.currentState, price: payload.price };
 		},
-		updateDescription: (state) => {
-			state.currentState = { ...state.currentState, description: '' };
+		updateDescription: (state, { payload }) => {
+			state.currentState = { ...state.currentState, description: payload.description };
 		},
 		resetMenuItem: (state) => {
 			state.currentState = { ...state.currentState, price: '', description: '' };

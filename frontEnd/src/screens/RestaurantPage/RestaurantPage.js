@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState } from './redux/restaurantPageSlice';
 import { selectStarRatingState, starRatingAsync } from './redux/starRatingSlice';
 import { postMenuItemAsync, resetMenuItem, selectMenuItemState } from './redux/menuItemSlice';
+import { selectFavoriteState } from './redux/favoriteSlice';
 
 
 
@@ -16,6 +17,7 @@ const RestaurantPage = ({route}) => {
 	const state = useSelector(selectRestaurantPageState);
 	const starRatingState = useSelector(selectStarRatingState);
 	const menuItemState = useSelector(selectMenuItemState);
+	const favoriteState = useSelector(selectFavoriteState);
 	const dispatch = useDispatch();
 
 	//did screen focus, get restaurant data
@@ -48,13 +50,28 @@ const RestaurantPage = ({route}) => {
 				showErrorAlert('Star rating failed. Please check your network.')
 				return;
 			case 'fulfilled':
-
-				dispatch(resetMenuItem());
-
+				break;
 			default:
 				return;
 		}
-  }, [])
+		dispatch(resetMenuItem());
+  }, [menuItemState])
+
+  //Favorite check
+  useEffect(() => {
+	  switch(favoriteState.favoriteRequestStatus){
+		case 'rejected':
+			showErrorAlert('Favoriting restaurant failed. Please check your network.')
+			return;
+		case 'fulfilled':
+
+			return;
+		default:
+			return;
+
+	  }
+
+  }, [favoriteState])
 
   const showErrorAlert = (errorString) => {
 		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
@@ -96,7 +113,7 @@ const RestaurantPage = ({route}) => {
 		dispatch(starRatingAsync({rating: rating, restaurantId: state.restaurantId, restaurantName: state.restaurantName}))
 	}
 
-	const	getDataFromMenuItem = () => {
+	const getDataFromMenuItem = () => {
 		dispatch(postMenuItemAsync({description: state.description, price: state.price, restaurantName: state.restaurantName, restaurantId: state.restaurantId }))
 		// const axios = require('axios').default;
 		// if (!this.state.price || this.state.price.trim().length === 0) {
@@ -127,6 +144,11 @@ const RestaurantPage = ({route}) => {
 		}
 		dispatch(updateMenuItems({price: price, content: state.description}))
 		//showMenuItemOverlay(false);
+	}
+
+	const favoriteChangeColor = (data) => {
+		const favoriteColor = data[0]['contains'] ? 'red' : 'white';
+		this.changeColor(favoriteColor);
 	}
 
 
@@ -298,57 +320,54 @@ export default RestaurantPage;
 	// 	this.showMenuItemOverlay();
 	// }
 
-	favorite() {
-		const axios = require('axios').default;
-		axios
-			.post(
-				`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/add`,
-				{
-					restaurantId: this.state.restaurantId,
-					name: this.state.restaurantName
-				},
-				{
-					headers: {
-						Accept: 'application/json, text/plain, */*',
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			.then((response) => {
-				console.log('Favorited/Unfavorite!');
-				axios
-					.post(
-						`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites`,
-						{
-							restaurantId: this.state.restaurantId,
-							name: this.state.restaurantName
-						},
-						{
-							headers: {
-								Accept: 'application/json, text/plain, */*',
-								'Content-Type': 'application/json'
-							}
-						}
-					)
-					.then((response) => {
-						this.favoriteChangeColor(response);
-					})
-					.catch(function (error) {
-						console.log(error);
-					});
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
-	}
+	//favorite() {
+		// const axios = require('axios').default;
+		// axios
+		// 	.post(
+		// 		`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/add`,
+		// 		{
+		// 			restaurantId: this.state.restaurantId,
+		// 			name: this.state.restaurantName
+		// 		},
+		// 		{
+		// 			headers: {
+		// 				Accept: 'application/json, text/plain, */*',
+		// 				'Content-Type': 'application/json'
+		// 			}
+		// 		}
+		// 	)
+		// 	.then((response) => {
+		// 		console.log('Favorited/Unfavorite!');
+		// 		axios
+		// 			.post(
+		// 				`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites`,
+		// 				{
+		// 					restaurantId: this.state.restaurantId,
+		// 					name: this.state.restaurantName
+		// 				},
+		// 				{
+		// 					headers: {
+		// 						Accept: 'application/json, text/plain, */*',
+		// 						'Content-Type': 'application/json'
+		// 					}
+		// 				}
+		// 			)
+		// 			.then((response) => {
+		// 				this.favoriteChangeColor(response);
+		// 			})
+		// 			.catch(function (error) {
+		// 				console.log(error);
+		// 			});
+		// 	})
+		// 	.catch(function (error) {
+		// 		console.log(error);
+		// 	});
+	//}
 
-	favoriteChangeColor(response) {
-		if (response.data[0]['contains']) {
-			this.changeColor('red');
-		} else {
-			this.changeColor('white');
-		}
-	}
+	// favoriteChangeColor(data) {
+	// 	const favoriteColor = data[0]['contains'] ? 'red' : 'white';
+	// 	this.changeColor(favoriteColor);
+	// }
 
 	render() {
 		let items = this.state.menuItemArray.map((val, key) => {
