@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpState } from './signUpSlice';
+import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpState } from './redux/signUpSlice';
 import background from '../../images/background.jpg';
-import SignUpHeader from './SignUpHeader';
-import SignUpInput from './SignUpInput';
+import SignUpHeader from './SignUpHeader/SignUpHeader';
+import SignUpInput from './SignUpInput/SignUpInput';
 
 const SignUp = ({ navigation }) => {
 	const state = useSelector(selectSignUpState);

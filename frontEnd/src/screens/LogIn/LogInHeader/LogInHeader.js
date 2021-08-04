@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Image, ActivityIndicator, StyleSheet } from 'react-native';
-import logo from '../../images/logo.png';
+import logo from '../../../images/logo.png';
 
 const LogInHeader = ({ state }) => {
 	return (

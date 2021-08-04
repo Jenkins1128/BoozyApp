@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './loginSlice';
+import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './redux/loginSlice';
 import background from '../../images/background.jpeg';
 
-import LogInHeader from './LogInHeader';
-import LogInInput from './LogInInput';
+import LogInHeader from './LogInHeader/LogInHeader';
+import LogInInput from './LogInInput/LogInInput';
 
 const LogIn = ({ navigation }) => {
 	const state = useSelector(selectLogInState);
