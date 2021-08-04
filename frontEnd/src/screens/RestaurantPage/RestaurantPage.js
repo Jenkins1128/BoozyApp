@@ -1,172 +1,302 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, ImageBackground, Animated } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import StarRating from 'react-native-star-rating';
 import MenuItem from '../MenuItem/MenuItem';
 import background from '../../images/background.jpeg';
-var isHidden = true;
+import { useDispatch, useSelector } from 'react-redux';
+import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState } from './redux/restaurantPageSlice';
+import { selectStarRatingState, starRatingAsync } from './redux/starRatingSlice';
+import { postMenuItemAsync, resetMenuItem, selectMenuItemState } from './redux/menuItemSlice';
 
-export default class RestaurantPage extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			restaurantId: '',
-			restaurantName: '',
-			restaurantImage: 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png',
-			phoneNumber: '',
-			allCategories: '',
-			rating: 0.0,
-			reviews: 0,
-			favoriteColor: 'white',
-			changeFavoritedColor: '',
-			starCount: 0,
-			favorited: false,
-			rated: false,
-			bounceValue: new Animated.Value(250),
-			price: 0.0,
-			description: '',
-			menuItemArray: []
-		};
-		this.populateMenuItems = this.populateMenuItems.bind(this);
+
+
+const RestaurantPage = ({route}) => {
+	const bounceValue = useRef(new Animated.Value(1000)).current;
+	const state = useSelector(selectRestaurantPageState);
+	const starRatingState = useSelector(selectStarRatingState);
+	const menuItemState = useSelector(selectMenuItemState);
+	const dispatch = useDispatch();
+
+	//did screen focus, get restaurant data
+	useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // The screen is focused
+      // Call any action
+	  getRestaurantDataOnFocus();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
+  //Star rating success check
+  useEffect(() => {
+		switch(starRatingState.starRatingRequestStatus){
+			case 'rejected':
+				showErrorAlert('Star rating failed. Please check your network.')
+				return;
+			default:
+				return;
+		}
+  },[state])
+
+  //Add menu check 
+  useEffect(() => {
+	switch(menuItemState.getMenuItemRequestStatus){
+			case 'rejected':
+				showErrorAlert('Star rating failed. Please check your network.')
+				return;
+			case 'fulfilled':
+
+				dispatch(resetMenuItem());
+
+			default:
+				return;
+		}
+  }, [])
+
+  const showErrorAlert = (errorString) => {
+		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
+	};
+
+
+  const getRestaurantDataOnFocus = () => {
+		const {params } = route;
+		dispatch(updateState({parmas: params}))
+		
+		const colorFavorited =  state.favorited ? 'red' : 'white';
+		changeColor(colorFavorited);
+		
+		dispatch(getMenuItemsAsync(state.restaurantId))
 	}
 
-	showMenuItemOverlay() {
-		var toValue = 400;
-		if (isHidden) {
+	const showFilterOverlay = (shown) => {
+		let toValue;
+		if (shown) {
 			toValue = 0;
+		} else {
+			toValue = 1000;
 		}
-		Animated.spring(this.state.bounceValue, {
+		Animated.spring(bounceValue, {
 			toValue: toValue,
 			velocity: 5,
 			tension: 2,
-			friction: 8
+			friction: 8,
+			useNativeDriver: true
 		}).start();
-		isHidden = !isHidden;
-	}
-
-	onFocusFunction = () => {
-		const { params } = this.props.route;
-		console.log('params', params);
-		this.state.restaurantId = params ? params.id : '';
-		this.state.restaurantName = params ? params.name : '';
-		this.state.restaurantImage = params ? params.img : 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png';
-		this.state.phoneNumber = params ? params.phone : '';
-		this.state.allCategories = params ? params.allCategories : '';
-		this.state.rating = params ? params.rating : 0.0;
-		this.state.reviews = params ? params.reviews : 0;
-		this.state.rated = params ? params.alreadyRated : false;
-		this.state.favorited = params ? params.alreadyFavorited : false;
-		this.state.starCount = 0;
-
-		if (this.state.favorited) {
-			this.changeColor('red');
-		} else {
-			this.changeColor('white');
-		}
-		const axios = require('axios').default;
-		axios
-			.post(
-				'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/menu/list',
-				{
-					restaurantId: this.state.restaurantId
-				},
-				{
-					headers: {
-						Accept: 'application/json, text/plain, */*',
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			.then((response) => {
-				this.populateMenuItems(response.data);
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
 	};
 
-	populateMenuItems(response) {
-		this.setState({
-			menuItemArray: response
-		});
-	}
-
-	async componentDidMount() {
-		this.focusListener = this.props.navigation.addListener('didFocus', () => {
-			this.onFocusFunction();
-		});
-	}
-
-	componentWillUnmount() {
-		this.focusListener.remove();
-	}
-
-	changeColor = (color) => {
-		this.setState({
-			favoriteColor: color
-		});
+	const changeColor = (color) => {
+		dispatch(updateFavoriteColor({color: color}))
 	};
 
-	onStarRatingPress(rating) {
-		this.setState({
-			starCount: rating
-		});
-		const axios = require('axios').default;
-		axios
-			.post(
-				'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + this.state.restaurantId + '/restaurants',
-				{
-					content: rating,
-					name: this.state.restaurantName
-				},
-				{
-					headers: {
-						Accept: 'application/json, text/plain, */*',
-						'Content-Type': 'application/json'
-					}
-				}
-			)
-			.then((response) => {
-				console.log('Rating sent!');
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
+	const onStarRatingPress = (rating) => {
+		dispatch(updateStarCount({starCount: rating}))
+		dispatch(starRatingAsync({rating: rating, restaurantId: state.restaurantId, restaurantName: state.restaurantName}))
 	}
 
-	getDataFromMenuItem() {
-		const axios = require('axios').default;
-		if (!this.state.price || this.state.price.trim().length === 0) {
-			this.setState({ price: '' });
-		}
-		if (!this.state.description || this.state.description.trim().length === 0) {
-			this.setState({ description: '' });
-		}
-		axios
-			.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + this.state.restaurantId + '/menu', {
-				content: this.state.description,
-				price: this.state.price,
-				name: this.state.restaurantName
-			})
-			.then((response) => {
-				this.menuItemSubmitted();
-			})
-			.catch(function (error) {
-				console.log(error);
-			});
+	const	getDataFromMenuItem = () => {
+		dispatch(postMenuItemAsync({description: state.description, price: state.price, restaurantName: state.restaurantName, restaurantId: state.restaurantId }))
+		// const axios = require('axios').default;
+		// if (!this.state.price || this.state.price.trim().length === 0) {
+		// 	this.setState({ price: '' });
+		// }
+		// if (!this.state.description || this.state.description.trim().length === 0) {
+		// 	this.setState({ description: '' });
+		// }
+
+		// axios
+		// 	.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + this.state.restaurantId + '/menu', {
+		// 		content: this.state.description,
+		// 		price: this.state.price,
+		// 		name: this.state.restaurantName
+		// 	})
+		// 	.then((response) => {
+		// 		this.menuItemSubmitted();
+		// 	})
+		// 	.catch(function (error) {
+		// 		console.log(error);
+		// 	});
 	}
 
-	menuItemSubmitted() {
-		if (this.state.price % 1 == 0) {
-			this.state.price = parseFloat(this.state.price.toString());
+	const menuItemSubmitted = () => {
+		let price = state.price;
+		if (price % 1 == 0) {
+			price = parseFloat(price.toString());
 		}
-		this.state.menuItemArray.push({
-			price: this.state.price,
-			content: this.state.description
-		});
-		this.setState({ menuItemArray: this.state.menuItemArray });
-		this.showMenuItemOverlay();
+		dispatch(updateMenuItems({price: price, content: state.description}))
+		//showMenuItemOverlay(false);
 	}
+
+
+
+
+}
+
+export default RestaurantPage;
+
+//export default class RestaurantPage extends React.Component {
+	// constructor(props) {
+	// 	super(props);
+	// 	this.state = {
+	// 		restaurantId: '',
+	// 		restaurantName: '',
+	// 		restaurantImage: 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png',
+	// 		phoneNumber: '',
+	// 		allCategories: '',
+	// 		rating: 0.0,
+	// 		reviews: 0,
+	// 		favoriteColor: 'white',
+	// 		changeFavoritedColor: '',
+	// 		starCount: 0,
+	// 		favorited: false,
+	// 		rated: false,
+	// 		bounceValue: new Animated.Value(250),
+	// 		price: 0.0,
+	// 		description: '',
+	// 		menuItemArray: []
+	// 	};
+	// 	this.populateMenuItems = this.populateMenuItems.bind(this);
+	// }
+
+	// showMenuItemOverlay() {
+	// 	var toValue = 400;
+	// 	if (isHidden) {
+	// 		toValue = 0;
+	// 	}
+	// 	Animated.spring(this.state.bounceValue, {
+	// 		toValue: toValue,
+	// 		velocity: 5,
+	// 		tension: 2,
+	// 		friction: 8
+	// 	}).start();
+	// 	isHidden = !isHidden;
+	// }
+
+	// onFocusFunction = () => {
+	// 	const { params } = this.props.route;
+	// 	console.log('params', params);
+	// 	this.state.restaurantId = params ? params.id : '';
+	// 	this.state.restaurantName = params ? params.name : '';
+	// 	this.state.restaurantImage = params ? params.img : 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png';
+	// 	this.state.phoneNumber = params ? params.phone : '';
+	// 	this.state.allCategories = params ? params.allCategories : '';
+	// 	this.state.rating = params ? params.rating : 0.0;
+	// 	this.state.reviews = params ? params.reviews : 0;
+	// 	this.state.rated = params ? params.alreadyRated : false;
+	// 	this.state.favorited = params ? params.alreadyFavorited : false;
+	// 	this.state.starCount = 0;
+
+	// 	if (this.state.favorited) {
+	// 		this.changeColor('red');
+	// 	} else {
+	// 		this.changeColor('white');
+	// 	}
+	// 	const axios = require('axios').default;
+	// 	axios
+	// 		.post(
+	// 			'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/menu/list',
+	// 			{
+	// 				restaurantId: this.state.restaurantId
+	// 			},
+	// 			{
+	// 				headers: {
+	// 					Accept: 'application/json, text/plain, */*',
+	// 					'Content-Type': 'application/json'
+	// 				}
+	// 			}
+	// 		)
+	// 		.then((response) => {
+	// 			this.populateMenuItems(response.data);
+	// 		})
+	// 		.catch(function (error) {
+	// 			console.log(error);
+	// 		});
+	// };
+
+	// populateMenuItems(response) {
+	// 	this.setState({
+	// 		menuItemArray: response
+	// 	});
+	// }
+
+	// async componentDidMount() {
+	// 	this.focusListener = this.props.navigation.addListener('didFocus', () => {
+	// 		this.onFocusFunction();
+	// 	});
+	// }
+
+	// componentWillUnmount() {
+	// 	this.focusListener.remove();
+	// }
+
+	// changeColor = (color) => {
+	// 	this.setState({
+	// 		favoriteColor: color
+	// 	});
+	// };
+
+	// onStarRatingPress(rating) {
+	// 	this.setState({
+	// 		starCount: rating
+	// 	});
+	// 	const axios = require('axios').default;
+	// 	axios
+	// 		.post(
+	// 			'https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + this.state.restaurantId + '/restaurants',
+	// 			{
+	// 				content: rating,
+	// 				name: this.state.restaurantName
+	// 			},
+	// 			{
+	// 				headers: {
+	// 					Accept: 'application/json, text/plain, */*',
+	// 					'Content-Type': 'application/json'
+	// 				}
+	// 			}
+	// 		)
+	// 		.then((response) => {
+	// 			console.log('Rating sent!');
+	// 		})
+	// 		.catch(function (error) {
+	// 			console.log(error);
+	// 		});
+	// }
+
+	// getDataFromMenuItem() {
+	// 	const axios = require('axios').default;
+	// 	if (!this.state.price || this.state.price.trim().length === 0) {
+	// 		this.setState({ price: '' });
+	// 	}
+	// 	if (!this.state.description || this.state.description.trim().length === 0) {
+	// 		this.setState({ description: '' });
+	// 	}
+	// 	axios
+	// 		.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + this.state.restaurantId + '/menu', {
+	// 			content: this.state.description,
+	// 			price: this.state.price,
+	// 			name: this.state.restaurantName
+	// 		})
+	// 		.then((response) => {
+	// 			this.menuItemSubmitted();
+	// 		})
+	// 		.catch(function (error) {
+	// 			console.log(error);
+	// 		});
+	// }
+
+	// menuItemSubmitted() {
+	// 	if (this.state.price % 1 == 0) {
+	// 		this.state.price = parseFloat(this.state.price.toString());
+	// 	}
+	// 	this.state.menuItemArray.push({
+	// 		price: this.state.price,
+	// 		content: this.state.description
+	// 	});
+	// 	this.setState({ menuItemArray: this.state.menuItemArray });
+	// 	this.showMenuItemOverlay();
+	// }
 
 	favorite() {
 		const axios = require('axios').default;
@@ -273,7 +403,7 @@ export default class RestaurantPage extends React.Component {
 			</View>
 		);
 	}
-}
+//}
 
 const styles = StyleSheet.create({
 	container: {

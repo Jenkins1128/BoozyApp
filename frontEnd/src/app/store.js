@@ -4,6 +4,9 @@ import loginRedcuer from '../screens/LogIn/redux/loginSlice';
 import homeReducer from '../screens/Home/redux/homeSlice';
 import viewRestaurantsReducer from '../screens/Home/redux/viewRestaurantsSlice';
 import getDataFromFilterReducer from '../screens/Home/redux/getDataFromFilterSlice';
+import restaurantPageReducer from '../screens/RestaurantPage/redux/restaurantPageSlice';
+import starRatingReducer from '../screens/RestaurantPage/redux/starRatingSlice';
+import menuItemReducer from '../screens/RestaurantPage/redux/menuItemSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -11,6 +14,9 @@ export const store = configureStore({
 		login: loginRedcuer,
 		home: homeReducer,
 		restaurant: viewRestaurantsReducer,
-		dataFromFilter: getDataFromFilterReducer
+		dataFromFilter: getDataFromFilterReducer,
+		restaurantPage: restaurantPageReducer,
+		starRating: starRatingReducer,
+		menuItem: menuItemReducer
 	}
 });

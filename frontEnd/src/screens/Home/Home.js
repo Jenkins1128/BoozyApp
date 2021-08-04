@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 
 import * as Location from 'expo-location';
 import { StyleSheet, View, Animated, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import Restaurant from '../Restaurant/Restaurant';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	getCurrentLocationDataAsync,
@@ -62,6 +61,8 @@ const Home = ({ navigation }) => {
 			case 'fulfilled':
 				populateRestaurants(state.restaurantsArray);
 				break;
+			default:
+				return;
 		}
 		dispatch(resetHomeRequestStatus());
 	}, [state]);
@@ -82,6 +83,8 @@ const Home = ({ navigation }) => {
 					populateRestaurants(filteredRestaurantData.restaurantsArray);
 				}
 				break;
+			default:
+				return;
 		}
 		dispatch(resetDataFromFilterRequestStatus());
 	}, [filteredRestaurantData]);
@@ -108,6 +111,8 @@ const Home = ({ navigation }) => {
 					alreadyRated: restaurantState.restaurantInfo.alreadyRated
 				});
 				break;
+			default:
+				return;
 		}
 		dispatch(resetRestaurantRequestStatus());
 	}, [restaurantState]);
@@ -125,13 +130,6 @@ const Home = ({ navigation }) => {
 			keyboardDidShowListener.remove();
 		};
 	}, []);
-
-	const isEmpty = (currentState) => {
-		for (const x in currentState) {
-			return false;
-		}
-		return true;
-	};
 
 	const showErrorAlert = (errorString) => {
 		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
@@ -166,10 +164,6 @@ const Home = ({ navigation }) => {
 		dispatch(viewRestaurantsAsync({ index, state }));
 	};
 
-	const restaurant = ({ item, index }) => {
-		return <Restaurant key={index} keyval={index} val={item} viewRestaurant={() => viewRestaurants(index)} />;
-	};
-
 	const setMapRef = (ref) => {
 		mapref = ref;
 	};
@@ -187,7 +181,7 @@ const Home = ({ navigation }) => {
 		<View style={styles.container}>
 			<BoozyMap setMapRef={setMapRef} state={state} dismiss={dismiss} />
 			<Searchbar state={state} dispatch={dispatch} updateLocation={updateLocation} showFilterOverlay={() => showFilterOverlay(true)} getDataFromFilter={getDataFromFilter} dismiss={dismiss} />
-			<RestaurantList state={state} viewRestaurants={viewRestaurants} restaurant={restaurant} dismiss={dismiss} />
+			<RestaurantList state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
 
 			<FilterView
 				bounceValue={bounceValue}
