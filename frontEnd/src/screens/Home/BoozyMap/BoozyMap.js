@@ -3,7 +3,7 @@ import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
 import { Image, Text, StyleSheet, Dimensions, TouchableWithoutFeedback } from 'react-native';
 import logo from '../../../images/logo.png';
 
-const BoozyMap = ({ setMapRef, state, dismiss }) => {
+const BoozyMap = ({ setMapRef, state, viewRestaurants, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={dismiss}>
 			<MapView

@@ -15,18 +15,16 @@ export const viewRestaurantsAsync = createAsyncThunk('viewRestaurantsAsync/statu
 			restaurantId: restaurantId,
 			name: name
 		});
-		state.alreadyFavorited = alreadyFavoritedResponse.data[0]['contains'];
 		const alreadyRatedResponse = await axios.get(`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/${state.restaurantsArray[index]['id']}/review`);
-		state.alreadyRated = alreadyRatedResponse.data[0]['contains'];
-		state.allCategories = '';
-		for (let i = 0; i < state.restaurantsArray[index]['categories'].length; i++) {
-			if (i == 0) {
-				state.allCategories += state.restaurantsArray[index]['categories'][i]['title'];
-			} else {
-				state.allCategories += ', ' + state.restaurantsArray[index]['categories'][i]['title'];
-			}
-		}
-		const newState = { ...state, restaurantsArray: [state.restaurantsArray[index]] };
+		const categories = state.restaurantsArray[index]['categories'].map((obj) => obj.title);
+		const categoriesString = categories.join(', ');
+		const newState = {
+			...state,
+			alreadyFavorited: alreadyFavoritedResponse.data[0]['contains'],
+			alreadyRated: alreadyRatedResponse.data[0]['contains'],
+			allCategories: categoriesString,
+			restaurantsArray: [state.restaurantsArray[index]]
+		};
 		return newState;
 	} catch (err) {
 		return rejectWithValue(err.response.data);

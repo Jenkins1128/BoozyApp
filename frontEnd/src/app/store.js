@@ -7,7 +7,7 @@ import getDataFromFilterReducer from '../screens/Home/redux/getDataFromFilterSli
 import restaurantPageReducer from '../screens/RestaurantPage/redux/restaurantPageSlice';
 import starRatingReducer from '../screens/RestaurantPage/redux/starRatingSlice';
 import menuItemReducer from '../screens/RestaurantPage/redux/menuItemSlice';
-
+import favoriteReducer from '../screens/RestaurantPage/redux/favoriteSlice';
 export const store = configureStore({
 	reducer: {
 		signup: signUpReducer,
@@ -17,6 +17,7 @@ export const store = configureStore({
 		dataFromFilter: getDataFromFilterReducer,
 		restaurantPage: restaurantPageReducer,
 		starRating: starRatingReducer,
-		menuItem: menuItemReducer
+		menuItem: menuItemReducer,
+		favorite: favoriteReducer
 	}
 });

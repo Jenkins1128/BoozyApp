@@ -37,9 +37,10 @@ export const restaurantPageSlice = createSlice({
 	initialState,
 	reducers: {
 		updateState: (state, { payload }) => {
+			console.log('payload', payload);
 			state.currentState = {
 				...state.currentState,
-				restaurantId: payload.parmas.id,
+				restaurantId: payload.params.id,
 				restaurantName: payload.params.name,
 				restaurantImage: payload.params.img,
 				phoneNumber: payload.params.phone,

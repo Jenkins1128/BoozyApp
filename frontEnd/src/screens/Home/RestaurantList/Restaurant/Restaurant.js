@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } fr
 const Restaurant = ({ keyval, val, viewRestaurant, dismiss }) => {
 	const dismissAndViewRestaurant = () => {
 		dismiss();
-		//viewRestaurant();
+		viewRestaurant();
 	};
 	return (
 		<TouchableWithoutFeedback onPress={dismissAndViewRestaurant}>

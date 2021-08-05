@@ -179,7 +179,7 @@ const Home = ({ navigation }) => {
 
 	return (
 		<View style={styles.container}>
-			<BoozyMap setMapRef={setMapRef} state={state} dismiss={dismiss} />
+			<BoozyMap setMapRef={setMapRef} state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
 			<Searchbar state={state} dispatch={dispatch} updateLocation={updateLocation} showFilterOverlay={() => showFilterOverlay(true)} getDataFromFilter={getDataFromFilter} dismiss={dismiss} />
 			<RestaurantList state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
 
