@@ -21,6 +21,11 @@ export const starRatingAsync = createAsyncThunk('starRatingAsync/status', async 
 export const starRatingSlice = createSlice({
 	name: 'starRatingAsync',
 	initialState,
+	reducers: {
+		resetStarRatingRequestStatus: (state) => {
+			state.currentState = { ...state.currentState, starRatingRequestStatus: 'idle' };
+		}
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(starRatingAsync.fulfilled, (state) => {
@@ -32,7 +37,7 @@ export const starRatingSlice = createSlice({
 	}
 });
 
-export const { updateStarCount } = starRatingSlice.actions;
+export const { resetStarRatingRequestStatus } = starRatingSlice.actions;
 
 export const selectStarRatingState = (state) => state.starRating.currentState;
 export default starRatingSlice.reducer;

@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, ImageBackground, Animated, FlatList, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Image, ImageBackground, Animated, FlatList, TouchableWithoutFeedback } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import StarRating from 'react-native-star-rating';
 import MenuItem from './MenuItem/MenuItem';
 import background from '../../images/background.jpeg';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState } from './redux/restaurantPageSlice';
+import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState, resetRestaurantPageRequestStatus } from './redux/restaurantPageSlice';
 import { selectStarRatingState, starRatingAsync } from './redux/starRatingSlice';
-import { postMenuItemAsync, resetMenuItem, selectMenuItemState, updateDescription } from './redux/menuItemSlice';
-import { favoriteAsync, selectFavoriteState } from './redux/favoriteSlice';
+import { postMenuItemAsync, resetMenuItem, selectMenuItemState, updateDescription, updatePrice } from './redux/menuItemSlice';
+import { favoriteAsync, resetFavorite, selectFavoriteState } from './redux/favoriteSlice';
 
 const RestaurantPage = ({ navigation, route }) => {
 	const bounceValue = useRef(new Animated.Value(1000)).current;
@@ -35,18 +35,18 @@ const RestaurantPage = ({ navigation, route }) => {
 		switch (starRatingState.starRatingRequestStatus) {
 			case 'rejected':
 				showErrorAlert('Star rating failed. Please check your network.');
-				return;
+				break;
 			default:
 				return;
 		}
-	}, [state]);
+	}, [starRatingState]);
 
-	//Add menu check
+	//Add submit menu item check
 	useEffect(() => {
-		switch (menuItemState.getMenuItemRequestStatus) {
+		switch (menuItemState.postMenuItemRequestStatus) {
 			case 'rejected':
 				showErrorAlert('Menu item submit failed. Please check your network.');
-				return;
+				break;
 			case 'fulfilled':
 				menuItemSubmitted();
 				break;
@@ -56,17 +56,32 @@ const RestaurantPage = ({ navigation, route }) => {
 		dispatch(resetMenuItem());
 	}, [menuItemState]);
 
+	//get menu items check
+	useEffect(() => {
+		switch (state.restaurantPageRequestStatus) {
+			case 'rejected':
+				showErrorAlert('Fetching Menu items failed. Please check your network.');
+				break;
+			default:
+				return;
+		}
+		dispatch(resetRestaurantPageRequestStatus());
+	}, [state]);
+
 	//Favorite check
 	useEffect(() => {
 		switch (favoriteState.favoriteRequestStatus) {
 			case 'rejected':
 				showErrorAlert('Favoriting restaurant failed. Please check your network.');
-				return;
+				break;
 			case 'fulfilled':
-				return;
+				console.log('favoriteColor', favoriteState.favoriteColor);
+				changeColor(favoriteState.favoriteColor);
+				break;
 			default:
 				return;
 		}
+		dispatch(resetFavorite());
 	}, [favoriteState]);
 
 	const showErrorAlert = (errorString) => {
@@ -77,11 +92,11 @@ const RestaurantPage = ({ navigation, route }) => {
 		const { params } = route;
 		console.log('params', params);
 		dispatch(updateState({ params: params }));
-
-		const colorFavorited = state.favorited ? 'red' : 'white';
+		console.log('favorited', params.alreadyFavorited);
+		const colorFavorited = params.alreadyFavorited ? 'red' : 'white';
 		changeColor(colorFavorited);
 
-		dispatch(getMenuItemsAsync(state.restaurantId));
+		dispatch(getMenuItemsAsync(params.id));
 	};
 
 	const showMenuItemOverlay = (shown) => {
@@ -111,34 +126,30 @@ const RestaurantPage = ({ navigation, route }) => {
 	};
 
 	const getDataFromMenuItem = () => {
-		dispatch(postMenuItemAsync({ description: state.description, price: state.price, restaurantName: state.restaurantName, restaurantId: state.restaurantId }));
+		dispatch(postMenuItemAsync({ description: menuItemState.description, price: menuItemState.price, restaurantName: state.restaurantName, restaurantId: state.restaurantId }));
+		showMenuItemOverlay(false);
 	};
 
 	const menuItemSubmitted = () => {
-		let price = state.price;
+		let price = menuItemState.price;
 		if (price % 1 == 0) {
 			price = parseFloat(price.toString());
 		}
-		dispatch(updateMenuItems({ price: price, content: state.description }));
-		showMenuItemOverlay(false);
+		console.log('menuItemSubmitted', price, menuItemState.description);
+		dispatch(updateMenuItems({ menuItem: { price: price, content: menuItemState.description } }));
 	};
 
 	const favorite = () => {
 		dispatch(favoriteAsync({ restaurantId: state.restaurantId, name: state.restaurantName }));
 	};
 
-	const favoriteChangeColor = (data) => {
-		const favoriteColor = data[0]['contains'] ? 'red' : 'white';
-		this.changeColor(favoriteColor);
-	};
-
 	const menuItem = ({ item, index }) => {
-		return <MenuItem key={index} keyval={index} val={item} />;
+		return <MenuItem key={index} keyval={index} val={item} showMenuItemOverlay={showMenuItemOverlay} />;
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => showMenuItemOverlay(false)}>
-			<View style={styles.container}>
+		<View style={styles.container}>
+			<TouchableWithoutFeedback onPress={() => showMenuItemOverlay(false)}>
 				<View style={styles.header}>
 					<Image source={{ uri: state.restaurantImage }} style={styles.logoImage}></Image>
 					<ImageBackground source={background} style={styles.backgroundImage}>
@@ -181,12 +192,13 @@ const RestaurantPage = ({ navigation, route }) => {
 						</View>
 					</ImageBackground>
 				</View>
+			</TouchableWithoutFeedback>
 
-				<View style={styles.scrollContainer}>
-					<Text style={styles.menuTitle}> Menu items </Text>
-					{/* <FlatList data={state.menuItemArray} keyExtractor={(item, i) => i.toString()} renderItem={menuItem}></FlatList> */}
-				</View>
-
+			<View style={styles.scrollContainer}>
+				<Text style={styles.menuTitle}> Menu items </Text>
+				<FlatList data={state.menuItemArray} keyExtractor={(item, i) => i.toString()} renderItem={menuItem}></FlatList>
+			</View>
+			<TouchableWithoutFeedback>
 				<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
 					<View style={styles.addMenuItemHeader}>
 						<View style={styles.addMenuItemTitleContainer}>
@@ -205,17 +217,24 @@ const RestaurantPage = ({ navigation, route }) => {
 						multiline={false}
 						value=''
 						returnKeyType='next'
-						onChangeText={(price) => dispatch(updateDescription({ price: price }))}
-						value={state.price > 0 ? state.price.toString() : ''}
+						onChangeText={(price) => dispatch(updatePrice({ price: price }))}
+						value={menuItemState.price > 0 ? menuItemState.price.toString() : ''}
 						placeholder='Enter Price'
 					/>
-					<TextInput style={styles.descriptionStyle} multiline={false} returnKeyType='next' onChangeText={(description) => dispatch(updateDescription({ description: description }))} value={state.description} placeholder='Enter menu item' />
+					<TextInput
+						style={styles.descriptionStyle}
+						multiline={false}
+						returnKeyType='next'
+						onChangeText={(description) => dispatch(updateDescription({ description: description }))}
+						value={menuItemState.description}
+						placeholder='Enter menu item'
+					/>
 					<TouchableOpacity onPress={getDataFromMenuItem} style={styles.addMenuItemButton}>
 						<Text style={styles.addMenuItemText}>Submit</Text>
 					</TouchableOpacity>
 				</Animated.View>
-			</View>
-		</TouchableWithoutFeedback>
+			</TouchableWithoutFeedback>
+		</View>
 	);
 };
 

@@ -68,12 +68,13 @@ export const restaurantPageSlice = createSlice({
 			state.currentState = { ...state.currentState, menuItemArray: [...state.currentState.menuItemArray, payload.menuItem] };
 		},
 		resetRestaurantPageRequestStatus: (state) => {
-			state.currentState.restaurantPageRequestStatus = 'idle';
+			state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'idle' };
 		}
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getMenuItemsAsync.fulfilled, (state, { payload }) => {
+				console.log('PAYLOAD', payload);
 				state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'fulfilled', menuItemArray: payload };
 			})
 			.addCase(getMenuItemsAsync.rejected, (state) => {

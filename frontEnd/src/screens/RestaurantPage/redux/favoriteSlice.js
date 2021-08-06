@@ -7,17 +7,20 @@ const initialState = {
 
 export const favoriteAsync = createAsyncThunk('favoriteAsync/status', async (data, { rejectWithValue }) => {
 	const { restaurantId, restaurantName } = data;
+	console.log(data);
 	try {
 		//favorite restaurant
 		await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/add', {
 			restaurantId: restaurantId,
 			name: restaurantName
 		});
+		console.log('FAVORITED!');
 		//add restaurants to your favorites
-		await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites', {
+		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites', {
 			restaurantId: restaurantId,
 			name: restaurantName
 		});
+		console.log('ADDED TO LIST!');
 		return response.data;
 	} catch (err) {
 		return rejectWithValue(err.response.data);

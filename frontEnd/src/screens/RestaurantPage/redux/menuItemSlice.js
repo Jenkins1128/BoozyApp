@@ -30,7 +30,7 @@ const postMenuItemSlice = createSlice({
 			state.currentState = { ...state.currentState, description: payload.description };
 		},
 		resetMenuItem: (state) => {
-			state.currentState = { ...state.currentState, price: '', description: '' };
+			state.currentState = { ...state.currentState, price: '', description: '', postMenuItemRequestStatus: 'idle' };
 		}
 	},
 	extraReducers: (builder) => {
