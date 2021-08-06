@@ -26,7 +26,7 @@ import RestaurantList from './RestaurantList/RestaurantList';
 import FilterView from './FilterView/FilterView';
 
 const Home = ({ navigation }) => {
-	let mapref = null;
+	let mapref = useRef();
 	const bounceValue = useRef(new Animated.Value(1000)).current;
 	const keyboardVisible = useRef(false);
 
@@ -145,7 +145,9 @@ const Home = ({ navigation }) => {
 	};
 
 	const populateRestaurants = (restaurantsArray) => {
-		mapref.fitToCoordinates(restaurantsArray.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
+		if (mapref != null) {
+			mapref.fitToCoordinates(restaurantsArray.map(({ lat, long }) => ({ latitude: lat, longitude: long })));
+		}
 	};
 
 	const showFilterOverlay = (shown) => {
