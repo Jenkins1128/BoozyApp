@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './redux/loginSlice';
 import background from '../../images/background.jpeg';

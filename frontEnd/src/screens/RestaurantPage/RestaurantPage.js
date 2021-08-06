@@ -8,7 +8,6 @@ import { postMenuItemAsync, resetMenuItem, selectMenuItemState, updateDescriptio
 import { favoriteAsync, resetFavorite, selectFavoriteState } from './redux/favoriteSlice';
 import RestaurantHeader from './RestaurantHeader/RestaurantHeader';
 import MenuItemsList from './MenuItemsList/MenuItemsList';
-import MenuItem from './MenuItem/MenuItem';
 import AddMenuItem from './AddMenuItem/AddMenuItem';
 
 const RestaurantPage = ({ navigation, route }) => {
@@ -23,12 +22,8 @@ const RestaurantPage = ({ navigation, route }) => {
 	//did screen focus, get restaurant data
 	useEffect(() => {
 		const unsubscribe = navigation.addListener('focus', () => {
-			// The screen is focused
-			// Call any action
 			getRestaurantDataOnFocus();
 		});
-
-		// Return the function to unsubscribe from the event so it gets removed on unmount
 		return unsubscribe;
 	}, [navigation]);
 
@@ -91,7 +86,6 @@ const RestaurantPage = ({ navigation, route }) => {
 				showErrorAlert('Favoriting restaurant failed. Please check your network.');
 				break;
 			case 'fulfilled':
-				console.log('favoriteColor', favoriteState.favoriteColor);
 				changeColor(favoriteState.favoriteColor);
 				break;
 			default:
@@ -106,17 +100,13 @@ const RestaurantPage = ({ navigation, route }) => {
 
 	const getRestaurantDataOnFocus = () => {
 		const { params } = route;
-		console.log('params', params);
 		dispatch(updateState({ params: params }));
-		console.log('favorited', params.alreadyFavorited);
 		const colorFavorited = params.alreadyFavorited ? 'red' : 'white';
 		changeColor(colorFavorited);
-
 		dispatch(getMenuItemsAsync(params.id));
 	};
 
 	const showMenuItemOverlay = (shown) => {
-		console.log('shown', shown);
 		let toValue;
 		if (shown) {
 			toValue = 0;
@@ -151,7 +141,6 @@ const RestaurantPage = ({ navigation, route }) => {
 		if (price % 1 == 0) {
 			price = parseFloat(price.toString());
 		}
-		console.log('menuItemSubmitted', price, menuItemState.description);
 		dispatch(updateMenuItems({ menuItem: { price: price, content: menuItemState.description } }));
 	};
 

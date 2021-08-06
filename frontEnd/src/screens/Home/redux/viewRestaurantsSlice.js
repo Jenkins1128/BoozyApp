@@ -7,7 +7,6 @@ const initialState = {
 
 export const viewRestaurantsAsync = createAsyncThunk('viewRestaurantsAsync/status', async (data, { rejectWithValue }) => {
 	const { index, state } = data;
-	console.log(data);
 	state.index = index;
 	let restaurantId;
 	if (state.restaurantsArray[index]['id']) {
@@ -16,18 +15,14 @@ export const viewRestaurantsAsync = createAsyncThunk('viewRestaurantsAsync/statu
 		restaurantId = state.restaurantsArray[index]['restaurantId'];
 	}
 	const name = state.restaurantsArray[index]['name'];
-	console.log(name, restaurantId);
 	try {
 		const alreadyFavoritedResponse = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites', {
 			restaurantId: restaurantId,
 			name: name
 		});
-		console.log('alreadyFavoritedResponse');
 		const alreadyRatedResponse = await axios.get(`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/${restaurantId}/review`);
-		console.log('alreadyRatedResponse');
 		const categories = state.restaurantsArray[index]['categories'] ? state.restaurantsArray[index]['categories'].map((obj) => obj.title) : [];
 		const categoriesString = categories.length ? categories.join(', ') : '';
-		console.log(categoriesString);
 		const newState = {
 			...state,
 			alreadyFavorited: alreadyFavoritedResponse.data[0]['contains'],

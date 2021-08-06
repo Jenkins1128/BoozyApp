@@ -37,7 +37,6 @@ export const restaurantPageSlice = createSlice({
 	initialState,
 	reducers: {
 		updateState: (state, { payload }) => {
-			console.log('payload', payload);
 			state.currentState = {
 				...state.currentState,
 				restaurantId: payload.params.id,
@@ -74,7 +73,6 @@ export const restaurantPageSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(getMenuItemsAsync.fulfilled, (state, { payload }) => {
-				console.log('PAYLOAD', payload);
 				state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'fulfilled', menuItemArray: payload };
 			})
 			.addCase(getMenuItemsAsync.rejected, (state) => {

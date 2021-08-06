@@ -50,6 +50,16 @@ const Home = ({ navigation }) => {
 		})();
 	}, []);
 
+	//did screen focus, get last filtered data
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+			if (state.restaurantsArray.length) {
+				populateRestaurants(state.restaurantsArray);
+			}
+		});
+		return unsubscribe;
+	}, [navigation]);
+
 	//Get current location data
 	useEffect(() => {
 		switch (state.locationDataRequestStatus) {
@@ -57,9 +67,8 @@ const Home = ({ navigation }) => {
 				return;
 			case 'rejected':
 				showErrorAlert('Unable to get location. Please check your network.');
-				return;
+				break;
 			case 'fulfilled':
-				console.log('home', state.restaurantsArray);
 				populateRestaurants(state.restaurantsArray);
 				break;
 			default:
@@ -75,7 +84,7 @@ const Home = ({ navigation }) => {
 				return;
 			case 'rejected':
 				showErrorAlert('Unable to fulfill filter. Please check your network.');
-				return;
+				break;
 			case 'fulfilled':
 				if (!filteredRestaurantData.restaurantsArray.length) {
 					showErrorAlert('No places found for filter.');
@@ -97,7 +106,7 @@ const Home = ({ navigation }) => {
 				return;
 			case 'rejected':
 				showErrorAlert('Unable to get restaurant data. Please check your network.');
-				return;
+				break;
 			case 'fulfilled':
 				navigation.navigate('Restaurant', {
 					id: restaurantState.restaurantInfo.restaurantsArray[0]['id'],

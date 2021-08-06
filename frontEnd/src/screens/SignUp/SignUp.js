@@ -14,15 +14,17 @@ const SignUp = ({ navigation }) => {
 		if (isEmpty(state)) {
 			return;
 		}
-		if (state.requestStatus === 'rejected') {
-			dispatch(resetStatus());
-			showErrorAlert('Username already exists...');
-			return;
+		switch (state.requestStatus) {
+			case 'idle':
+				return;
+			case 'rejected':
+				showErrorAlert('Username already exists...');
+				break;
+			case 'fulfilled':
+				login();
+				break;
 		}
-		if (state.requestStatus === 'fulfilled') {
-			dispatch(resetStatus());
-			login();
-		}
+		dispatch(resetStatus());
 	}, [state]);
 
 	const isEmpty = (currentState) => {
@@ -45,11 +47,8 @@ const SignUp = ({ navigation }) => {
 			showErrorAlert('Please fill out all fields.');
 			return;
 		}
+		console.log(state.email, state.password);
 		dispatch(signUpAsync({ email: state.email, password: state.password }));
-	};
-
-	const goToHome = () => {
-		navigation.navigate('Home');
 	};
 
 	return (
