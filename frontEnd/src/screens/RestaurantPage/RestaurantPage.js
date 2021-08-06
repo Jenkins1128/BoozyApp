@@ -1,16 +1,18 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, TouchableOpacity, Image, ImageBackground, Animated, FlatList, TouchableWithoutFeedback } from 'react-native';
-import { AntDesign, Entypo } from '@expo/vector-icons';
-import StarRating from 'react-native-star-rating';
-import MenuItem from './MenuItem/MenuItem';
-import background from '../../images/background.jpeg';
+import { StyleSheet, Keyboard, View, TextInput, Alert, TouchableOpacity, Image, ImageBackground, Animated, FlatList, TouchableWithoutFeedback } from 'react-native';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState, resetRestaurantPageRequestStatus } from './redux/restaurantPageSlice';
 import { selectStarRatingState, starRatingAsync } from './redux/starRatingSlice';
 import { postMenuItemAsync, resetMenuItem, selectMenuItemState, updateDescription, updatePrice } from './redux/menuItemSlice';
 import { favoriteAsync, resetFavorite, selectFavoriteState } from './redux/favoriteSlice';
+import RestaurantHeader from './RestaurantHeader/RestaurantHeader';
+import MenuItemsList from './MenuItemsList/MenuItemsList';
+import MenuItem from './MenuItem/MenuItem';
+import AddMenuItem from './AddMenuItem/AddMenuItem';
 
 const RestaurantPage = ({ navigation, route }) => {
+	const keyboardVisible = useRef(false);
 	const bounceValue = useRef(new Animated.Value(1000)).current;
 	const state = useSelector(selectRestaurantPageState);
 	const starRatingState = useSelector(selectStarRatingState);
@@ -29,6 +31,20 @@ const RestaurantPage = ({ navigation, route }) => {
 		// Return the function to unsubscribe from the event so it gets removed on unmount
 		return unsubscribe;
 	}, [navigation]);
+
+	useEffect(() => {
+		const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+			keyboardVisible.current = true; // or some other action
+		});
+		const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+			keyboardVisible.current = false; // or some other action
+		});
+
+		return () => {
+			keyboardDidHideListener.remove();
+			keyboardDidShowListener.remove();
+		};
+	}, []);
 
 	//Star rating success check
 	useEffect(() => {
@@ -143,97 +159,29 @@ const RestaurantPage = ({ navigation, route }) => {
 		dispatch(favoriteAsync({ restaurantId: state.restaurantId, name: state.restaurantName }));
 	};
 
-	const menuItem = ({ item, index }) => {
-		return <MenuItem key={index} keyval={index} val={item} showMenuItemOverlay={showMenuItemOverlay} />;
+	const dismiss = () => {
+		if (keyboardVisible.current) {
+			Keyboard.dismiss();
+		}
+		if (!keyboardVisible.current) {
+			showMenuItemOverlay(false);
+		}
 	};
 
 	return (
 		<View style={styles.container}>
-			<TouchableWithoutFeedback onPress={() => showMenuItemOverlay(false)}>
-				<View style={styles.header}>
-					<Image source={{ uri: state.restaurantImage }} style={styles.logoImage}></Image>
-					<ImageBackground source={background} style={styles.backgroundImage}>
-						<View style={styles.titleHeader}>
-							<Text style={styles.restaurantName}> {state.restaurantName} </Text>
-							<TouchableOpacity onPress={favorite} style={styles.favoriteButton}>
-								<AntDesign name='heart' style={{ color: state.favoriteColor, fontSize: 30 }} />
-							</TouchableOpacity>
-						</View>
-						<View style={styles.titleBody}>
-							<View style={styles.infoContainer}>
-								<Text style={styles.categoriesText}>
-									{state.allCategories} • {state.rating}★
-								</Text>
-								<Text style={styles.phoneNumberText}>
-									{state.phoneNumber} • {state.reviews} Yelp Reviews
-								</Text>
-							</View>
-
-							<View style={styles.starRatingContainer}>
-								<StarRating
-									disabled={false}
-									emptyStar={'ios-star-outline'}
-									fullStar={'ios-star'}
-									halfStar={'ios-star-half'}
-									iconSet={'Ionicons'}
-									maxStars={5}
-									disabled={state.rated}
-									rating={state.starCount}
-									selectedStar={(rating) => onStarRatingPress(rating)}
-									fullStarColor={'yellow'}
-									ratingBackgroundColor='white'
-								/>
-							</View>
-							<View style={styles.menuButtonContainer}>
-								<TouchableOpacity onPress={() => showMenuItemOverlay(true)} style={styles.menuButton}>
-									<Text style={styles.menuItemText}>+ Menu Item</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</ImageBackground>
-				</View>
-			</TouchableWithoutFeedback>
-
-			<View style={styles.scrollContainer}>
-				<Text style={styles.menuTitle}> Menu items </Text>
-				<FlatList data={state.menuItemArray} keyExtractor={(item, i) => i.toString()} renderItem={menuItem}></FlatList>
-			</View>
-			<TouchableWithoutFeedback>
-				<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
-					<View style={styles.addMenuItemHeader}>
-						<View style={styles.addMenuItemTitleContainer}>
-							<Text style={styles.addMenuItemTitle}>Add Menu Item</Text>
-						</View>
-						<View>
-							<TouchableOpacity onPress={() => showMenuItemOverlay(false)} style={styles.cancelButton}>
-								<Text style={styles.cancelText}>Cancel</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-
-					<TextInput
-						style={styles.priceStyle}
-						keyboardType={'numeric'}
-						multiline={false}
-						value=''
-						returnKeyType='next'
-						onChangeText={(price) => dispatch(updatePrice({ price: price }))}
-						value={menuItemState.price > 0 ? menuItemState.price.toString() : ''}
-						placeholder='Enter Price'
-					/>
-					<TextInput
-						style={styles.descriptionStyle}
-						multiline={false}
-						returnKeyType='next'
-						onChangeText={(description) => dispatch(updateDescription({ description: description }))}
-						value={menuItemState.description}
-						placeholder='Enter menu item'
-					/>
-					<TouchableOpacity onPress={getDataFromMenuItem} style={styles.addMenuItemButton}>
-						<Text style={styles.addMenuItemText}>Submit</Text>
-					</TouchableOpacity>
-				</Animated.View>
-			</TouchableWithoutFeedback>
+			<RestaurantHeader state={state} showMenuItemOverlay={showMenuItemOverlay} onStarRatingPress={onStarRatingPress} favorite={favorite} dismiss={dismiss} />
+			<MenuItemsList state={state} showMenuItemOverlay={showMenuItemOverlay} dismiss={dismiss} />
+			<AddMenuItem
+				bounceValue={bounceValue}
+				menuItemState={menuItemState}
+				dispatch={dispatch}
+				updatePrice={updatePrice}
+				updateDescription={updateDescription}
+				showMenuItemOverlay={showMenuItemOverlay}
+				getDataFromMenuItem={getDataFromMenuItem}
+				dismiss={dismiss}
+			/>
 		</View>
 	);
 };
@@ -245,137 +193,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
-	},
-	header: {
-		flex: 1,
-		width: '100%',
-		height: '100%',
-		justifyContent: 'center'
-	},
-	backgroundImage: {
-		flex: 1,
-		opacity: 0.95
-	},
-	titleHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: 10
-	},
-	logoImage: {
-		width: 430,
-		height: 200
-	},
-	restaurantName: {
-		color: 'white',
-		fontSize: 25,
-		fontWeight: 'bold',
-		marginLeft: 10
-	},
-	categoriesText: {
-		fontSize: 14,
-		marginBottom: 0,
-		color: 'white'
-	},
-	phoneNumberText: {
-		fontSize: 14,
-		marginBottom: 0,
-		color: 'white'
-	},
-	favoriteButton: {
-		marginBottom: 0,
-		margin: 10
-	},
-	titleBody: {
-		marginTop: 5,
-		marginHorizontal: 15
-	},
-	infoContainer: {
-		marginBottom: 10
-	},
-	starRatingContainer: {
-		marginBottom: 15
-	},
-	menuButtonContainer: {
-		alignSelf: 'center'
-	},
-	menuButton: {
-		width: 110,
-		backgroundColor: '#EB8873',
-		borderRadius: 20,
-		padding: 10
-	},
-	menuItemText: {
-		color: 'white',
-		fontWeight: 'bold'
-	},
-
-	scrollContainer: {
-		flex: 1,
-		width: '100%',
-		backgroundColor: 'white'
-	},
-
-	menuTitle: {
-		color: 'lightgrey',
-		fontSize: 20,
-		marginTop: 0,
-		fontWeight: 'bold',
-		padding: 10
-	},
-
-	subView: {
-		position: 'absolute',
-		backgroundColor: '#FFFFFF',
-		padding: 20,
-		borderRadius: 30
-	},
-	addMenuItemHeader: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: 20
-	},
-	addMenuItemTitleContainer: {
-		marginRight: 20
-	},
-	addMenuItemTitle: {
-		fontSize: 20,
-		fontWeight: 'bold',
-		color: '#EB8873'
-	},
-	cancelButton: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#FFFFFF',
-		padding: 10,
-		borderRadius: 20
-	},
-
-	priceStyle: {
-		fontSize: 18,
-		textAlign: 'center',
-		marginBottom: 20
-	},
-	descriptionStyle: {
-		fontSize: 18,
-		textAlign: 'center',
-		marginBottom: 20
-	},
-	addMenuItemButton: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#EB8873',
-		padding: 10,
-		borderRadius: 20
-	},
-	cancelText: {
-		color: '#EB8873',
-		fontWeight: 'bold'
-	},
-	addMenuItemText: {
-		color: 'white',
-		fontWeight: 'bold'
 	}
 });
 
