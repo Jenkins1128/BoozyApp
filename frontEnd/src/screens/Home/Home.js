@@ -59,6 +59,7 @@ const Home = ({ navigation }) => {
 				showErrorAlert('Unable to get location. Please check your network.');
 				return;
 			case 'fulfilled':
+				console.log('home', state.restaurantsArray);
 				populateRestaurants(state.restaurantsArray);
 				break;
 			default:
@@ -98,7 +99,6 @@ const Home = ({ navigation }) => {
 				showErrorAlert('Unable to get restaurant data. Please check your network.');
 				return;
 			case 'fulfilled':
-				console.log('restaurantState', restaurantState);
 				navigation.navigate('Restaurant', {
 					id: restaurantState.restaurantInfo.restaurantsArray[0]['id'],
 					name: restaurantState.restaurantInfo.restaurantsArray[0]['name'],

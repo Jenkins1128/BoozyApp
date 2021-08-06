@@ -7,7 +7,6 @@ const initialState = {
 
 export const getDataFromFilterAsync = createAsyncThunk('getDataFromFilterAsync/status', async (data, { rejectWithValue }) => {
 	const { location, priceType, cuisine } = data;
-	console.log(location, priceType, cuisine);
 	try {
 		const response = await axios.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/yelp/' + location + '/' + priceType + '/' + cuisine);
 		return response.data;

@@ -8,6 +8,8 @@ import restaurantPageReducer from '../screens/RestaurantPage/redux/restaurantPag
 import starRatingReducer from '../screens/RestaurantPage/redux/starRatingSlice';
 import menuItemReducer from '../screens/RestaurantPage/redux/menuItemSlice';
 import favoriteReducer from '../screens/RestaurantPage/redux/favoriteSlice';
+import profileReducer from '../screens/Profile/redux/profileSlice';
+
 export const store = configureStore({
 	reducer: {
 		signup: signUpReducer,
@@ -18,6 +20,7 @@ export const store = configureStore({
 		restaurantPage: restaurantPageReducer,
 		starRating: starRatingReducer,
 		menuItem: menuItemReducer,
-		favorite: favoriteReducer
+		favorite: favoriteReducer,
+		profile: profileReducer
 	}
 });
