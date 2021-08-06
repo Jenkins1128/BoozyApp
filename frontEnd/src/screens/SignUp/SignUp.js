@@ -47,7 +47,10 @@ const SignUp = ({ navigation }) => {
 			showErrorAlert('Please fill out all fields.');
 			return;
 		}
-		console.log(state.email, state.password);
+		if (state.password.trim().length < 6) {
+			showErrorAlert('Password needs to be greater than 5 characters.');
+			return;
+		}
 		dispatch(signUpAsync({ email: state.email, password: state.password }));
 	};
 
