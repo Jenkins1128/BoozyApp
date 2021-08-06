@@ -131,7 +131,7 @@ export const homeSlice = createSlice({
 			};
 		},
 		resetHomeRequestStatus: (state) => {
-			state.currentState.locationDataRequestStatus = 'idle';
+			state.currentState = { ...state.currentState, locationDataRequestStatus: 'idle' };
 		}
 	},
 	extraReducers: (builder) => {
