@@ -8,41 +8,44 @@ Boozy App is a mobile application intended for people looking for the nearest ha
 
 ## Build Instructions
 
+### Download Repository
+git clone https://github.com/Jenkins1128/BoozyApp.git
+
 ### Download Expo Client
 npm install expo-cli --global
 
+### Go to project directory
+cd to  "BoozyApp/frontEnd” in terminal.
+
 ### Download Dependencies
-npm install `<dependency>`
+npm install
   
-* "@react-native-community/masked-view"
+* "@expo/vector-icons"
+* "@react-navigation/core"
+* "react-navigation/material-bottom-tabs"
+* "@react-navigation/native"
+* "@react-navigation/stack"
+* "@reduxjs/toolkit"
 * "axios"
-* "Expo-location"
+* "core-js"
+* "expo"
 * "expo-location"
+* "expo-status-bar"
 * "react"
-* "react-axios"
 * "react-dom"
 * "react-native"
 * "react-native-gesture-handler"
 * "react-native-maps"
+* "react-native-paper"
 * "react-native-reanimated"
-* "react-native-safe-area-context"
 * "react-native-screens"
 * "react-native-star-rating"
 * "react-native-vector-icons"
 * "react-native-web"
-* "react-navigation"
-* "react-navigation-stack"
-* "react-navigation-tabs"
-* "sprintf-js"
+* "react-redux"
 
-### Download Repository
-git clone https://github.com/Jenkins1128/BoozyApp.git
-
-### Create an Expo Project and Migrate FinalFrontEnd folder from Repository
-1. “expo init BoozyApp” in terminal.
-2. “cd BoozyApp” in terminal.
-3. Copy over all files and folders from FinalFrontEnd to BoozyApp folder.
-4. “expo start” in terminal.
+### Run BoozyApp
+Execute “npm start” in terminal.
 
 
 
