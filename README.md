@@ -14,7 +14,7 @@ git clone https://github.com/Jenkins1128/BoozyApp.git
 ### Download Expo Client
 npm install expo-cli --global
 
-### Go to project directory
+### Go to project folder
 cd to  "BoozyApp/frontEnd” in terminal.
 
 ### Download Dependencies
