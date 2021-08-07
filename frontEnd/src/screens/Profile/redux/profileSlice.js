@@ -29,10 +29,13 @@ export const getFavoritesSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getFavoritesAsync.fulfilled, (state, { payload }) => {
-			state.currentState = { ...state.currentState, restaurantsArray: payload, getFavoritesRequestStatus: 'fulfilled' };
+			Object.assign(state.currentState, {
+				restaurantsArray: payload,
+				getFavoritesRequestStatus: 'fulfilled'
+			});
 		});
 		builder.addCase(getFavoritesAsync.rejected, (state) => {
-			state.currentState = { ...state.currentState, getFavoritesRequestStatus: 'rejected' };
+			state.currentState.getFavoritesRequestStatus = 'rejected';
 		});
 	}
 });

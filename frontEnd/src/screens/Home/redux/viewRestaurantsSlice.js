@@ -47,10 +47,13 @@ export const viewRestaurantsSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(viewRestaurantsAsync.fulfilled, (state, { payload }) => {
-				state.currentState = { ...state.currentState, restaurantInfo: payload, restaurantRequestStatus: 'fulfilled' };
+				Object.assign(state.currentState, {
+					restaurantInfo: payload,
+					restaurantRequestStatus: 'fulfilled'
+				});
 			})
 			.addCase(viewRestaurantsAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, restaurantRequestStatus: 'rejected' };
+				state.currentState.restaurantRequestStatus = 'rejected';
 			});
 	}
 });

@@ -23,10 +23,10 @@ const loginSlice = createSlice({
 	initialState,
 	reducers: {
 		updateEmail: (state, { payload }) => {
-			state.currentState = { ...state.currentState, email: payload.email };
+			state.currentState.email = payload.email;
 		},
 		updatePassword: (state, { payload }) => {
-			state.currentState = { ...state.currentState, password: payload.password };
+			state.currentState.password = payload.password;
 		},
 		resetStatus: (state) => {
 			state.currentState.requestStatus = 'idle';
@@ -35,13 +35,22 @@ const loginSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(loginAsync.pending, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'pending', isLoading: true };
+				Object.assign(state.currentState, {
+					requestStatus: 'pending',
+					isLoading: true
+				});
 			})
 			.addCase(loginAsync.fulfilled, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'fulfilled', isLoading: false };
+				Object.assign(state.currentState, {
+					requestStatus: 'fulfilled',
+					isLoading: false
+				});
 			})
 			.addCase(loginAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'rejected', isLoading: false };
+				Object.assign(state.currentState, {
+					requestStatus: 'rejected',
+					isLoading: false
+				});
 			});
 	}
 });

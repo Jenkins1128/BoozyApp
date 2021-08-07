@@ -24,10 +24,10 @@ export const settingsSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(logoutAsync.fulfilled, (state) => {
-			state.currentState = { ...state.currentState, settingsRequestStatus: 'fulfilled' };
+			state.currentState.settingsRequestStatus = 'fulfilled';
 		});
 		builder.addCase(logoutAsync.rejected, (state) => {
-			state.currentState = { ...state.currentState, settingsRequestStatus: 'rejected' };
+			state.currentState.settingsRequestStatus = 'rejected';
 		});
 	}
 });

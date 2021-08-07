@@ -23,16 +23,16 @@ export const starRatingSlice = createSlice({
 	initialState,
 	reducers: {
 		resetStarRatingRequestStatus: (state) => {
-			state.currentState = { ...state.currentState, starRatingRequestStatus: 'idle' };
+			state.currentState.starRatingRequestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(starRatingAsync.fulfilled, (state) => {
-				state.currentState = { ...state.currentState, starRatingRequestStatus: 'fulfilled' };
+				state.currentState.starRatingRequestStatus = 'fulfilled';
 			})
 			.addCase(starRatingAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, starRatingRequestStatus: 'rejected' };
+				state.currentState.starRatingRequestStatus = 'rejected';
 			});
 	}
 });

@@ -23,10 +23,10 @@ export const signUpSlice = createSlice({
 	initialState,
 	reducers: {
 		updateEmail: (state, { payload }) => {
-			state.currentState = { ...state.currentState, email: payload.email };
+			state.currentState.email = payload.email;
 		},
 		updatePassword: (state, { payload }) => {
-			state.currentState = { ...state.currentState, password: payload.password };
+			state.currentState.password = payload.password;
 		},
 		resetStatus: (state) => {
 			state.currentState.requestStatus = 'idle';
@@ -35,13 +35,22 @@ export const signUpSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(signUpAsync.pending, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'pending', isLoading: true };
+				Object.assign(state.currentState, {
+					requestStatus: 'pending',
+					isLoading: true
+				});
 			})
 			.addCase(signUpAsync.fulfilled, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'fulfilled', isLoading: false };
+				Object.assign(state.currentState, {
+					requestStatus: 'fulfilled',
+					isLoading: false
+				});
 			})
 			.addCase(signUpAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, requestStatus: 'rejected', isLoading: false };
+				Object.assign(state.currentState, {
+					requestStatus: 'rejected',
+					isLoading: false
+				});
 			});
 	}
 });

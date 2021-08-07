@@ -37,8 +37,7 @@ export const restaurantPageSlice = createSlice({
 	initialState,
 	reducers: {
 		updateState: (state, { payload }) => {
-			state.currentState = {
-				...state.currentState,
+			Object.assign(state.currentState, {
 				restaurantId: payload.params.id,
 				restaurantName: payload.params.name,
 				restaurantImage: payload.params.img,
@@ -49,34 +48,31 @@ export const restaurantPageSlice = createSlice({
 				rated: payload.params.alreadyRated,
 				favorited: payload.params.alreadyFavorited,
 				starCount: 0
-			};
+			});
 		},
 		updateFavoriteColor: (state, { payload }) => {
-			state.currentState = {
-				...state.currentState,
-				favoriteColor: payload.color
-			};
+			state.currentState.favoriteColor = payload.color;
 		},
 		updateStarCount: (state, { payload }) => {
-			state.currentState = {
-				...state.currentState,
-				starCount: payload.starCount
-			};
+			state.currentState.starCount = payload.starCount;
 		},
 		updateMenuItems: (state, { payload }) => {
-			state.currentState = { ...state.currentState, menuItemArray: [...state.currentState.menuItemArray, payload.menuItem] };
+			state.currentState.menuItemArray.push(payload.menuItem);
 		},
 		resetRestaurantPageRequestStatus: (state) => {
-			state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'idle' };
+			state.currentState.restaurantPageRequestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(getMenuItemsAsync.fulfilled, (state, { payload }) => {
-				state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'fulfilled', menuItemArray: payload };
+				Object.assign(state.currentState, {
+					restaurantPageRequestStatus: 'fulfilled',
+					menuItemArray: payload
+				});
 			})
 			.addCase(getMenuItemsAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, restaurantPageRequestStatus: 'rejected' };
+				state.currentState.restaurantPageRequestStatus = 'rejected';
 			});
 	}
 });

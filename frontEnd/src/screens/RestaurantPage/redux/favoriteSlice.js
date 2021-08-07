@@ -29,16 +29,19 @@ const favoriteSlice = createSlice({
 	initialState,
 	reducers: {
 		resetFavorite: (state) => {
-			state.currentState = { ...state.currentState, favoriteRequestStatus: 'idle' };
+			state.currentState.favoriteRequestStatus = 'idle';
 		}
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(favoriteAsync.fulfilled, (state, { payload }) => {
-				state.currentState = { ...state.currentState, favoriteColor: payload[0]['contains'] ? 'red' : 'white', favoriteRequestStatus: 'fulfilled' };
+				Object.assign(state.currentState, {
+					favoriteColor: payload[0]['contains'] ? 'red' : 'white',
+					favoriteRequestStatus: 'fulfilled'
+				});
 			})
 			.addCase(favoriteAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, favoriteRequestStatus: 'rejected' };
+				state.currentState.favoriteRequestStatus = 'rejected';
 			});
 	}
 });

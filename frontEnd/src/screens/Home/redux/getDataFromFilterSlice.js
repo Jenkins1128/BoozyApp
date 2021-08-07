@@ -25,10 +25,13 @@ export const getDataFromFilterSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getDataFromFilterAsync.fulfilled, (state, { payload }) => {
-			state.currentState = { ...state.currentState, restaurantsArray: payload, dataFromFilterRequestStatus: 'fulfilled' };
+			Object.assign(state.currentState, {
+				restaurantsArray: payload,
+				dataFromFilterRequestStatus: 'fulfilled'
+			});
 		});
 		builder.addCase(getDataFromFilterAsync.rejected, (state) => {
-			state.currentState = { ...state.currentState, dataFromFilterRequestStatus: 'rejected' };
+			state.currentState.dataFromFilterRequestStatus = 'rejected';
 		});
 	}
 });

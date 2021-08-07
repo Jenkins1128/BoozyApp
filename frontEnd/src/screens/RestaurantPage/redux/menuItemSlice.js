@@ -24,22 +24,26 @@ const postMenuItemSlice = createSlice({
 	initialState,
 	reducers: {
 		updatePrice: (state, { payload }) => {
-			state.currentState = { ...state.currentState, price: payload.price };
+			state.currentState.price = payload.price;
 		},
 		updateDescription: (state, { payload }) => {
-			state.currentState = { ...state.currentState, description: payload.description };
+			state.currentState.description = payload.description;
 		},
 		resetMenuItem: (state) => {
-			state.currentState = { ...state.currentState, price: '', description: '', postMenuItemRequestStatus: 'idle' };
+			Object.assign(state.currentState, {
+				price: '',
+				description: '',
+				postMenuItemRequestStatus: 'idle'
+			});
 		}
 	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(postMenuItemAsync.fulfilled, (state) => {
-				state.currentState = { ...state.currentState, postMenuItemRequestStatus: 'fulfilled' };
+				state.currentState.postMenuItemRequestStatus = 'fulfilled';
 			})
 			.addCase(postMenuItemAsync.rejected, (state) => {
-				state.currentState = { ...state.currentState, postMenuItemRequestStatus: 'rejected' };
+				state.currentState.postMenuItemRequestStatus = 'rejected';
 			});
 	}
 });
