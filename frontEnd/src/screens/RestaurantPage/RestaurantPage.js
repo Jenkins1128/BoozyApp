@@ -126,7 +126,7 @@ const RestaurantPage = ({ navigation, route }) => {
 		dispatch(updateFavoriteColor({ color: color }));
 	};
 
-	const onStarRatingPress = (rating) => {
+	const onStarRatingPressed = (rating) => {
 		dispatch(updateStarCount({ starCount: rating }));
 		dispatch(starRatingAsync({ rating: rating, restaurantId: state.restaurantId, restaurantName: state.restaurantName }));
 	};
@@ -159,7 +159,7 @@ const RestaurantPage = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
-			<RestaurantHeader state={state} onStarRatingPress={onStarRatingPress} favorite={favorite} dismiss={dismiss} />
+			<RestaurantHeader state={state} onStarRatingPressed={onStarRatingPressed} favorite={favorite} dismiss={dismiss} />
 			<MenuItemsList state={state} showMenuItemOverlay={showMenuItemOverlay} dismiss={dismiss} />
 			<AddMenuItem
 				bounceValue={bounceValue}

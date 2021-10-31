@@ -17,22 +17,23 @@ const Settings = ({ navigation }) => {
 			case 'rejected':
 				break;
 			case 'fulfilled':
-				setIsSignedIn('false');
-				dispatch(resetSettingsRequestStatus());
-				dispatch(setSignedIn({ signedIn: 'false' }));
-				//navigation.navigate('Login');
+				goToLogin();
 				break;
 			default:
 				return;
 		}
 	}, [state]);
 
-	const setIsSignedIn = async (value) => {
+	const goToLogin = () => {
+		setIsSignedInAsyncStorage('false');
+		dispatch(setSignedIn({ signedIn: 'false' }));
+		dispatch(resetSettingsRequestStatus());
+	};
+
+	const setIsSignedInAsyncStorage = async (value) => {
 		try {
 			await AsyncStorage.setItem('@isSignedIn', value);
-		} catch (e) {
-			// saving error
-		}
+		} catch (e) {}
 	};
 
 	const logout = () => {

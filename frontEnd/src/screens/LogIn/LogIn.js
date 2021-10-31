@@ -47,9 +47,7 @@ const LogIn = ({ navigation }) => {
 	const setIsSignedInAsyncStorage = async (value) => {
 		try {
 			await AsyncStorage.setItem('@isSignedIn', value);
-		} catch (e) {
-			// saving error
-		}
+		} catch (e) {}
 	};
 
 	const loginPressed = () => {
