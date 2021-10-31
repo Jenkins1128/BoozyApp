@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, SafeAreaView } from 'react-native';
-import background from '../../images/background.jpeg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../../images/logo.png';
 import { logoutAsync, resetSettingsRequestStatus, selectSettingsState } from './redux/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { setSignedIn } from '../../../appSlice';
 
 const Settings = ({ navigation }) => {
 	const state = useSelector(selectSettingsState);
@@ -16,13 +17,24 @@ const Settings = ({ navigation }) => {
 			case 'rejected':
 				break;
 			case 'fulfilled':
-				dispatch(resetSettingsRequestStatus());
-				navigation.navigate('Login');
+				goToLogin();
 				break;
 			default:
 				return;
 		}
 	}, [state]);
+
+	const goToLogin = () => {
+		setIsSignedInAsyncStorage('false');
+		dispatch(setSignedIn({ signedIn: 'false' }));
+		dispatch(resetSettingsRequestStatus());
+	};
+
+	const setIsSignedInAsyncStorage = async (value) => {
+		try {
+			await AsyncStorage.setItem('@isSignedIn', value);
+		} catch (e) {}
+	};
 
 	const logout = () => {
 		dispatch(logoutAsync());

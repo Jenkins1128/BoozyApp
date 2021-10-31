@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
 
-const SignUpHeader = ({ state, login }) => {
+const SignUpHeader = ({ state, goToLogin }) => {
 	return (
 		<View style={styles.header}>
-			<TouchableOpacity onPress={login} style={styles.loginButton}>
+			<TouchableOpacity onPress={goToLogin} style={styles.loginButton}>
 				<Text style={styles.logInText}>Log In</Text>
 			</TouchableOpacity>
 			<Text style={styles.BoozyText}>Boozy</Text>

@@ -4,7 +4,7 @@ import StarRating from 'react-native-star-rating';
 import background from '../../../images/background.jpeg';
 import { AntDesign } from '@expo/vector-icons';
 
-const RestaurantHeader = ({ state, onStarRatingPress, favorite, dismiss }) => {
+const RestaurantHeader = ({ state, onStarRatingPressed, favorite, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={dismiss}>
 			<View style={styles.header}>
@@ -34,7 +34,7 @@ const RestaurantHeader = ({ state, onStarRatingPress, favorite, dismiss }) => {
 							maxStars={5}
 							disabled={state.rated}
 							rating={state.starCount}
-							selectedStar={(rating) => onStarRatingPress(rating)}
+							selectedStar={(rating) => onStarRatingPressed(rating)}
 							fullStarColor={'yellow'}
 							ratingBackgroundColor='white'
 							starSize={30}

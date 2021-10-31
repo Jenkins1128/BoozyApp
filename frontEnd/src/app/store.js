@@ -10,9 +10,11 @@ import menuItemReducer from '../screens/RestaurantPage/redux/menuItemSlice';
 import favoriteReducer from '../screens/RestaurantPage/redux/favoriteSlice';
 import profileReducer from '../screens/Profile/redux/profileSlice';
 import settingsReducer from '../screens/Settings/redux/settingsSlice';
+import appReducer from '../../appSlice';
 
 export const store = configureStore({
 	reducer: {
+		app: appReducer,
 		signup: signUpReducer,
 		login: loginRedcuer,
 		home: homeReducer,

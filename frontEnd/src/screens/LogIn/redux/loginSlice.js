@@ -9,8 +9,8 @@ export const loginAsync = createAsyncThunk('loginAsync/status', async (data, { r
 	const { email, password } = data;
 	try {
 		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/login', {
-			email: email,
-			password: password
+			email,
+			password
 		});
 		return response.status;
 	} catch (err) {

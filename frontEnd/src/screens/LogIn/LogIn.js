@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, SafeAreaView } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './redux/loginSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import background from '../../images/background.jpeg';
-
 import LogInHeader from './LogInHeader/LogInHeader';
 import LogInInput from './LogInInput/LogInInput';
+import { setSignedIn } from '../../../appSlice';
 
 const LogIn = ({ navigation }) => {
 	const state = useSelector(selectLogInState);
@@ -16,12 +17,11 @@ const LogIn = ({ navigation }) => {
 			return;
 		}
 		if (state.requestStatus === 'fulfilled') {
-			dispatch(resetStatus());
 			goToHome();
 		} else if (state.requestStatus === 'rejected') {
-			dispatch(resetStatus());
 			showErrorAlert('Username or password is incorrect.');
 		}
+		dispatch(resetStatus());
 	}, [state]);
 
 	const isEmpty = (currentState) => {
@@ -35,15 +35,22 @@ const LogIn = ({ navigation }) => {
 		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
 	};
 
-	const goToHome = () => {
-		navigation.navigate('Home');
-	};
-
-	const signup = () => {
+	const goToSignup = () => {
 		navigation.navigate('SignUp');
 	};
 
-	const login = () => {
+	const goToHome = () => {
+		setIsSignedInAsyncStorage('true');
+		dispatch(setSignedIn({ signedIn: 'true' }));
+	};
+
+	const setIsSignedInAsyncStorage = async (value) => {
+		try {
+			await AsyncStorage.setItem('@isSignedIn', value);
+		} catch (e) {}
+	};
+
+	const loginPressed = () => {
 		if (isEmpty(state) || !state.email.trim().length || !state.password.trim().length) {
 			showErrorAlert('Please fill out all the fields.');
 			return;
@@ -56,7 +63,7 @@ const LogIn = ({ navigation }) => {
 			<View style={styles.container}>
 				<ImageBackground source={background} style={styles.backgroundImage}>
 					<LogInHeader state={state} />
-					<LogInInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signup={signup} login={login} />
+					<LogInInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} goToSignup={goToSignup} loginPressed={loginPressed} />
 				</ImageBackground>
 			</View>
 		</TouchableWithoutFeedback>
