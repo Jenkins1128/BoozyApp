@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, SafeAreaViewComponent, SafeAreaView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpState } from './redux/signUpSlice';
 import background from '../../images/background.jpg';
@@ -21,7 +21,7 @@ const SignUp = ({ navigation }) => {
 				showErrorAlert('Username already exists...');
 				break;
 			case 'fulfilled':
-				login();
+				goToLogin();
 				break;
 		}
 		dispatch(resetStatus());
@@ -38,11 +38,11 @@ const SignUp = ({ navigation }) => {
 		Alert.alert('Uh oh', errorString, [{ text: 'OK' }]);
 	};
 
-	const login = () => {
+	const goToLogin = () => {
 		navigation.navigate('Login');
 	};
 
-	const signup = () => {
+	const signupPressed = () => {
 		if (isEmpty(state) || !state.email.trim().length || !state.password.trim().length) {
 			showErrorAlert('Please fill out all fields.');
 			return;
@@ -58,8 +58,8 @@ const SignUp = ({ navigation }) => {
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<View style={styles.container}>
 				<ImageBackground source={background} style={styles.backgroundImage}>
-					<SignUpHeader state={state} login={login} />
-					<SignUpInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signup={signup} />
+					<SignUpHeader state={state} goToLogin={goToLogin} />
+					<SignUpInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signupPressed={signupPressed} />
 				</ImageBackground>
 			</View>
 		</TouchableWithoutFeedback>

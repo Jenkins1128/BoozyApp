@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const LogInInput = ({ state, dispatch, updateEmail, updatePassword, signup, login }) => {
+const LogInInput = ({ state, dispatch, updateEmail, updatePassword, goToSignup, loginPressed }) => {
 	return (
 		<View style={styles.inputContainer}>
 			<TextInput style={styles.emailInput} onChangeText={(email) => dispatch(updateEmail({ email: email }))} value={state.email} placeholder='Email' placeholderTextColor='#FFFFFF' underlineColorAndroid='transparent'></TextInput>
@@ -14,10 +14,10 @@ const LogInInput = ({ state, dispatch, updateEmail, updatePassword, signup, logi
 				placeholderTextColor='#FFFFFF'
 				underlineColorAndroid='transparent'
 			></TextInput>
-			<TouchableOpacity onPress={signup} style={styles.signUpButton}>
+			<TouchableOpacity onPress={goToSignup} style={styles.signUpButton}>
 				<Text style={styles.signUpText}>Sign Up</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={login} style={styles.loginButton}>
+			<TouchableOpacity onPress={loginPressed} style={styles.loginButton}>
 				<Text style={styles.logInText}>Log In</Text>
 			</TouchableOpacity>
 		</View>
