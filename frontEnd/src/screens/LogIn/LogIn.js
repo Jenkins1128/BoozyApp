@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
+import { View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmail, updatePassword, resetStatus, loginAsync, selectLogInState } from './redux/loginSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -59,19 +59,24 @@ const LogIn = ({ navigation }) => {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={styles.container}>
-				<ImageBackground source={background} style={styles.backgroundImage}>
-					<LogInHeader state={state} />
-					<LogInInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} goToSignup={goToSignup} loginPressed={loginPressed} />
-				</ImageBackground>
-			</View>
-		</TouchableWithoutFeedback>
+		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.inner}>
+					<ImageBackground source={background} style={styles.backgroundImage}>
+						<LogInHeader state={state} />
+						<LogInInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} goToSignup={goToSignup} loginPressed={loginPressed} />
+					</ImageBackground>
+				</View>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	inner: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'

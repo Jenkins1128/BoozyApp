@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, SafeAreaViewComponent, SafeAreaView } from 'react-native';
+import { Alert, View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpState } from './redux/signUpSlice';
 import background from '../../images/background.jpg';
@@ -55,19 +55,24 @@ const SignUp = ({ navigation }) => {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={styles.container}>
-				<ImageBackground source={background} style={styles.backgroundImage}>
-					<SignUpHeader state={state} goToLogin={goToLogin} />
-					<SignUpInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signupPressed={signupPressed} />
-				</ImageBackground>
-			</View>
-		</TouchableWithoutFeedback>
+		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.inner}>
+					<ImageBackground source={background} style={styles.backgroundImage}>
+						<SignUpHeader state={state} goToLogin={goToLogin} />
+						<SignUpInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signupPressed={signupPressed} />
+					</ImageBackground>
+				</View>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	inner: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
