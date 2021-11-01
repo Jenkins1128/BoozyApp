@@ -6,12 +6,15 @@ import { store } from './src/app/store';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
 import SignUp from './src/screens/SignUp/SignUp';
 import LogIn from './src/screens/LogIn/LogIn';
 import Home from './src/screens/Home/Home';
 import RestaurantPage from './src/screens/RestaurantPage/RestaurantPage';
 import Settings from './src/screens/Settings/Settings';
-import Favorites from './src/screens/Profile/Profile';
+import Favorites from './src/screens/Favorites/Favorites';
 import { selectIsSignedIn, setSignedIn } from './appSlice';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -66,25 +69,34 @@ const AppHome = () => {
 		getData();
 	}, [signedIn]);
 
-	return (
-		<NavigationContainer>
-			<AppStack.Navigator screenOptions={{ headerShown: false }}>
-				{signedIn === 'true' ? (
-					<>
-						<AppStack.Screen name='Home' component={HomeTabNav} />
-						<AppStack.Screen name='Restaurant' component={RestaurantPage} />
-						<AppStack.Screen name='Settings' component={Settings} />
-						<AppStack.Screen name='Favorites' component={Favorites} />
-					</>
-				) : (
-					<>
-						<AppStack.Screen name='Login' component={LogIn} />
-						<AppStack.Screen name='SignUp' component={SignUp} />
-					</>
-				)}
-			</AppStack.Navigator>
-		</NavigationContainer>
-	);
+	const [loaded] = useFonts({
+		BradleyHandBold: require('./assets/fonts/BradleyHandBold.ttf'),
+		Arial: require('./assets/fonts/Arial.ttf')
+	});
+
+	if (!loaded) {
+		return <AppLoading />;
+	} else {
+		return (
+			<NavigationContainer>
+				<AppStack.Navigator screenOptions={{ headerShown: false }}>
+					{signedIn === 'true' ? (
+						<>
+							<AppStack.Screen name='Home' component={HomeTabNav} />
+							<AppStack.Screen name='Restaurant' component={RestaurantPage} />
+							<AppStack.Screen name='Settings' component={Settings} />
+							<AppStack.Screen name='Favorites' component={Favorites} />
+						</>
+					) : (
+						<>
+							<AppStack.Screen name='Login' component={LogIn} />
+							<AppStack.Screen name='SignUp' component={SignUp} />
+						</>
+					)}
+				</AppStack.Navigator>
+			</NavigationContainer>
+		);
+	}
 };
 
 const AppStack = createStackNavigator();

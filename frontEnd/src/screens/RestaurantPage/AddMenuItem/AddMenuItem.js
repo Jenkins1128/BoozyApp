@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Animated, StyleSheet, Keyboard } from 'react-native';
 
-const AddMenuItem = ({ bounceValue, menuItemState, dispatch, updatePrice, updateDescription, showMenuItemOverlay, getDataFromMenuItem, dismiss }) => {
+const AddMenuItem = ({ bounceValue, menuItemState, dispatch, updatePrice, updateDescription, getDataFromMenuItem, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>

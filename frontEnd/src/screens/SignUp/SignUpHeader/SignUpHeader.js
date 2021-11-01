@@ -38,14 +38,12 @@ const styles = StyleSheet.create({
 	BoozyText: {
 		color: '#EB8873',
 		fontSize: 90,
-		fontFamily: 'Bradley Hand',
-		fontWeight: 'bold'
+		fontFamily: 'BradleyHandBold'
 	},
 	BoozySlogan: {
 		color: 'white',
 		fontSize: 25,
-		fontFamily: 'Bradley Hand',
-		fontWeight: 'bold'
+		fontFamily: 'BradleyHandBold'
 	},
 	logInText: {
 		color: 'white',

@@ -21,8 +21,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 20
 	},
 	itemText: {
-		borderLeftWidth: 10,
-		borderLeftColor: '#e91e63',
 		color: 'black'
 	},
 	viewList: {

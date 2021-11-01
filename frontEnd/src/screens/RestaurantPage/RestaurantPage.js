@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { StyleSheet, Keyboard, View, TextInput, Alert, TouchableOpacity, Image, ImageBackground, Animated, FlatList, TouchableWithoutFeedback, SafeAreaView } from 'react-native';
+import { StyleSheet, Keyboard, View, Alert, KeyboardAvoidingView, Animated } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItemsAsync, selectRestaurantPageState, updateFavoriteColor, updateMenuItems, updateStarCount, updateState, resetRestaurantPageRequestStatus } from './redux/restaurantPageSlice';
@@ -158,20 +158,22 @@ const RestaurantPage = ({ navigation, route }) => {
 	};
 
 	return (
-		<View style={styles.container}>
-			<RestaurantHeader state={state} onStarRatingPressed={onStarRatingPressed} favorite={favorite} dismiss={dismiss} />
-			<MenuItemsList state={state} showMenuItemOverlay={showMenuItemOverlay} dismiss={dismiss} />
-			<AddMenuItem
-				bounceValue={bounceValue}
-				menuItemState={menuItemState}
-				dispatch={dispatch}
-				updatePrice={updatePrice}
-				updateDescription={updateDescription}
-				showMenuItemOverlay={showMenuItemOverlay}
-				getDataFromMenuItem={getDataFromMenuItem}
-				dismiss={dismiss}
-			/>
-		</View>
+		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<View style={styles.inner}>
+				<RestaurantHeader state={state} onStarRatingPressed={onStarRatingPressed} favorite={favorite} dismiss={dismiss} />
+				<MenuItemsList state={state} showMenuItemOverlay={showMenuItemOverlay} dismiss={dismiss} />
+				<AddMenuItem
+					bounceValue={bounceValue}
+					menuItemState={menuItemState}
+					dispatch={dispatch}
+					updatePrice={updatePrice}
+					updateDescription={updateDescription}
+					showMenuItemOverlay={showMenuItemOverlay}
+					getDataFromMenuItem={getDataFromMenuItem}
+					dismiss={dismiss}
+				/>
+			</View>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -179,6 +181,9 @@ export default RestaurantPage;
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	inner: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
