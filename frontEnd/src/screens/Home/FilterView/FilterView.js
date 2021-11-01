@@ -19,8 +19,16 @@ const FilterView = ({ bounceValue, dispatch, state, reset, updateLocation, updat
 					</View>
 				</View>
 				<View style={styles.filterInput}>
-					<TextInput style={styles.locationStyle} multiline={false} returnKeyType='next' onChangeText={(location) => dispatch(updateLocation({ location: location }))} value={state.location} placeholder='Enter City or Zip code' />
-					<TextInput style={styles.cuisineStyle} multiline={false} returnKeyType='next' onChangeText={(cuisine) => dispatch(updateCuisine({ cuisine: cuisine }))} value={state.cuisine} placeholder='Enter cuisine' />
+					<TextInput
+						style={styles.locationStyle}
+						textAlign='center'
+						multiline={false}
+						returnKeyType='next'
+						onChangeText={(location) => dispatch(updateLocation({ location: location }))}
+						value={state.location}
+						placeholder='Enter City or Zip code'
+					/>
+					<TextInput style={styles.cuisineStyle} textAlign='center' multiline={false} returnKeyType='next' onChangeText={(cuisine) => dispatch(updateCuisine({ cuisine: cuisine }))} value={state.cuisine} placeholder='Enter cuisine' />
 					<View style={styles.priceTypeContainer}>
 						<TouchableOpacity onPress={() => dispatch(setPrice1())} style={styles.$Button}>
 							<Text style={{ color: state.$color, fontWeight: 'bold', fontSize: 16 }}>$</Text>
