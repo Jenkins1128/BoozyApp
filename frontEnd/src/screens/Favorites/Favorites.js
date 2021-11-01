@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, FlatList, View, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, FlatList, View, Alert, SafeAreaView, StatusBar, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Favorite from './Favorite/Favorite';
 import { getFavoritesAsync, resetGetFavoritesRequestStatus, selectFavoritesState } from './redux/profileSlice';
@@ -56,6 +56,7 @@ export default Profile;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import * as Location from 'expo-location';
-import { StyleSheet, View, Animated, Alert, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, Animated, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	getCurrentLocationDataAsync,
@@ -189,26 +189,28 @@ const Home = ({ navigation }) => {
 	};
 
 	return (
-		<View style={styles.container}>
-			<BoozyMap setMapRef={setMapRef} state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
-			<Searchbar state={state} dispatch={dispatch} updateLocation={updateLocation} showFilterOverlay={() => showFilterOverlay(true)} getDataFromFilter={getDataFromFilter} dismiss={dismiss} />
-			<RestaurantList state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
+		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<View style={styles.inner}>
+				<BoozyMap setMapRef={setMapRef} state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
+				<Searchbar state={state} dispatch={dispatch} updateLocation={updateLocation} showFilterOverlay={() => showFilterOverlay(true)} getDataFromFilter={getDataFromFilter} dismiss={dismiss} />
+				<RestaurantList state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
 
-			<FilterView
-				bounceValue={bounceValue}
-				dispatch={dispatch}
-				state={state}
-				reset={reset}
-				updateLocation={updateLocation}
-				updateCuisine={updateCuisine}
-				setPrice1={setPrice1}
-				setPrice2={setPrice2}
-				setPrice3={setPrice3}
-				setPrice4={setPrice4}
-				showFilterOverlay={showFilterOverlay}
-				getDataFromFilter={getDataFromFilter}
-			/>
-		</View>
+				<FilterView
+					bounceValue={bounceValue}
+					dispatch={dispatch}
+					state={state}
+					reset={reset}
+					updateLocation={updateLocation}
+					updateCuisine={updateCuisine}
+					setPrice1={setPrice1}
+					setPrice2={setPrice2}
+					setPrice3={setPrice3}
+					setPrice4={setPrice4}
+					showFilterOverlay={showFilterOverlay}
+					getDataFromFilter={getDataFromFilter}
+				/>
+			</View>
+		</KeyboardAvoidingView>
 	);
 };
 
@@ -216,6 +218,9 @@ export default Home;
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1
+	},
+	inner: {
 		flex: 1,
 		backgroundColor: '#fff',
 		alignItems: 'center',

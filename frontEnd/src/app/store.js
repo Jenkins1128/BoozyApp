@@ -26,5 +26,9 @@ export const store = configureStore({
 		favorite: favoriteReducer,
 		profile: profileReducer,
 		settings: settingsReducer
-	}
+	},
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: false
+		})
 });

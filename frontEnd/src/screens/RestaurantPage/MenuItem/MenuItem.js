@@ -22,13 +22,9 @@ const styles = StyleSheet.create({
 		borderBottomColor: '#ededed'
 	},
 	priceText: {
-		borderLeftWidth: 10,
-		borderLeftColor: '#e91e63',
 		color: 'black'
 	},
 	descText: {
-		borderLeftWidth: 10,
-		borderLeftColor: '#e91e63',
 		color: 'black'
 	}
 });

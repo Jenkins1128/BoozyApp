@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Platform, StatusBar, Image, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../../images/logo.png';
 import { logoutAsync, resetSettingsRequestStatus, selectSettingsState } from './redux/settingsSlice';
@@ -72,6 +72,7 @@ export default Settings;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
 		backgroundColor: '#fff'
 	},
 	logoutButtonContainer: {
