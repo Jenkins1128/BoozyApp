@@ -5,6 +5,7 @@ import { updateEmail, updatePassword, resetStatus, signUpAsync, selectSignUpStat
 import background from '../../images/background.jpg';
 import SignUpHeader from './SignUpHeader/SignUpHeader';
 import SignUpInput from './SignUpInput/SignUpInput';
+import { getOS } from '../../helpers/os';
 
 const SignUp = ({ navigation }) => {
 	const state = useSelector(selectSignUpState);
@@ -55,10 +56,10 @@ const SignUp = ({ navigation }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+		<KeyboardAvoidingView testID={'container'} behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View style={styles.inner}>
-					<ImageBackground source={background} style={styles.backgroundImage}>
+				<View testID={'inner'} style={styles.inner}>
+					<ImageBackground testID={'backgroundImage'} source={background} style={styles.backgroundImage}>
 						<SignUpHeader state={state} goToLogin={goToLogin} />
 						<SignUpInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} signupPressed={signupPressed} />
 					</ImageBackground>

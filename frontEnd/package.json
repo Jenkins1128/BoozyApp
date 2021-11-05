@@ -1,77 +1,86 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "eject": "expo eject",
-    "test": "jest --verbose --coverage",
-    "test:update": "jest --verbose --coverage --updateSnapshot",
-    "test:watch": "jest --verbose --watch",
-    "coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
-  },
-  "expo": {
-    "name": "Boozy",
-    "icon": "",
-    "version": "1.0.0",
-    "slug": "",
-    "ios": {
-      "bundleIdentifier": "com.Isaiah-Jenkins.Boozy",
-      "buildNumber": "1.0.0"
-    },
-    "android": {
-      "package": "com.yourcompany.yourappname",
-      "versionCode": 1
-    }
-  },
-  "dependencies": {
-    "@expo/vector-icons": "^12.0.5",
-    "@react-native-async-storage/async-storage": "^1.15.9",
-    "@react-navigation/core": "^5.15.3",
-    "@react-navigation/material-bottom-tabs": "^5.3.15",
-    "@react-navigation/native": "^5.9.6",
-    "@react-navigation/stack": "^5.14.5",
-    "@reduxjs/toolkit": "^1.6.1",
-    "axios": "^0.21.1",
-    "core-js": "^3.15.2",
-    "expo": "~42.0.1",
-    "expo-app-loading": "^1.2.1",
-    "expo-font": "~9.2.1",
-    "expo-location": "~12.1.2",
-    "expo-status-bar": "~1.0.4",
-    "jest": "^26.6.3",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
-    "react-native-gesture-handler": "^1.10.3",
-    "react-native-maps": "^0.28.0",
-    "react-native-paper": "^4.9.2",
-    "react-native-reanimated": "^2.2.0",
-    "react-native-screens": "^3.4.0",
-    "react-native-star-rating": "^1.1.0",
-    "react-native-vector-icons": "^8.1.0",
-    "react-native-web": "~0.13.12",
-    "react-redux": "^7.2.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.9.0",
-    "react-test-renderer": "^17.0.2"
-  },
-  "jest": {
-    "preset": "react-native",
-    "cacheDirectory": "./cache",
-    "coveragePathIgnorePatterns": [
-      "./app/utils/vendor"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "statements": 80
-      }
-    },
-    "transformIgnorePatterns": [
-      "/node_modules/(?!react-native|react-clone-referenced-element|react-navigation)"
-    ]
-  },
-  "private": true
+	"main": "node_modules/expo/AppEntry.js",
+	"scripts": {
+		"start": "expo start",
+		"android": "expo start --android",
+		"ios": "expo start --ios",
+		"web": "expo start --web",
+		"eject": "expo eject",
+		"test": "jest --verbose --coverage",
+		"test:update": "jest --verbose --coverage --updateSnapshot",
+		"test:watch": "jest --verbose --watch",
+		"coverage": "jest --verbose --coverage && open ./coverage/lcov-report/index.html"
+	},
+	"expo": {
+		"name": "Boozy",
+		"icon": "",
+		"version": "1.0.0",
+		"slug": "",
+		"ios": {
+			"bundleIdentifier": "com.Isaiah-Jenkins.Boozy",
+			"buildNumber": "1.0.0"
+		},
+		"android": {
+			"package": "com.yourcompany.yourappname",
+			"versionCode": 1
+		}
+	},
+	"dependencies": {
+		"@expo/vector-icons": "^12.0.5",
+		"@react-native-async-storage/async-storage": "^1.15.9",
+		"@react-navigation/core": "^5.15.3",
+		"@react-navigation/material-bottom-tabs": "^5.3.15",
+		"@react-navigation/native": "^5.9.6",
+		"@react-navigation/stack": "^5.14.5",
+		"@reduxjs/toolkit": "^1.6.1",
+		"@types/jest": "^27.0.2",
+		"axios": "^0.21.1",
+		"core-js": "^3.15.2",
+		"expo": "~42.0.1",
+		"expo-app-loading": "^1.2.1",
+		"expo-font": "~9.2.1",
+		"expo-location": "~12.1.2",
+		"expo-status-bar": "~1.0.4",
+		"jest": "^26.6.3",
+		"mock-async-storage": "^2.2.0",
+		"react": "16.13.1",
+		"react-dom": "16.13.1",
+		"react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+		"react-native-gesture-handler": "^1.10.3",
+		"react-native-maps": "^0.28.0",
+		"react-native-paper": "^4.9.2",
+		"react-native-reanimated": "^2.2.0",
+		"react-native-screens": "^3.4.0",
+		"react-native-star-rating": "^1.1.0",
+		"react-native-vector-icons": "^8.1.0",
+		"react-native-web": "~0.13.12",
+		"react-redux": "^7.2.4",
+		"redux-mock-store": "^1.5.4"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.9.0",
+		"@testing-library/react-native": "^8.0.0",
+		"react-test-renderer": "^17.0.2"
+	},
+	"jest": {
+		"preset": "react-native",
+		"cacheDirectory": "./cache",
+		"testEnvironment": "jsdom",
+		"coveragePathIgnorePatterns": [
+			"./app/utils/vendor"
+		],
+		"coverageThreshold": {
+			"global": {
+				"statements": 80
+			}
+		},
+		"transformIgnorePatterns": [
+			"/node_modules/(?!react-native|react-clone-referenced-element|@react-navigation|react-native-community)"
+		],
+		"setupFiles": [
+			"./node_modules/react-native-gesture-handler/jestSetup.js",
+			"./src/screens/LogIn/__mocks__/mockAsyncStorage.js"
+		]
+	},
+	"private": true
 }

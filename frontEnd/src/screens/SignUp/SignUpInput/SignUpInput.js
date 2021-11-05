@@ -14,7 +14,7 @@ const SignUpInput = ({ state, dispatch, updateEmail, updatePassword, signupPress
 				placeholderTextColor='#EB8873'
 				underlineColorAndroid='transparent'
 			></TextInput>
-			<TouchableOpacity onPress={signupPressed} style={styles.signUpButton}>
+			<TouchableOpacity testID={'signupButton'} onPress={signupPressed} style={styles.signUpButton}>
 				<Text style={styles.signUpText}>Sign Up</Text>
 			</TouchableOpacity>
 		</View>

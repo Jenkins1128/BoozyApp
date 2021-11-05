@@ -7,6 +7,7 @@ import background from '../../images/background.jpeg';
 import LogInHeader from './LogInHeader/LogInHeader';
 import LogInInput from './LogInInput/LogInInput';
 import { setSignedIn } from '../../../appSlice';
+import { getOS } from '../../helpers/os';
 
 const LogIn = ({ navigation }) => {
 	const state = useSelector(selectLogInState);
@@ -59,7 +60,7 @@ const LogIn = ({ navigation }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+		<KeyboardAvoidingView behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.inner}>
 					<ImageBackground source={background} style={styles.backgroundImage}>

@@ -17,7 +17,7 @@ const LogInInput = ({ state, dispatch, updateEmail, updatePassword, goToSignup, 
 			<TouchableOpacity onPress={goToSignup} style={styles.signUpButton}>
 				<Text style={styles.signUpText}>Sign Up</Text>
 			</TouchableOpacity>
-			<TouchableOpacity onPress={loginPressed} style={styles.loginButton}>
+			<TouchableOpacity testID={'loginButton'} onPress={loginPressed} style={styles.loginButton}>
 				<Text style={styles.logInText}>Log In</Text>
 			</TouchableOpacity>
 		</View>

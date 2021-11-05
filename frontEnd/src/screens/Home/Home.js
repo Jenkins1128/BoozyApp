@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-
 import * as Location from 'expo-location';
 import { StyleSheet, View, Animated, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
