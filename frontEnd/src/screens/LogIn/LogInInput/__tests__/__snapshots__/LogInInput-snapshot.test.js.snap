@@ -114,6 +114,7 @@ exports[`LogInInput renders correctly 1`] = `
         "width": 240,
       }
     }
+    testID="loginButton"
   >
     <Text
       style={

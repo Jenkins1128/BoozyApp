@@ -27,45 +27,45 @@
 	},
 	"dependencies": {
 		"@expo/vector-icons": "^12.0.5",
-		"@react-native-async-storage/async-storage": "^1.15.9",
-		"@react-navigation/core": "^5.15.3",
-		"@react-navigation/material-bottom-tabs": "^5.3.15",
-		"@react-navigation/native": "^5.9.6",
-		"@react-navigation/stack": "^5.14.5",
-		"@reduxjs/toolkit": "^1.6.1",
+		"@react-native-async-storage/async-storage": "^1.15.11",
+		"@react-navigation/core": "^6.1.0",
+		"@react-navigation/material-bottom-tabs": "^6.0.9",
+		"@react-navigation/native": "^6.0.6",
+		"@react-navigation/stack": "^6.0.11",
+		"@reduxjs/toolkit": "^1.6.2",
 		"@types/jest": "^27.0.2",
-		"axios": "^0.21.1",
-		"core-js": "^3.15.2",
-		"expo": "~42.0.1",
+		"axios": "^0.24.0",
+		"core-js": "^3.19.1",
+		"expo": "~43.0.2",
 		"expo-app-loading": "^1.2.1",
-		"expo-font": "~9.2.1",
-		"expo-location": "~12.1.2",
-		"expo-status-bar": "~1.0.4",
+		"expo-font": "~10.0.3",
+		"expo-location": "~13.0.4",
+		"expo-status-bar": "~1.1.0",
 		"jest": "^26.6.3",
 		"mock-async-storage": "^2.2.0",
-		"react": "16.13.1",
-		"react-dom": "16.13.1",
+		"react": "^16.14.0",
+		"react-dom": "^16.14.0",
 		"react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
 		"react-native-gesture-handler": "^1.10.3",
-		"react-native-maps": "^0.28.0",
-		"react-native-paper": "^4.9.2",
-		"react-native-reanimated": "^2.2.0",
-		"react-native-screens": "^3.4.0",
+		"react-native-maps": "^0.29.3",
+		"react-native-paper": "^4.10.0",
+		"react-native-reanimated": "^2.2.3",
+		"react-native-safe-area-context": "^3.3.2",
+		"react-native-screens": "^3.9.0",
 		"react-native-star-rating": "^1.1.0",
-		"react-native-vector-icons": "^8.1.0",
-		"react-native-web": "~0.13.12",
-		"react-redux": "^7.2.4",
+		"react-native-vector-icons": "^9.0.0",
+		"react-native-web": "~0.17.5",
+		"react-redux": "^7.2.6",
 		"redux-mock-store": "^1.5.4"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.9.0",
+		"@babel/core": "^7.16.0",
 		"@testing-library/react-native": "^8.0.0",
-		"react-test-renderer": "^17.0.2"
+		"react-test-renderer": "^16.14.0"
 	},
 	"jest": {
 		"preset": "react-native",
 		"cacheDirectory": "./cache",
-		"testEnvironment": "jsdom",
 		"coveragePathIgnorePatterns": [
 			"./app/utils/vendor"
 		],
@@ -75,7 +75,7 @@
 			}
 		},
 		"transformIgnorePatterns": [
-			"/node_modules/(?!react-native|react-clone-referenced-element|@react-navigation|react-native-community)"
+			"/node_modules/(?!(jest-)?@?react-native|@react-navigation|@react-native-community)"
 		],
 		"setupFiles": [
 			"./node_modules/react-native-gesture-handler/jestSetup.js",

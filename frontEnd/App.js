@@ -17,12 +17,12 @@ import Settings from './src/screens/Settings/Settings';
 import Favorites from './src/screens/Favorites/Favorites';
 import { selectIsSignedIn, setSignedIn } from './appSlice';
 
-const Tab = createMaterialBottomTabNavigator();
+const { Navigator, Screen } = createMaterialBottomTabNavigator();
 
 const HomeTabNav = () => {
 	return (
-		<Tab.Navigator activeColor='#EB8873' inactiveColor='gray' barStyle={{ backgroundColor: '#fff' }}>
-			<Tab.Screen
+		<Navigator activeColor='#EB8873' inactiveColor='gray' barStyle={{ backgroundColor: '#fff' }}>
+			<Screen
 				name='Home'
 				component={Home}
 				options={{
@@ -30,7 +30,7 @@ const HomeTabNav = () => {
 					tabBarIcon: ({ color }) => <Icon name={`ios-home`} color={color} size={25} />
 				}}
 			/>
-			<Tab.Screen
+			<Screen
 				name='Favorites'
 				component={Favorites}
 				options={{
@@ -38,7 +38,7 @@ const HomeTabNav = () => {
 					tabBarIcon: ({ color }) => <Icon name='ios-heart' color={color} size={25} />
 				}}
 			/>
-			<Tab.Screen
+			<Screen
 				name='Settings'
 				component={Settings}
 				options={{
@@ -46,9 +46,11 @@ const HomeTabNav = () => {
 					tabBarIcon: ({ color }) => <Icon name='ios-settings' color={color} size={25} />
 				}}
 			/>
-		</Tab.Navigator>
+		</Navigator>
 	);
 };
+
+const { Navigator, Screen } = createStackNavigator();
 
 const AppHome = () => {
 	const signedIn = useSelector(selectIsSignedIn);
@@ -79,27 +81,25 @@ const AppHome = () => {
 	} else {
 		return (
 			<NavigationContainer>
-				<AppStack.Navigator screenOptions={{ headerShown: false }}>
+				<Navigator screenOptions={{ headerShown: false }}>
 					{signedIn === 'true' ? (
 						<>
-							<AppStack.Screen name='Home' component={HomeTabNav} />
-							<AppStack.Screen name='Restaurant' component={RestaurantPage} />
-							<AppStack.Screen name='Settings' component={Settings} />
-							<AppStack.Screen name='Favorites' component={Favorites} />
+							<Screen name='Home' component={HomeTabNav} />
+							<Screen name='Restaurant' component={RestaurantPage} />
+							<Screen name='Settings' component={Settings} />
+							<Screen name='Favorites' component={Favorites} />
 						</>
 					) : (
 						<>
-							<AppStack.Screen name='Login' component={LogIn} />
-							<AppStack.Screen name='SignUp' component={SignUp} />
+							<Screen name='Login' component={LogIn} />
+							<Screen name='SignUp' component={SignUp} />
 						</>
 					)}
-				</AppStack.Navigator>
+				</Navigator>
 			</NavigationContainer>
 		);
 	}
 };
-
-const AppStack = createStackNavigator();
 
 export default function App() {
 	return (

@@ -209,6 +209,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "width": "80%",
             }
           }
+          testID="signupButton"
         >
           <Text
             style={

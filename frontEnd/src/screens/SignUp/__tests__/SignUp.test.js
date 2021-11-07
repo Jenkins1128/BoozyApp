@@ -3,13 +3,13 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import SignUp from '../SignUp';
 import { render, cleanup, fireEvent } from '@testing-library/react-native';
-import isEmpty from './IsEmpty';
-import ShowErrorAlert from './ShowErrorAlert';
+import isEmpty from '../TestHelperFiles/IsEmpty';
+import ShowErrorAlert from '../TestHelperFiles/ShowErrorAlert';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from './AppNavigator';
+import AppNavigator from '../TestHelperFiles/AppNavigator';
 
+jest.useFakeTimers();
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
-afterEach(cleanup);
 
 describe('<SignUp />', () => {
 	const mockStore = configureStore([]);
@@ -17,10 +17,22 @@ describe('<SignUp />', () => {
 		signup: {
 			currentState: {
 				requestStatus: 'idle',
-				isLoading: false
+				isLoading: false,
+				email: 'xxx@gmail.com',
+				password: 'xxx'
+			}
+		},
+		login: {
+			currentState: {
+				requestStatus: 'idle',
+				isLoading: false,
+				email: 'xxx@gmail.com',
+				password: 'xxx'
 			}
 		}
 	};
+
+	afterEach(cleanup);
 
 	//snapshot
 	it('should match snapshot', () => {
@@ -59,13 +71,13 @@ describe('<SignUp />', () => {
 		);
 		const rendered = render(signup);
 		const innerViewComponent = rendered.getByTestId('inner');
-		const expect = innerViewComponent.props.style;
+		const given = innerViewComponent.props.style;
 		const result = {
 			flex: 1,
 			justifyContent: 'center',
 			alignItems: 'center'
 		};
-		expect(expect).toMatchObject(result);
+		expect(given).toMatchObject(result);
 	});
 
 	it('should wrap a flexible wrapper around the Image Background component, width/height = 100%, and opacity = 0.95', () => {
@@ -77,9 +89,9 @@ describe('<SignUp />', () => {
 		);
 		const rendered = render(signup);
 		const imageBackgroundComponent = rendered.getByTestId('backgroundImage');
-		const expect = imageBackgroundComponent.props.style;
+		const given = imageBackgroundComponent.props.style;
 		const result = [{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }, { height: '100%', width: '100%' }, undefined];
-		expect(expect).toMatchObject(result);
+		expect(given).toMatchObject(result);
 	});
 
 	//functions
@@ -101,18 +113,21 @@ describe('<SignUp />', () => {
 	});
 
 	describe('goToLogin', () => {
-		it('calls sideEffect', async () => {
+		it('calls sideEffect', () => {
+			const store = mockStore(signupReducer);
 			const component = (
-				<NavigationContainer>
-					<AppNavigator />
-				</NavigationContainer>
+				<Provider store={store}>
+					<NavigationContainer>
+						<AppNavigator />
+					</NavigationContainer>
+				</Provider>
 			);
 
-			const { findByTestId } = render(component);
-			const toClick = await findByTestId('signupButton');
+			const { getByTestId } = render(component);
+			const toClick = getByTestId('goToLogin');
 
 			fireEvent(toClick, 'press');
-			const loginButton = await findByTestId('loginButton');
+			const loginButton = getByTestId('loginButton');
 
 			expect(loginButton).toBeTruthy();
 		});

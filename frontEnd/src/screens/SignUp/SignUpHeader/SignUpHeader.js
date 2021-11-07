@@ -4,7 +4,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'rea
 const SignUpHeader = ({ state, goToLogin }) => {
 	return (
 		<View style={styles.header}>
-			<TouchableOpacity onPress={goToLogin} style={styles.loginButton}>
+			<TouchableOpacity testID={'goToLogin'} onPress={goToLogin} style={styles.loginButton}>
 				<Text style={styles.logInText}>Log In</Text>
 			</TouchableOpacity>
 			<Text style={styles.BoozyText}>Boozy</Text>
