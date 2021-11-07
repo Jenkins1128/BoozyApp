@@ -1,6 +1,6 @@
 version: 2.1
 defaults: &defaults
-  working_directory: ~/app
+  working_directory: ~/frontEnd
   docker:
     # the Docker image with Cypress dependencies
     - image: cypress/base:12.14.0
