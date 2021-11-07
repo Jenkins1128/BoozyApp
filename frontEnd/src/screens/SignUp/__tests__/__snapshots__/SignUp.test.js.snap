@@ -103,6 +103,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "width": 100,
             }
           }
+          testID="goToLogin"
         >
           <Text
             style={
@@ -166,6 +167,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
             }
           }
           underlineColorAndroid="transparent"
+          value="xxx@gmail.com"
         />
         <TextInput
           allowFontScaling={true}
@@ -184,6 +186,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
             }
           }
           underlineColorAndroid="transparent"
+          value="xxx"
         />
         <View
           accessible={true}
@@ -209,7 +212,6 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "width": "80%",
             }
           }
-          testID="signupButton"
         >
           <Text
             style={

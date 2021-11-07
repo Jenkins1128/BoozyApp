@@ -72,7 +72,6 @@ exports[`SignUpInput snapshot SignUpInput renders correctly 1`] = `
         "width": "80%",
       }
     }
-    testID="signupButton"
   >
     <Text
       style={
