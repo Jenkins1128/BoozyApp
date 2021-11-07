@@ -49,6 +49,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+          path: ~/BoozyApp
       - restore-cache-and-install-dependencies
       - run:
           name: Run ESLint
