@@ -48,7 +48,7 @@ jobs:
   unit_test:
     <<: *defaults
     steps:
-      - checkout
+      - checkout:
           path: ~/BoozyApp
       - restore-cache-and-install-dependencies
       - run:
