@@ -8,7 +8,7 @@ import AppNavigator from '../TestHelperFiles/AppNavigator';
 import SignUpInput from '../SignUpInput/SignUpInput';
 
 jest.useFakeTimers();
-jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 describe('<SignUp />', () => {
 	afterEach(cleanup);
