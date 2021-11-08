@@ -26,7 +26,8 @@ commands:
   publish_to_expo:
     description: "Publish JS bundle to Expo"
     steps:
-      - checkout
+      - checkout:
+          path: ~/BoozyApp
       - restore-cache-and-install-dependencies
       - run:
           name: Publish to Expo
@@ -35,7 +36,8 @@ commands:
   build_binaries:
     description: "Build native binaries"
     steps:
-      - checkout
+      - checkout:
+          path: ~/BoozyApp
       - restore-cache-and-install-dependencies
       - run:
           name: Build Android
