@@ -27,6 +27,7 @@ exports[`SignUpInput snapshot SignUpInput renders correctly 1`] = `
         "padding": 30,
       }
     }
+    testID="emailInput"
     underlineColorAndroid="transparent"
     value="xxx@gmail.com"
   />
@@ -46,6 +47,7 @@ exports[`SignUpInput snapshot SignUpInput renders correctly 1`] = `
         "padding": 30,
       }
     }
+    testID="passwordInput"
     underlineColorAndroid="transparent"
   />
   <View
@@ -72,6 +74,7 @@ exports[`SignUpInput snapshot SignUpInput renders correctly 1`] = `
         "width": "80%",
       }
     }
+    testID="signupPressed"
   >
     <Text
       style={

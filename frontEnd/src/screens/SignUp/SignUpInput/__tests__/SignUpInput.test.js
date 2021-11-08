@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 import SignUpInput from '../SignUpInput';
 
 const state = {
@@ -8,7 +8,7 @@ const state = {
 
 describe('SignUpInput snapshot', () => {
 	test('SignUpInput renders correctly', () => {
-		const tree = renderer.create(<SignUpInput state={state} />).toJSON();
+		const tree = render(<SignUpInput state={state} />);
 		expect(tree).toMatchSnapshot();
 	});
 });

@@ -69,11 +69,18 @@
 		"preset": "react-native",
 		"cacheDirectory": "./cache",
 		"coveragePathIgnorePatterns": [
-			"./app/utils/vendor"
+			"./app/utils/vendor",
+			"./src/screens/Favorites/redux",
+			"./src/screens/Home/redux",
+			"./src/screens/LogIn/redux",
+			"./src/screens/RestaurantPage/redux",
+			"./src/screens/Settings/redux",
+			"./src/screens/SignUp/redux",
+			"./appSlice.js"
 		],
 		"coverageThreshold": {
 			"global": {
-				"statements": 80
+				"statements": 65
 			}
 		},
 		"transformIgnorePatterns": [
@@ -81,7 +88,7 @@
 		],
 		"setupFiles": [
 			"./node_modules/react-native-gesture-handler/jestSetup.js",
-			"./src/screens/LogIn/__mocks__/mockAsyncStorage.js"
+			"./src/screens/SignUp/__mocks__/mockAsyncStorage.js"
 		]
 	},
 	"private": true

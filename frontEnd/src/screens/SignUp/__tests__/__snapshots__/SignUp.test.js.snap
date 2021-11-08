@@ -166,6 +166,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "padding": 30,
             }
           }
+          testID="emailInput"
           underlineColorAndroid="transparent"
           value="xxx@gmail.com"
         />
@@ -185,6 +186,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "padding": 30,
             }
           }
+          testID="passwordInput"
           underlineColorAndroid="transparent"
           value="xxx"
         />
@@ -212,6 +214,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "width": "80%",
             }
           }
+          testID="signupPressed"
         >
           <Text
             style={

@@ -1,60 +1,27 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
 import SignUp from '../SignUp';
-import { render, cleanup, fireEvent } from '@testing-library/react-native';
+import { reduxRender, render, cleanup, fireEvent, store } from '../TestHelperFiles/test-utils';
 import isEmpty from '../TestHelperFiles/IsEmpty';
 import ShowErrorAlert from '../TestHelperFiles/ShowErrorAlert';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from '../TestHelperFiles/AppNavigator';
+import SignUpInput from '../SignUpInput/SignUpInput';
 
 jest.useFakeTimers();
 jest.mock('react-native/Libraries/Animated/src/NativeAnimatedHelper');
 
 describe('<SignUp />', () => {
-	const mockStore = configureStore([]);
-	const signupReducer = {
-		signup: {
-			currentState: {
-				requestStatus: 'idle',
-				isLoading: false,
-				email: 'xxx@gmail.com',
-				password: 'xxx'
-			}
-		},
-		login: {
-			currentState: {
-				requestStatus: 'idle',
-				isLoading: false,
-				email: 'xxx@gmail.com',
-				password: 'xxx'
-			}
-		}
-	};
-
 	afterEach(cleanup);
 
 	//snapshot
 	it('should match snapshot', () => {
-		const store = mockStore(signupReducer);
-		const signup = (
-			<Provider store={store}>
-				<SignUp />
-			</Provider>
-		);
-		const tree = render(signup).toJSON();
+		const tree = reduxRender(<SignUp />);
 		expect(tree).toMatchSnapshot();
 	});
 
 	//content
 	it('should wrap view with a flexible wrapper', () => {
-		const store = mockStore(signupReducer);
-		const signup = (
-			<Provider store={store}>
-				<SignUp />
-			</Provider>
-		);
-		const rendered = render(signup);
+		const rendered = reduxRender(<SignUp />);
 		const keyboardAvoidingViewComponent = rendered.getByTestId('container');
 		const given = keyboardAvoidingViewComponent.props.style;
 		//padding-bottom 0 added from KeyboardAvoidingView behavior prop
@@ -63,13 +30,7 @@ describe('<SignUp />', () => {
 	});
 
 	it('should wrap backgroundImage with a flexible wrapper and centers items', () => {
-		const store = mockStore(signupReducer);
-		const signup = (
-			<Provider store={store}>
-				<SignUp />
-			</Provider>
-		);
-		const rendered = render(signup);
+		const rendered = reduxRender(<SignUp />);
 		const innerViewComponent = rendered.getByTestId('inner');
 		const given = innerViewComponent.props.style;
 		const result = {
@@ -81,17 +42,65 @@ describe('<SignUp />', () => {
 	});
 
 	it('should wrap a flexible wrapper around the Image Background component, width/height = 100%, and opacity = 0.95', () => {
-		const store = mockStore(signupReducer);
-		const signup = (
-			<Provider store={store}>
-				<SignUp />
-			</Provider>
-		);
-		const rendered = render(signup);
+		const rendered = reduxRender(<SignUp />);
 		const imageBackgroundComponent = rendered.getByTestId('backgroundImage');
 		const given = imageBackgroundComponent.props.style;
 		const result = [{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }, { height: '100%', width: '100%' }, undefined];
 		expect(given).toMatchObject(result);
+	});
+
+	//interaction
+
+	it('should fire updateEmail onChangeText events', () => {
+		const state = {
+			email: 'xxx@gmail.com',
+			password: 'xx'
+		};
+
+		const updateEmail = jest.fn();
+		const updatePassword = jest.fn();
+		const dispatch = jest.fn();
+		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} />);
+		const inputComponent = rendered.getByTestId('emailInput');
+
+		fireEvent(inputComponent, 'changeText', 'new text');
+
+		expect(updateEmail).toHaveBeenCalledWith({ email: 'new text' });
+	});
+
+	it('should fire updatePassword onChangeText events', () => {
+		const state = {
+			email: 'xxx@gmail.com',
+			password: 'xx'
+		};
+
+		const updateEmail = jest.fn();
+		const updatePassword = jest.fn();
+		const dispatch = jest.fn();
+		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} />);
+		const inputComponent = rendered.getByTestId('passwordInput');
+
+		fireEvent(inputComponent, 'changeText', 'new text');
+
+		expect(updatePassword).toHaveBeenCalledWith({ password: 'new text' });
+	});
+
+	it('should fire signupPressed events', () => {
+		const state = {
+			email: 'xxx@gmail.com',
+			password: 'xx'
+		};
+
+		const updateEmail = jest.fn();
+		const updatePassword = jest.fn();
+		const dispatch = jest.fn();
+		const signupPressed = jest.fn();
+		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} signupPressed={signupPressed} />);
+		const signupPressedButton = rendered.getByText('Sign Up');
+
+		fireEvent.press(signupPressedButton);
+
+		expect(signupPressed).toHaveBeenCalledTimes(1);
 	});
 
 	//functions
@@ -113,17 +122,16 @@ describe('<SignUp />', () => {
 	});
 
 	describe('goToLogin', () => {
+		afterEach(cleanup);
+
 		it('calls sideEffect', () => {
-			const store = mockStore(signupReducer);
 			const component = (
-				<Provider store={store}>
-					<NavigationContainer>
-						<AppNavigator />
-					</NavigationContainer>
-				</Provider>
+				<NavigationContainer>
+					<AppNavigator />
+				</NavigationContainer>
 			);
 
-			const { getByTestId } = render(component);
+			const { getByTestId } = reduxRender(component);
 			const toClick = getByTestId('goToLogin');
 
 			fireEvent(toClick, 'press');
@@ -132,4 +140,24 @@ describe('<SignUp />', () => {
 			expect(loginButton).toBeTruthy();
 		});
 	});
+
+	//redux actions
+	// describe('redux actions', () => {
+	// 	afterEach(() => {
+	// 		cleanup();
+	// 		store.clearActions();
+	// 	});
+
+	// 	it('should dispatch signup pressed action', () => {
+	// 		const rendered = reduxRender(<SignUp />);
+	// 		const buttonComponent = rendered.getByTestId('signupPressed');
+
+	// 		fireEvent(buttonComponent, 'press');
+
+	// 		// This will return all actions dispatched on this store
+	// 		const actions = store.getActions();
+	// 		expect(actions.length).toBe(1);
+	// 		expect(actions[0].type).toEqual('INCREMENT');
+	// 	});
+	// });
 });

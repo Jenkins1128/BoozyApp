@@ -1,5 +1,5 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render } from '@testing-library/react-native';
 import SignUpHeader from '../SignUpHeader';
 
 const state = {
@@ -9,7 +9,7 @@ const state = {
 
 describe('SignUpHeader unit tests', () => {
 	test('SignUpHeader renders correctly', () => {
-		const tree = renderer.create(<SignUpHeader state={state} />).toJSON();
+		const tree = render(<SignUpHeader state={state} />);
 		expect(tree).toMatchSnapshot();
 	});
 });

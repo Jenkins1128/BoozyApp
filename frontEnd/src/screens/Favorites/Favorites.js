@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, FlatList, View, Alert, SafeAreaView, StatusBar, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Favorite from './Favorite/Favorite';
-import { getFavoritesAsync, resetGetFavoritesRequestStatus, selectFavoritesState } from './redux/profileSlice';
+import { getFavoritesAsync, resetGetFavoritesRequestStatus, selectFavoritesState } from './redux/favoritesSlice';
 
 const Profile = ({ navigation }) => {
 	const state = useSelector(selectFavoritesState);
