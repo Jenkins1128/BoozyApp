@@ -62,7 +62,7 @@ jobs:
     <<: *defaults
     environment:
       EXPO_RELEASE_CHANNEL: << pipeline.git.branch >>
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - publish_to_expo
 
@@ -70,7 +70,7 @@ jobs:
     <<: *defaults
     environment:
       EXPO_RELEASE_CHANNEL: staging
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - publish_to_expo
 
@@ -85,7 +85,7 @@ jobs:
     <<: *defaults
     environment:
       EXPO_RELEASE_CHANNEL: production
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - publish_to_expo
 
