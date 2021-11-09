@@ -44,7 +44,7 @@ commands:
           command: npx expo build:android -t apk --non-interactive --release-channel $EXPO_RELEASE_CHANNEL --no-wait
       - run:
           name: Build iOS
-          command: npx expo build:ios -t archive --non-interactive --release-channel $EXPO_RELEASE_CHANNEL --dist-p12-path ~/BoozyApp/iosCredentials/Certificates.p12 --team-id 2ZW8D4GCGX EXPO_IOS_DIST_P12_PASSWORD --push-id Q6WWHWWCHQ --push-p8-path ~/BoozyApp/iosCredentials/AuthKey_Q6WWHWWCHQ.p8 --provisioning-profile-path ~/BoozyApp/iosCredentials/BoozyProvisioningProfile.mobileprovision
+          command: npx expo build:ios -t archive --non-interactive --release-channel $EXPO_RELEASE_CHANNEL --team-id 2ZW8D4GCGX --dist-p12-path ~/BoozyApp/iosCredentials/Certificates.p12 --push-id Q6WWHWWCHQ --push-p8-path ~/BoozyApp/iosCredentials/AuthKey_Q6WWHWWCHQ.p8 --provisioning-profile-path ~/BoozyApp/iosCredentials/BoozyProvisioningProfile.mobileprovision
 
 jobs:
   unit_test:
@@ -80,6 +80,7 @@ jobs:
     <<: *defaults
     environment:
       EXPO_RELEASE_CHANNEL: staging
+    resource_class: large
     steps:
       - build_binaries
 
@@ -95,6 +96,7 @@ jobs:
     <<: *defaults
     environment:
       EXPO_RELEASE_CHANNEL: production
+    resource_class: large
     steps:
       - build_binaries
 
