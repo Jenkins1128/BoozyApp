@@ -49,6 +49,7 @@ commands:
 jobs:
   unit_test:
     <<: *defaults
+    resource_class: large
     steps:
       - checkout:
           path: ~/BoozyApp

@@ -85,7 +85,7 @@
 		],
 		"coverageThreshold": {
 			"global": {
-				"statements": 65
+				"statements": 50
 			}
 		},
 		"transformIgnorePatterns": [
