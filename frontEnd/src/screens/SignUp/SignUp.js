@@ -53,6 +53,7 @@ const SignUp = ({ navigation }) => {
 			return;
 		}
 		dispatch(signUpAsync({ email: state.email, password: state.password }));
+		console.log('email', state.email, 'pass', state.password);
 	};
 
 	return (

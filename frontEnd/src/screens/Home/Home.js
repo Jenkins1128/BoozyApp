@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import * as Location from 'expo-location';
+import { requestForegroundPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { StyleSheet, View, Animated, Alert, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,6 +23,7 @@ import BoozyMap from './BoozyMap/BoozyMap';
 import Searchbar from './Searchbar/Searchbar';
 import RestaurantList from './RestaurantList/RestaurantList';
 import FilterView from './FilterView/FilterView';
+import { getOS } from '../../helpers/os';
 
 const Home = ({ navigation }) => {
 	let mapref = useRef();
@@ -36,12 +37,12 @@ const Home = ({ navigation }) => {
 
 	useEffect(() => {
 		(async () => {
-			const { status } = await Location.requestForegroundPermissionsAsync();
+			const { status } = await requestForegroundPermissionsAsync();
 			if (status !== 'granted') {
 				setErrorMsg('Permission to access location was denied');
 				return;
 			}
-			const location = await Location.getCurrentPositionAsync({});
+			const location = await getCurrentPositionAsync({});
 			const position = { latitude: parseFloat(location.coords.latitude), longitude: parseFloat(location.coords.longitude) };
 			dispatch(updateInitialPosition({ initialPosition: position }));
 			dispatch(updateMarkerPosition({ markerPosition: position }));
@@ -188,8 +189,8 @@ const Home = ({ navigation }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-			<View style={styles.inner}>
+		<KeyboardAvoidingView testID={'container'} behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<View testID={'inner'} style={styles.inner}>
 				<BoozyMap setMapRef={setMapRef} state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />
 				<Searchbar state={state} dispatch={dispatch} updateLocation={updateLocation} showFilterOverlay={() => showFilterOverlay(true)} getDataFromFilter={getDataFromFilter} dismiss={dismiss} />
 				<RestaurantList state={state} viewRestaurants={viewRestaurants} dismiss={dismiss} />

@@ -1,27 +1,29 @@
 import React from 'react';
 import SignUp from '../SignUp';
-import { reduxRender, render, cleanup, fireEvent, store } from '../TestHelperFiles/test-utils';
-import isEmpty from '../TestHelperFiles/IsEmpty';
-import ShowErrorAlert from '../TestHelperFiles/ShowErrorAlert';
+import { reduxRender, cleanup, fireEvent, configureStore } from '../../../TestHelperFiles/redux/test-utils';
+import { baseUrl } from '../../../helpers/constants';
+import { ShowErrorAlert, isEmpty } from '../../../TestHelperFiles/Functions/SignupTestFuncs';
 import { NavigationContainer } from '@react-navigation/native';
-import AppNavigator from '../TestHelperFiles/AppNavigator';
-import SignUpInput from '../SignUpInput/SignUpInput';
-
-jest.useFakeTimers();
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
+import AppNavigator from '../../../TestHelperFiles/AppNavigators/AppNavigatorSignUp';
+import axios from 'axios';
+import signUpReducer, { signUpAsync } from '../redux/signUpSlice';
 
 describe('<SignUp />', () => {
+	let rendered;
+
+	beforeEach(() => {
+		rendered = reduxRender(<SignUp />);
+	});
+
 	afterEach(cleanup);
 
 	//snapshot
 	it('should match snapshot', () => {
-		const tree = reduxRender(<SignUp />);
-		expect(tree).toMatchSnapshot();
+		expect(rendered).toMatchSnapshot();
 	});
 
 	//content
 	it('should wrap view with a flexible wrapper', () => {
-		const rendered = reduxRender(<SignUp />);
 		const keyboardAvoidingViewComponent = rendered.getByTestId('container');
 		const given = keyboardAvoidingViewComponent.props.style;
 		//padding-bottom 0 added from KeyboardAvoidingView behavior prop
@@ -30,7 +32,6 @@ describe('<SignUp />', () => {
 	});
 
 	it('should wrap backgroundImage with a flexible wrapper and centers items', () => {
-		const rendered = reduxRender(<SignUp />);
 		const innerViewComponent = rendered.getByTestId('inner');
 		const given = innerViewComponent.props.style;
 		const result = {
@@ -42,65 +43,10 @@ describe('<SignUp />', () => {
 	});
 
 	it('should wrap a flexible wrapper around the Image Background component, width/height = 100%, and opacity = 0.95', () => {
-		const rendered = reduxRender(<SignUp />);
 		const imageBackgroundComponent = rendered.getByTestId('backgroundImage');
 		const given = imageBackgroundComponent.props.style;
 		const result = [{ bottom: 0, left: 0, position: 'absolute', right: 0, top: 0 }, { height: '100%', width: '100%' }, undefined];
 		expect(given).toMatchObject(result);
-	});
-
-	//interaction
-
-	it('should fire updateEmail onChangeText events', () => {
-		const state = {
-			email: 'xxx@gmail.com',
-			password: 'xx'
-		};
-
-		const updateEmail = jest.fn();
-		const updatePassword = jest.fn();
-		const dispatch = jest.fn();
-		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} />);
-		const inputComponent = rendered.getByTestId('emailInput');
-
-		fireEvent(inputComponent, 'changeText', 'new text');
-
-		expect(updateEmail).toHaveBeenCalledWith({ email: 'new text' });
-	});
-
-	it('should fire updatePassword onChangeText events', () => {
-		const state = {
-			email: 'xxx@gmail.com',
-			password: 'xx'
-		};
-
-		const updateEmail = jest.fn();
-		const updatePassword = jest.fn();
-		const dispatch = jest.fn();
-		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} />);
-		const inputComponent = rendered.getByTestId('passwordInput');
-
-		fireEvent(inputComponent, 'changeText', 'new text');
-
-		expect(updatePassword).toHaveBeenCalledWith({ password: 'new text' });
-	});
-
-	it('should fire signupPressed events', () => {
-		const state = {
-			email: 'xxx@gmail.com',
-			password: 'xx'
-		};
-
-		const updateEmail = jest.fn();
-		const updatePassword = jest.fn();
-		const dispatch = jest.fn();
-		const signupPressed = jest.fn();
-		const rendered = render(<SignUpInput state={state} updateEmail={updateEmail} updatePassword={updatePassword} dispatch={dispatch} signupPressed={signupPressed} />);
-		const signupPressedButton = rendered.getByText('Sign Up');
-
-		fireEvent.press(signupPressedButton);
-
-		expect(signupPressed).toHaveBeenCalledTimes(1);
 	});
 
 	//functions
@@ -141,23 +87,30 @@ describe('<SignUp />', () => {
 		});
 	});
 
-	//redux actions
-	// describe('redux actions', () => {
-	// 	afterEach(() => {
-	// 		cleanup();
-	// 		store.clearActions();
-	// 	});
-
-	// 	it('should dispatch signup pressed action', () => {
-	// 		const rendered = reduxRender(<SignUp />);
-	// 		const buttonComponent = rendered.getByTestId('signupPressed');
-
-	// 		fireEvent(buttonComponent, 'press');
-
-	// 		// This will return all actions dispatched on this store
-	// 		const actions = store.getActions();
-	// 		expect(actions.length).toBe(1);
-	// 		expect(actions[0].type).toEqual('INCREMENT');
-	// 	});
-	// });
+	//redux integration
+	describe('redux', () => {
+		it('should dispatch signup pressed and state updated fulfilled', async () => {
+			const emailPass = {
+				email: '123@gmail.com',
+				password: '123456'
+			};
+			const postSpy = jest.spyOn(axios, 'post').mockResolvedValueOnce(204);
+			const store = configureStore({
+				reducer: {
+					signup: signUpReducer
+				}
+			});
+			await store.dispatch(signUpAsync(emailPass));
+			expect(postSpy).toBeCalledWith(`${baseUrl}/register`, emailPass);
+			const state = store.getState();
+			expect(state).toEqual({
+				signup: {
+					currentState: {
+						isLoading: false,
+						requestStatus: 'fulfilled'
+					}
+				}
+			});
+		});
+	});
 });

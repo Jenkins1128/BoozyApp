@@ -8,10 +8,14 @@ const Restaurant = ({ keyval, val, viewRestaurant, dismiss }) => {
 	};
 	return (
 		<TouchableWithoutFeedback onPress={dismissAndViewRestaurant}>
-			<View key={keyval} style={styles.container}>
-				<Text style={styles.nameText}>{val.name}</Text>
-				<TouchableOpacity onPress={viewRestaurant} style={styles.viewButton}>
-					<Text style={styles.viewText}>view</Text>
+			<View testID={'container'} key={keyval} style={styles.container}>
+				<Text testID={'nameText'} style={styles.nameText}>
+					{val.name}
+				</Text>
+				<TouchableOpacity testID={'viewRestaurant'} onPress={viewRestaurant} style={styles.viewButton}>
+					<Text testID={'viewText'} style={styles.viewText}>
+						view
+					</Text>
 				</TouchableOpacity>
 			</View>
 		</TouchableWithoutFeedback>

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SignUpHeader unit tests SignUpHeader renders correctly 1`] = `
+exports[`<SignUpHeader /> should render correctly 1`] = `
 <View
   style={
     Object {
@@ -9,6 +9,7 @@ exports[`SignUpHeader unit tests SignUpHeader renders correctly 1`] = `
       "marginTop": 40,
     }
   }
+  testID="header"
 >
   <View
     accessible={true}
@@ -45,6 +46,7 @@ exports[`SignUpHeader unit tests SignUpHeader renders correctly 1`] = `
           "fontWeight": "bold",
         }
       }
+      testID="logInText"
     >
       Log In
     </Text>
@@ -57,6 +59,7 @@ exports[`SignUpHeader unit tests SignUpHeader renders correctly 1`] = `
         "fontSize": 90,
       }
     }
+    testID="boozyText"
   >
     Boozy
   </Text>
@@ -68,6 +71,7 @@ exports[`SignUpHeader unit tests SignUpHeader renders correctly 1`] = `
         "fontSize": 25,
       }
     }
+    testID="boozySlogan"
   >
     Happy hours, Happy you.
   </Text>

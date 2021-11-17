@@ -5,13 +5,16 @@ import { Feather, MaterialIcons } from '@expo/vector-icons';
 const Searchbar = ({ state, dispatch, updateLocation, showFilterOverlay, getDataFromFilter, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={dismiss}>
-			<View style={styles.searchContainer}>
-				<View style={styles.searchNearbyTextContainer}>
-					<Text style={styles.searchNearbyText}>Search for happy hours nearby.</Text>
+			<View testID={'searchContainer'} style={styles.searchContainer}>
+				<View testID={'searchNearbyTextContainer'} style={styles.searchNearbyTextContainer}>
+					<Text testID={'searchNearbyText'} style={styles.searchNearbyText}>
+						Search for happy hours nearby.
+					</Text>
 				</View>
-				<View style={styles.searchBarBackground}>
+				<View testID={'searchBarBackground'} style={styles.searchBarBackground}>
 					<Feather name='search' style={styles.searchIconStyle} />
 					<TextInput
+						testID={'searchInput'}
 						style={styles.inputStyle}
 						multiline={false}
 						returnKeyType='next'
@@ -28,8 +31,10 @@ const Searchbar = ({ state, dispatch, updateLocation, showFilterOverlay, getData
 						<MaterialIcons name='filter-list' style={styles.filterIconStyle} />
 					</TouchableOpacity>
 				</View>
-				<TouchableOpacity onPress={getDataFromFilter} style={styles.searchButton}>
-					<Text style={styles.searchtext}>search</Text>
+				<TouchableOpacity testID={'searchButton'} onPress={getDataFromFilter} style={styles.searchButton}>
+					<Text testID={'searchtext'} style={styles.searchtext}>
+						search
+					</Text>
 				</TouchableOpacity>
 			</View>
 		</TouchableWithoutFeedback>
@@ -81,7 +86,6 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		color: '#E91E63'
 	},
-
 	searchtext: {
 		color: '#E91E63'
 	}

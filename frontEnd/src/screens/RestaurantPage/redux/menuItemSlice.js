@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl } from '../../../helpers/constants';
 
 const initialState = {
 	currentState: {}
@@ -8,7 +9,7 @@ const initialState = {
 export const postMenuItemAsync = createAsyncThunk('postMenuItemAsync/status', async (data, { rejectWithValue }) => {
 	const { description, price, restaurantName, restaurantId } = data;
 	try {
-		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/' + restaurantId + '/menu', {
+		const response = await axios.post(`${baseUrl}/user/${restaurantId}/menu`, {
 			content: description,
 			price: price,
 			name: restaurantName

@@ -46,11 +46,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
       }
     >
       <Image
-        source={
-          Object {
-            "testUri": "../../../src/images/background.jpg",
-          }
-        }
+        source={1}
         style={
           Array [
             Object {
@@ -77,6 +73,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
             "marginTop": 40,
           }
         }
+        testID="header"
       >
         <View
           accessible={true}
@@ -113,6 +110,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
                 "fontWeight": "bold",
               }
             }
+            testID="logInText"
           >
             Log In
           </Text>
@@ -125,6 +123,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "fontSize": 90,
             }
           }
+          testID="boozyText"
         >
           Boozy
         </Text>
@@ -136,6 +135,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
               "fontSize": 25,
             }
           }
+          testID="boozySlogan"
         >
           Happy hours, Happy you.
         </Text>
@@ -148,6 +148,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
             "width": "100%",
           }
         }
+        testID="inputContainer"
       >
         <TextInput
           allowFontScaling={true}
@@ -168,7 +169,6 @@ exports[`<SignUp /> should match snapshot 1`] = `
           }
           testID="emailInput"
           underlineColorAndroid="transparent"
-          value="xxx@gmail.com"
         />
         <TextInput
           allowFontScaling={true}
@@ -188,7 +188,6 @@ exports[`<SignUp /> should match snapshot 1`] = `
           }
           testID="passwordInput"
           underlineColorAndroid="transparent"
-          value="xxx"
         />
         <View
           accessible={true}
@@ -224,6 +223,7 @@ exports[`<SignUp /> should match snapshot 1`] = `
                 "fontWeight": "bold",
               }
             }
+            testID="signUpText"
           >
             Sign Up
           </Text>

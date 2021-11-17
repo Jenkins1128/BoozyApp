@@ -4,22 +4,27 @@ import { View, Animated, Text, TextInput, TouchableOpacity, TouchableWithoutFeed
 const FilterView = ({ bounceValue, dispatch, state, reset, updateLocation, updateCuisine, setPrice1, setPrice2, setPrice3, setPrice4, showFilterOverlay, getDataFromFilter }) => {
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
-				<View style={styles.header}>
-					<View style={styles.title}>
+			<Animated.View testID={'subView'} style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
+				<View testID={'header'} style={styles.header}>
+					<View testID={'title'} style={styles.title}>
 						<Text style={{ fontSize: 20, fontWeight: 'bold', color: '#EB8873' }}>Filters</Text>
 					</View>
-					<View style={styles.headerSettings}>
-						<TouchableOpacity onPress={() => dispatch(reset())} style={styles.resetButton}>
-							<Text style={styles.resetText}>Reset</Text>
+					<View testID={'headerSettings'} style={styles.headerSettings}>
+						<TouchableOpacity testID={'resetButton'} onPress={() => dispatch(reset())} style={styles.resetButton}>
+							<Text testID={'resetText'} style={styles.resetText}>
+								Reset
+							</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={showFilterOverlay} style={styles.cancelButton}>
-							<Text style={styles.cancelText}>Cancel</Text>
+						<TouchableOpacity testID={'cancelButton'} onPress={() => showFilterOverlay()} style={styles.cancelButton}>
+							<Text testID={'cancelText'} style={styles.cancelText}>
+								Cancel
+							</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
-				<View style={styles.filterInput}>
+				<View testID={'filterInput'} style={styles.filterInput}>
 					<TextInput
+						testID={'locationInput'}
 						style={styles.locationStyle}
 						textAlign='center'
 						multiline={false}
@@ -28,23 +33,34 @@ const FilterView = ({ bounceValue, dispatch, state, reset, updateLocation, updat
 						value={state.location}
 						placeholder='Enter City or Zip code'
 					/>
-					<TextInput style={styles.cuisineStyle} textAlign='center' multiline={false} returnKeyType='next' onChangeText={(cuisine) => dispatch(updateCuisine({ cuisine: cuisine }))} value={state.cuisine} placeholder='Enter cuisine' />
-					<View style={styles.priceTypeContainer}>
-						<TouchableOpacity onPress={() => dispatch(setPrice1())} style={styles.$Button}>
+					<TextInput
+						testID={'cuisineInput'}
+						style={styles.cuisineStyle}
+						textAlign='center'
+						multiline={false}
+						returnKeyType='next'
+						onChangeText={(cuisine) => dispatch(updateCuisine({ cuisine: cuisine }))}
+						value={state.cuisine}
+						placeholder='Enter cuisine'
+					/>
+					<View testID={'priceTypeContainer'} style={styles.priceTypeContainer}>
+						<TouchableOpacity testID={'$Button'} onPress={() => dispatch(setPrice1())} style={styles.$Button}>
 							<Text style={{ color: state.$color, fontWeight: 'bold', fontSize: 16 }}>$</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => dispatch(setPrice2())} style={styles.$$Button}>
+						<TouchableOpacity testID={'$$Button'} onPress={() => dispatch(setPrice2())} style={styles.$$Button}>
 							<Text style={{ color: state.$$color, fontWeight: 'bold', fontSize: 16 }}>$$</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => dispatch(setPrice3())} style={styles.$$$Button}>
+						<TouchableOpacity testID={'$$$Button'} onPress={() => dispatch(setPrice3())} style={styles.$$$Button}>
 							<Text style={{ color: state.$$$color, fontWeight: 'bold', fontSize: 16 }}>$$$</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={() => dispatch(setPrice4())} style={styles.$$$$Button}>
+						<TouchableOpacity testID={'$$$$Button'} onPress={() => dispatch(setPrice4())} style={styles.$$$$Button}>
 							<Text style={{ color: state.$$$$color, fontWeight: 'bold', fontSize: 16 }}>$$$$</Text>
 						</TouchableOpacity>
 					</View>
-					<TouchableOpacity onPress={getDataFromFilter} style={styles.applyButton}>
-						<Text style={styles.applyText}>Apply</Text>
+					<TouchableOpacity testID={'applyButton'} onPress={getDataFromFilter} style={styles.applyButton}>
+						<Text testID={'applyText'} style={styles.applyText}>
+							Apply
+						</Text>
 					</TouchableOpacity>
 				</View>
 			</Animated.View>
@@ -77,7 +93,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
-
 	locationStyle: {
 		flex: 1,
 		padding: 20,
@@ -93,27 +108,6 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-around',
 		height: 100,
 		width: '80%'
-	},
-	textInput: {
-		alignSelf: 'stretch',
-		color: '#fff',
-		padding: 20,
-		backgroundColor: '#252525',
-		borderTopWidth: 2,
-		borderTopColor: '#ededed'
-	},
-	addButton: {
-		backgroundColor: '#E91E63',
-		width: 90,
-		height: 90,
-		borderRadius: 50,
-		alignItems: 'center',
-		justifyContent: 'center',
-		elevation: 8
-	},
-	addButtonText: {
-		color: '#fff',
-		fontSize: 24
 	},
 	cancelButton: {
 		justifyContent: 'center',

@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BoozyMap /> should render correctly 1`] = `
+<MapView
+  accessible={true}
+  focusable={true}
+  initialCamera={
+    Object {
+      "altitude": 10,
+      "center": Object {
+        "latitude": 0,
+        "longitude": 0,
+      },
+      "heading": 0,
+      "pitch": 0,
+      "zoom": 10,
+    }
+  }
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "flex": 3,
+      "height": 667,
+      "width": 750,
+    }
+  }
+  testID="mapView"
+>
+  <Marker
+    coordinate={
+      Object {
+        "latitude": 0,
+        "longitude": 0,
+      }
+    }
+  />
+  <Marker
+    coordinate={
+      Object {
+        "latitude": undefined,
+        "longitude": undefined,
+      }
+    }
+  >
+    <Image
+      source={1}
+      style={
+        Object {
+          "height": 40,
+          "width": 30,
+        }
+      }
+    />
+    <Callout
+      onPress={[Function]}
+      style={
+        Object {
+          "flex": 1,
+          "position": "relative",
+        }
+      }
+      testID="calloutBtn"
+    >
+      <Text />
+      <Text />
+    </Callout>
+  </Marker>
+</MapView>
+`;

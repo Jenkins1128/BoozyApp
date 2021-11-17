@@ -3,7 +3,7 @@ import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-nativ
 
 const SignUpInput = ({ state, dispatch, updateEmail, updatePassword, signupPressed }) => {
 	return (
-		<View style={styles.inputContainer}>
+		<View testID={'inputContainer'} style={styles.inputContainer}>
 			<TextInput
 				testID={'emailInput'}
 				style={styles.emailInput}
@@ -24,7 +24,9 @@ const SignUpInput = ({ state, dispatch, updateEmail, updatePassword, signupPress
 				underlineColorAndroid='transparent'
 			></TextInput>
 			<TouchableOpacity testID={'signupPressed'} onPress={signupPressed} style={styles.signUpButton}>
-				<Text style={styles.signUpText}>Sign Up</Text>
+				<Text testID={'signUpText'} style={styles.signUpText}>
+					Sign Up
+				</Text>
 			</TouchableOpacity>
 		</View>
 	);

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+import { baseUrl } from '../../../helpers/constants';
 const initialState = {
 	currentState: {
 		allCategories: '',
@@ -12,7 +12,7 @@ const initialState = {
 
 export const getFavoritesAsync = createAsyncThunk('getFavoritesAsync/status', async (data, { rejectWithValue }) => {
 	try {
-		const response = await axios.get('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/get');
+		const response = await axios.get(`${baseUrl}/get`);
 		return response.data;
 	} catch (err) {
 		return rejectWithValue(err.response.data);

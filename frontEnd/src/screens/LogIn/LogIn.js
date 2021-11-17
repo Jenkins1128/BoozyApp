@@ -60,10 +60,10 @@ const LogIn = ({ navigation }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
+		<KeyboardAvoidingView testID={'container'} behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View style={styles.inner}>
-					<ImageBackground source={background} style={styles.backgroundImage}>
+				<View testID={'inner'} style={styles.inner}>
+					<ImageBackground testID={'backgroundImage'} source={background} style={styles.backgroundImage}>
 						<LogInHeader state={state} />
 						<LogInInput state={state} dispatch={dispatch} updateEmail={updateEmail} updatePassword={updatePassword} goToSignup={goToSignup} loginPressed={loginPressed} />
 					</ImageBackground>
