@@ -27,7 +27,7 @@ const Searchbar = ({ state, dispatch, updateLocation, showFilterOverlay, getData
 						value={state.location}
 						placeholder='Enter City or Zip code'
 					/>
-					<TouchableOpacity onPress={showFilterOverlay}>
+					<TouchableOpacity testID={'showFilterButton'} onPress={showFilterOverlay}>
 						<MaterialIcons name='filter-list' style={styles.filterIconStyle} />
 					</TouchableOpacity>
 				</View>

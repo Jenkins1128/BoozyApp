@@ -9,6 +9,7 @@ import { favoriteAsync, resetFavorite, selectFavoriteState } from './redux/favor
 import RestaurantHeader from './RestaurantHeader/RestaurantHeader';
 import MenuItemsList from './MenuItemsList/MenuItemsList';
 import AddMenuItem from './AddMenuItem/AddMenuItem';
+import { getOS } from '../../helpers/os';
 
 const RestaurantPage = ({ navigation, route }) => {
 	const keyboardVisible = useRef(false);
@@ -158,8 +159,8 @@ const RestaurantPage = ({ navigation, route }) => {
 	};
 
 	return (
-		<KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
-			<View style={styles.inner}>
+		<KeyboardAvoidingView testID={'container'} behavior={getOS() === 'ios' ? 'padding' : 'height'} style={styles.container}>
+			<View testID={'inner'} style={styles.inner}>
 				<RestaurantHeader state={state} onStarRatingPressed={onStarRatingPressed} favorite={favorite} dismiss={dismiss} />
 				<MenuItemsList state={state} showMenuItemOverlay={showMenuItemOverlay} dismiss={dismiss} />
 				<AddMenuItem

@@ -1,5 +1,5 @@
 import React from 'react';
-import { reduxRender, cleanup, render, fireEvent, waitFor } from '../../../TestHelperFiles/redux/test-utils';
+import { reduxRender, cleanup } from '../../../TestHelperFiles/redux/test-utils';
 import Home from '../Home';
 import HomeTestFuncs from '../../../TestHelperFiles/Functions/HomeTestFuncs';
 import getDataFromFilterReducer, { getDataFromFilterAsync } from '../redux/getDataFromFilterSlice';
@@ -42,9 +42,9 @@ describe('<Home />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render inner styles and center items', () => {
-		const keyboardAvoidingViewComponent = rendered.getByTestId('inner');
-		const given = keyboardAvoidingViewComponent.props.style;
+	it('should render inner styles and center items correctly', () => {
+		const innerViewComponent = rendered.getByTestId('inner');
+		const given = innerViewComponent.props.style;
 		//padding-bottom 0 added from KeyboardAvoidingView behavior prop
 		const result = {
 			flex: 1,

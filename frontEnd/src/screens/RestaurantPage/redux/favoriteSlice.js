@@ -37,7 +37,7 @@ const favoriteSlice = createSlice({
 		builder
 			.addCase(favoriteAsync.fulfilled, (state, { payload }) => {
 				Object.assign(state.currentState, {
-					favoriteColor: payload[0]['contains'] ? 'red' : 'white',
+					favoriteColor: payload ? (payload[0]['contains'] ? 'red' : 'white') : 'white',
 					favoriteRequestStatus: 'fulfilled'
 				});
 			})

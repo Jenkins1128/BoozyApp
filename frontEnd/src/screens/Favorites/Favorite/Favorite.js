@@ -3,8 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 const Favorite = ({ keyval, val }) => {
 	return (
-		<View key={keyval} style={styles.item}>
-			<Text style={styles.itemText}>{val.name}</Text>
+		<View testID={'container'} key={keyval} style={styles.container}>
+			<Text testID={'itemText'} style={styles.itemText}>
+				{val.name}
+			</Text>
 		</View>
 	);
 };
@@ -12,7 +14,7 @@ const Favorite = ({ keyval, val }) => {
 export default Favorite;
 
 const styles = StyleSheet.create({
-	item: {
+	container: {
 		flex: 1,
 		width: '100%',
 		borderBottomWidth: 2,
@@ -22,16 +24,5 @@ const styles = StyleSheet.create({
 	},
 	itemText: {
 		color: 'black'
-	},
-	viewList: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#fff',
-		padding: 10,
-		borderRadius: 20
-	},
-	viewText: {
-		color: 'white',
-		fontWeight: 'bold'
 	}
 });

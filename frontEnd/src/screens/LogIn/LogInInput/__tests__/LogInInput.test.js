@@ -62,7 +62,7 @@ describe('<LogInInput />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render goToSignup styles', () => {
+	it('should render goToSignup styles correctly', () => {
 		const signUpButtonComponent = rendered.getByTestId('goToSignup');
 		const given = signUpButtonComponent.props.style;
 		const result = {
@@ -82,7 +82,7 @@ describe('<LogInInput />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render signUpText styles', () => {
+	it('should render signUpText styles correctly', () => {
 		const signUpTextComponent = rendered.getByTestId('signUpText');
 		const given = signUpTextComponent.props.style;
 		const result = {
@@ -93,7 +93,7 @@ describe('<LogInInput />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render loginButton styles', () => {
+	it('should render loginButton styles correctly', () => {
 		const loginButtonComponent = rendered.getByTestId('loginButton');
 		const given = loginButtonComponent.props.style;
 		const result = {
@@ -112,7 +112,7 @@ describe('<LogInInput />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render logInText styles', () => {
+	it('should render logInText styles correctly', () => {
 		const logInTextComponent = rendered.getByTestId('logInText');
 		const given = logInTextComponent.props.style;
 		const result = {
@@ -124,19 +124,19 @@ describe('<LogInInput />', () => {
 	});
 
 	//interaction
-	it('should fire updateEmail onChangeText events', () => {
+	it('should fire updateEmail onChangeText event', () => {
 		const inputComponent = rendered.getByTestId('emailInput');
 		fireEvent(inputComponent, 'changeText', 'new text');
 		expect(updateEmail).toHaveBeenCalledWith({ email: 'new text' });
 	});
 
-	it('should fire updatePassword onChangeText events', () => {
+	it('should fire updatePassword onChangeText event', () => {
 		const inputComponent = rendered.getByTestId('passwordInput');
 		fireEvent(inputComponent, 'changeText', 'new text');
 		expect(updatePassword).toHaveBeenCalledWith({ password: 'new text' });
 	});
 
-	it('should fire loginPressed events', () => {
+	it('should fire loginPressed event', () => {
 		const loginPressedButton = rendered.getByText('Log In');
 		fireEvent.press(loginPressedButton);
 		expect(loginPressed).toHaveBeenCalledTimes(1);

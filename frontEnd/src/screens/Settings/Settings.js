@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Platform, StatusBar, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, StatusBar, Image, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../../images/logo.png';
 import { logoutAsync, resetSettingsRequestStatus, selectSettingsState } from './redux/settingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSignedIn } from '../../../appSlice';
+import { getOS } from '../../helpers/os';
 
-const Settings = ({ navigation }) => {
+const Settings = () => {
 	const state = useSelector(selectSettingsState);
 	const dispatch = useDispatch();
 
@@ -41,22 +42,30 @@ const Settings = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.logoutButtonContainer}>
-				<TouchableOpacity onPress={logout} style={styles.logoutButton}>
-					<Text style={styles.logoutText}>Log Out</Text>
+		<SafeAreaView testID={'container'} style={styles.container}>
+			<View testID={'logoutButtonContainer'} style={styles.logoutButtonContainer}>
+				<TouchableOpacity testID={'logoutButton'} onPress={logout} style={styles.logoutButton}>
+					<Text testID={'logoutText'} style={styles.logoutText}>
+						Log Out
+					</Text>
 				</TouchableOpacity>
-				<Image source={logo} style={styles.logoImage} />
+				<Image testID={'logoImage'} source={logo} style={styles.logoImage} />
 			</View>
 
-			<View style={styles.aboutContainer}>
-				<View style={styles.aboutBoozyContainer}>
-					<Text style={styles.AboutText}>About Boozy</Text>
-					<Text style={styles.aboutInfo}>Boozy is an app to help you find the best happy hour deals in your area.</Text>
+			<View testID={'aboutContainer'} style={styles.aboutContainer}>
+				<View testID={'aboutBoozyContainer'} style={styles.aboutBoozyContainer}>
+					<Text testID={'aboutText'} style={styles.aboutText}>
+						About Boozy
+					</Text>
+					<Text testID={'aboutInfo'} style={styles.aboutInfo}>
+						Boozy is an app to help you find the best happy hour deals in your area.
+					</Text>
 				</View>
 				<View>
-					<Text style={styles.creatorText}>About Us</Text>
-					<Text style={styles.creatorInfo}>
+					<Text testID={'creatorText'} style={styles.creatorText}>
+						About Us
+					</Text>
+					<Text testID={'creatorInfo'} style={styles.creatorInfo}>
 						Isaiah Jenkins, Hayden Miller, Chelsea Kaye Punzalan {'\n'}
 						Sponsor: Jose Alvarado {'\n'}Professors: Doug Halperin and Luigi Lucaccini {'\n'}TA: Harrison Chase Keeling
 						{'\n'}CS 490 Spring 2020
@@ -72,7 +81,7 @@ export default Settings;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+		paddingTop: getOS() === 'android' ? StatusBar.currentHeight : 0,
 		backgroundColor: '#fff'
 	},
 	logoutButtonContainer: {
@@ -112,7 +121,7 @@ const styles = StyleSheet.create({
 	aboutBoozyContainer: {
 		marginBottom: 20
 	},
-	AboutText: {
+	aboutText: {
 		color: '#EB8873',
 		fontSize: 30,
 		fontWeight: 'bold'

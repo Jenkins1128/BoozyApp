@@ -7,12 +7,16 @@ const MenuItemsList = ({ state, showMenuItemOverlay, dismiss }) => {
 		return <MenuItem key={index} keyval={index} val={item} dismiss={dismiss} />;
 	};
 	return (
-		<View style={styles.scrollContainer}>
-			<View style={styles.menuItemsTitle}>
-				<Text style={styles.menuTitle}> Menu items </Text>
-				<View style={styles.menuButtonContainer}>
-					<TouchableOpacity onPress={() => showMenuItemOverlay(true)} style={styles.menuButton}>
-						<Text style={styles.menuItemText}>+ Menu Item</Text>
+		<View testID={'scrollContainer'} style={styles.scrollContainer}>
+			<View testID={'menuItemsTitleContainer'} style={styles.menuItemsTitleContainer}>
+				<Text testID={'menuTitle'} style={styles.menuTitle}>
+					Menu items
+				</Text>
+				<View testID={'menuButtonContainer'} style={styles.menuButtonContainer}>
+					<TouchableOpacity testID={'menuButton'} onPress={() => showMenuItemOverlay(true)} style={styles.menuButton}>
+						<Text testID={'menuItemText'} style={styles.menuItemText}>
+							+ Menu Item
+						</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -30,10 +34,17 @@ const styles = StyleSheet.create({
 		width: '100%',
 		backgroundColor: 'white'
 	},
-	menuItemsTitle: {
+	menuItemsTitleContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center'
+	},
+	menuTitle: {
+		color: 'lightgrey',
+		fontSize: 20,
+		marginTop: 0,
+		fontWeight: 'bold',
+		padding: 10
 	},
 	menuButtonContainer: {
 		marginRight: 15
@@ -47,12 +58,5 @@ const styles = StyleSheet.create({
 	menuItemText: {
 		color: 'white',
 		fontWeight: 'bold'
-	},
-	menuTitle: {
-		color: 'lightgrey',
-		fontSize: 20,
-		marginTop: 0,
-		fontWeight: 'bold',
-		padding: 10
 	}
 });

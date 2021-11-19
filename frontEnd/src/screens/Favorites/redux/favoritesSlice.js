@@ -41,5 +41,5 @@ export const getFavoritesSlice = createSlice({
 });
 
 export const { resetGetFavoritesRequestStatus } = getFavoritesSlice.actions;
-export const selectFavoritesState = (state) => state.profile.currentState;
+export const selectFavoritesState = (state) => state.favorites.currentState;
 export default getFavoritesSlice.reducer;

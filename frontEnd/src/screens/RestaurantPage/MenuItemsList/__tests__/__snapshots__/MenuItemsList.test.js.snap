@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MenuItemsList /> should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "white",
+      "flex": 1,
+      "width": "100%",
+    }
+  }
+  testID="scrollContainer"
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+      }
+    }
+    testID="menuItemsTitleContainer"
+  >
+    <Text
+      style={
+        Object {
+          "color": "lightgrey",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "marginTop": 0,
+          "padding": 10,
+        }
+      }
+      testID="menuTitle"
+    >
+      Menu items
+    </Text>
+    <View
+      style={
+        Object {
+          "marginRight": 15,
+        }
+      }
+      testID="menuButtonContainer"
+    >
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "backgroundColor": "#EB8873",
+            "borderRadius": 20,
+            "opacity": 1,
+            "padding": 7,
+            "width": 110,
+          }
+        }
+        testID="menuButton"
+      >
+        <Text
+          style={
+            Object {
+              "color": "white",
+              "fontWeight": "bold",
+            }
+          }
+          testID="menuItemText"
+        >
+          + Menu Item
+        </Text>
+      </View>
+    </View>
+  </View>
+  <RCTScrollView
+    data={Array []}
+    disableVirtualization={false}
+    getItem={[Function]}
+    getItemCount={[Function]}
+    horizontal={false}
+    initialNumToRender={10}
+    keyExtractor={[Function]}
+    maxToRenderPerBatch={10}
+    onContentSizeChange={[Function]}
+    onEndReachedThreshold={2}
+    onLayout={[Function]}
+    onMomentumScrollEnd={[Function]}
+    onScroll={[Function]}
+    onScrollBeginDrag={[Function]}
+    onScrollEndDrag={[Function]}
+    removeClippedSubviews={false}
+    renderItem={[Function]}
+    scrollEventThrottle={50}
+    stickyHeaderIndices={Array []}
+    updateCellsBatchingPeriod={50}
+    viewabilityConfigCallbackPairs={Array []}
+    windowSize={21}
+  >
+    <View />
+  </RCTScrollView>
+</View>
+`;

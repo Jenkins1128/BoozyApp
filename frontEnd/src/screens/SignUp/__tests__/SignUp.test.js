@@ -2,7 +2,7 @@ import React from 'react';
 import SignUp from '../SignUp';
 import { reduxRender, cleanup, fireEvent, configureStore } from '../../../TestHelperFiles/redux/test-utils';
 import { baseUrl } from '../../../helpers/constants';
-import { ShowErrorAlert, isEmpty } from '../../../TestHelperFiles/Functions/SignupTestFuncs';
+import SignupTestFuncs from '../../../TestHelperFiles/Functions/SignupTestFuncs';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from '../../../TestHelperFiles/AppNavigators/AppNavigatorSignUp';
 import axios from 'axios';
@@ -53,17 +53,17 @@ describe('<SignUp />', () => {
 	describe('isEmpty', () => {
 		it('should return true', () => {
 			const currentState = {};
-			const result = isEmpty(currentState);
+			const result = SignupTestFuncs.isEmpty(currentState);
 			expect(result).toBeTruthy();
 		});
 	});
 
 	describe('showErrorAlert', () => {
 		it('calls sideEffect', () => {
-			jest.spyOn(ShowErrorAlert, 'showErrorAlert');
-			ShowErrorAlert.showErrorAlert('Username already exists...');
-			expect(ShowErrorAlert.showErrorAlert).toHaveBeenCalledTimes(1);
-			expect(ShowErrorAlert.showErrorAlert).toHaveBeenCalledWith('Username already exists...');
+			jest.spyOn(SignupTestFuncs, 'showErrorAlert');
+			SignupTestFuncs.showErrorAlert('Username already exists...');
+			expect(SignupTestFuncs.showErrorAlert).toHaveBeenCalledTimes(1);
+			expect(SignupTestFuncs.showErrorAlert).toHaveBeenCalledWith('Username already exists...');
 		});
 	});
 

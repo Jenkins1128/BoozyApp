@@ -32,7 +32,7 @@ describe('<SignUpHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should wrap goLogin and center items', () => {
+	it('should wrap goLogin and center items correctly', () => {
 		const goToLoginComponent = rendered.getByTestId('goToLogin');
 		const given = goToLoginComponent.props.style;
 		const result = {
@@ -51,7 +51,7 @@ describe('<SignUpHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render correct logInText styles', () => {
+	it('should render correct logInText styles correctly', () => {
 		const goToLoginComponent = rendered.getByTestId('logInText');
 		const given = goToLoginComponent.props.style;
 		const result = {
@@ -62,7 +62,7 @@ describe('<SignUpHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render correct boozyText styles', () => {
+	it('should render correct boozyText styles correctly', () => {
 		const boozyTextComponent = rendered.getByTestId('boozyText');
 		const given = boozyTextComponent.props.style;
 		const result = {
@@ -73,7 +73,7 @@ describe('<SignUpHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render correct boozySlogan styles', () => {
+	it('should render correct boozySlogan styles correctly', () => {
 		const boozySloganComponent = rendered.getByTestId('boozySlogan');
 		const given = boozySloganComponent.props.style;
 		const result = {

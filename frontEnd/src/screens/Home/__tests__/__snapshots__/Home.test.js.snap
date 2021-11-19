@@ -156,6 +156,7 @@ exports[`<Home /> should render correctly 1`] = `
               "opacity": 1,
             }
           }
+          testID="showFilterButton"
         >
           <Text />
         </View>

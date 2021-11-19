@@ -31,7 +31,7 @@ describe('<LogInHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render logoImage styles', () => {
+	it('should render logoImage styles correctly', () => {
 		const headerComponent = rendered.getByTestId('logoImage');
 		const given = headerComponent.props.style;
 		const result = {
@@ -42,7 +42,7 @@ describe('<LogInHeader />', () => {
 		expect(result).toMatchObject(given);
 	});
 
-	it('should render loadingIndicator styles', () => {
+	it('should render loadingIndicator styles correctly', () => {
 		const headerComponent = rendered.getByTestId('loadingIndicator');
 		const given = headerComponent.props.style;
 		const result = {

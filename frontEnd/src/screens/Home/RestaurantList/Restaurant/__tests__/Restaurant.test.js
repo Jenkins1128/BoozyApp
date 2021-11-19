@@ -70,7 +70,14 @@ describe('<Restaurant />', () => {
 	});
 
 	//interaction
-	it('should fire viewRestaurant button events', () => {
+	it('should fire dismissAndViewRestaurant button event on TouchableWithoutFeedback', () => {
+		const dismissAndViewRestaurantButton = rendered.getByTestId('container');
+		fireEvent.press(dismissAndViewRestaurantButton);
+		expect(dismiss).toHaveBeenCalledTimes(1);
+		expect(viewRestaurant).toHaveBeenCalledTimes(1);
+	});
+
+	it('should fire viewRestaurant button event', () => {
 		const viewRestaurantButton = rendered.getByTestId('viewRestaurant');
 		fireEvent.press(viewRestaurantButton);
 		expect(viewRestaurant).toHaveBeenCalledTimes(1);

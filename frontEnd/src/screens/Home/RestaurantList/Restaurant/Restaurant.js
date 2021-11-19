@@ -7,8 +7,8 @@ const Restaurant = ({ keyval, val, viewRestaurant, dismiss }) => {
 		viewRestaurant();
 	};
 	return (
-		<TouchableWithoutFeedback onPress={dismissAndViewRestaurant}>
-			<View testID={'container'} key={keyval} style={styles.container}>
+		<TouchableWithoutFeedback testID={'container'} onPress={dismissAndViewRestaurant}>
+			<View key={keyval} style={styles.container}>
 				<Text testID={'nameText'} style={styles.nameText}>
 					{val.name}
 				</Text>

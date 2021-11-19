@@ -8,7 +8,7 @@ import restaurantPageReducer from '../screens/RestaurantPage/redux/restaurantPag
 import starRatingReducer from '../screens/RestaurantPage/redux/starRatingSlice';
 import menuItemReducer from '../screens/RestaurantPage/redux/menuItemSlice';
 import favoriteReducer from '../screens/RestaurantPage/redux/favoriteSlice';
-import profileReducer from '../screens/Favorites/redux/favoritesSlice';
+import favoritesReducer from '../screens/Favorites/redux/favoritesSlice';
 import settingsReducer from '../screens/Settings/redux/settingsSlice';
 import appReducer from '../../appSlice';
 
@@ -24,7 +24,7 @@ export const store = configureStore({
 		starRating: starRatingReducer,
 		menuItem: menuItemReducer,
 		favorite: favoriteReducer,
-		profile: profileReducer,
+		favorites: favoritesReducer,
 		settings: settingsReducer
 	},
 	middleware: (getDefaultMiddleware) =>

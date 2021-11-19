@@ -78,7 +78,7 @@ exports[`<Searchbar /> should render correctly 1`] = `
     />
     <View
       accessible={true}
-      focusable={false}
+      focusable={true}
       onClick={[Function]}
       onResponderGrant={[Function]}
       onResponderMove={[Function]}
@@ -91,6 +91,7 @@ exports[`<Searchbar /> should render correctly 1`] = `
           "opacity": 1,
         }
       }
+      testID="showFilterButton"
     >
       <Text />
     </View>

@@ -4,15 +4,15 @@ import { cleanup, render, fireEvent } from '../../../../TestHelperFiles/redux/te
 
 describe('<Searchbar />', () => {
 	let state;
-	let updateLocation, dispatch, getDataFromFilter;
+	let updateLocation, dispatch, showFilterOverlay, getDataFromFilter;
 	let rendered;
 
 	beforeEach(() => {
 		state = {
 			location: 'France'
 		};
-		(updateLocation = jest.fn()), (dispatch = jest.fn()), (getDataFromFilter = jest.fn());
-		rendered = render(<Searchbar state={state} updateLocation={updateLocation} dispatch={dispatch} getDataFromFilter={getDataFromFilter} />);
+		(updateLocation = jest.fn()), (dispatch = jest.fn()), (showFilterOverlay = jest.fn()), (getDataFromFilter = jest.fn());
+		rendered = render(<Searchbar state={state} updateLocation={updateLocation} dispatch={dispatch} showFilterOverlay={showFilterOverlay} getDataFromFilter={getDataFromFilter} />);
 	});
 
 	afterEach(cleanup);
@@ -115,15 +115,21 @@ describe('<Searchbar />', () => {
 	});
 
 	//interaction
-	it('should fire searchInput onChangeText events', () => {
+	it('should fire searchInput onChangeText event', () => {
 		const searchInputComponent = rendered.getByTestId('searchInput');
 		fireEvent(searchInputComponent, 'changeText', 'new text');
 		expect(updateLocation).toHaveBeenCalledWith({ location: 'new text' });
 	});
 
-	it('should fire search button events', () => {
+	it('should fire search button event', () => {
 		const getDataFromFilterButton = rendered.getByText('search');
 		fireEvent.press(getDataFromFilterButton);
 		expect(getDataFromFilter).toHaveBeenCalledTimes(1);
+	});
+
+	it('should fire show filter button event', () => {
+		const showFilterButton = rendered.getByTestId('showFilterButton');
+		fireEvent.press(showFilterButton);
+		expect(showFilterOverlay).toHaveBeenCalledTimes(1);
 	});
 });

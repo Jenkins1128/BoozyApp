@@ -274,13 +274,13 @@ describe('<FilterView />', () => {
 	});
 
 	//interaction
-	it('should fire filterView location input onChangeText events', () => {
+	it('should fire filterView location input onChangeText event', () => {
 		const locationInputComponent = rendered.getByTestId('locationInput');
 		fireEvent(locationInputComponent, 'changeText', 'new text');
 		expect(updateLocation).toHaveBeenCalledWith({ location: 'new text' });
 	});
 
-	it('should fire filterView cuisine input onChangeText events', () => {
+	it('should fire filterView cuisine input onChangeText event', () => {
 		const updateCuisineComponent = rendered.getByTestId('cuisineInput');
 		fireEvent(updateCuisineComponent, 'changeText', 'new text');
 		expect(updateCuisine).toHaveBeenCalledWith({ cuisine: 'new text' });

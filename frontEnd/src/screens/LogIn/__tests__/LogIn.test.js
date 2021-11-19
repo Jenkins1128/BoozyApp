@@ -1,7 +1,7 @@
 import React from 'react';
 import LogIn from '../LogIn';
 import { reduxRender, cleanup, fireEvent, configureStore } from '../../../TestHelperFiles/redux/test-utils';
-import { isEmpty, ShowErrorAlert } from '../../../TestHelperFiles/Functions/LoginTestFuncs';
+import LoginTestFuncs from '../../../TestHelperFiles/Functions/LoginTestFuncs';
 import { baseUrl } from '../../../helpers/constants';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigatorLogIn from '../../../TestHelperFiles/AppNavigators/AppNavigatorLogIn';
@@ -52,17 +52,17 @@ describe('<LogIn />', () => {
 	describe('isEmpty', () => {
 		it('should return true', () => {
 			const currentState = {};
-			const result = isEmpty(currentState);
+			const result = LoginTestFuncs.isEmpty(currentState);
 			expect(result).toBeTruthy();
 		});
 	});
 
 	describe('showErrorAlert', () => {
 		it('calls sideEffect', () => {
-			jest.spyOn(ShowErrorAlert, 'showErrorAlert');
-			ShowErrorAlert.showErrorAlert('Username already exists...');
-			expect(ShowErrorAlert.showErrorAlert).toHaveBeenCalledTimes(1);
-			expect(ShowErrorAlert.showErrorAlert).toHaveBeenCalledWith('Username already exists...');
+			jest.spyOn(LoginTestFuncs, 'showErrorAlert');
+			LoginTestFuncs.showErrorAlert('Username already exists...');
+			expect(LoginTestFuncs.showErrorAlert).toHaveBeenCalledTimes(1);
+			expect(LoginTestFuncs.showErrorAlert).toHaveBeenCalledWith('Username already exists...');
 		});
 	});
 
