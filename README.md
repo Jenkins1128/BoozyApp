@@ -19,30 +19,18 @@ cd to  "BoozyApp/frontEnd” in terminal.
 
 ### Download Dependencies
 npm install
-  
-* "@expo/vector-icons"
-* "@react-navigation/core"
-* "react-navigation/material-bottom-tabs"
-* "@react-navigation/native"
-* "@react-navigation/stack"
-* "@reduxjs/toolkit"
-* "axios"
-* "core-js"
-* "expo"
-* "expo-location"
-* "expo-status-bar"
-* "react"
-* "react-dom"
-* "react-native"
-* "react-native-gesture-handler"
-* "react-native-maps"
-* "react-native-paper"
-* "react-native-reanimated"
-* "react-native-screens"
-* "react-native-star-rating"
-* "react-native-vector-icons"
-* "react-native-web"
-* "react-redux"
+
+#### Technologies
+
+* React Native
+* Redux
+* Axios 
+* Maps
+* Navigation 
+* Expo
+* React Native Testing Library
+* Jest
+* Circle CI/CD
 
 ### Run BoozyApp
 Execute “npm start” in terminal.
