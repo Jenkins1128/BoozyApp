@@ -1,0 +1,76 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Favorites /> should render correctly 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "center",
+      "paddingTop": 0,
+      "width": "100%",
+    }
+  }
+  testID="container"
+>
+  <View
+    style={
+      Object {
+        "flex": 1,
+      }
+    }
+    testID="myFavoritesContainer"
+  >
+    <Text
+      style={
+        Object {
+          "color": "#EB8873",
+          "fontFamily": "Arial",
+          "fontSize": 30,
+          "fontWeight": "bold",
+        }
+      }
+      testID="myFavoritesText"
+    >
+      My Favorites
+    </Text>
+  </View>
+  <View
+    style={
+      Object {
+        "flex": 7,
+      }
+    }
+    testID="myFavoritesListContainer"
+  >
+    <RCTScrollView
+      data={Array []}
+      disableVirtualization={false}
+      getItem={[Function]}
+      getItemCount={[Function]}
+      horizontal={false}
+      initialNumToRender={10}
+      keyExtractor={[Function]}
+      maxToRenderPerBatch={10}
+      onContentSizeChange={[Function]}
+      onEndReachedThreshold={2}
+      onLayout={[Function]}
+      onMomentumScrollEnd={[Function]}
+      onScroll={[Function]}
+      onScrollBeginDrag={[Function]}
+      onScrollEndDrag={[Function]}
+      removeClippedSubviews={false}
+      renderItem={[Function]}
+      scrollEventThrottle={50}
+      stickyHeaderIndices={Array []}
+      updateCellsBatchingPeriod={50}
+      viewabilityConfigCallbackPairs={Array []}
+      windowSize={21}
+    >
+      <View />
+    </RCTScrollView>
+  </View>
+</RCTSafeAreaView>
+`;

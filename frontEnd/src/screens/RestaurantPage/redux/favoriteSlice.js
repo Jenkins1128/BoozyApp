@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl } from '../../../helpers/constants';
 
 const initialState = {
 	currentState: {}
@@ -9,12 +10,12 @@ export const favoriteAsync = createAsyncThunk('favoriteAsync/status', async (dat
 	const { restaurantId, name } = data;
 	try {
 		//favorite restaurant
-		await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/user/add', {
+		await axios.post(`${baseUrl}/user/add`, {
 			restaurantId: restaurantId,
 			name: name
 		});
 		//add restaurants to your favorites
-		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites', {
+		const response = await axios.post(`${baseUrl}/favorites`, {
 			restaurantId: restaurantId,
 			name: name
 		});
@@ -36,7 +37,7 @@ const favoriteSlice = createSlice({
 		builder
 			.addCase(favoriteAsync.fulfilled, (state, { payload }) => {
 				Object.assign(state.currentState, {
-					favoriteColor: payload[0]['contains'] ? 'red' : 'white',
+					favoriteColor: payload ? (payload[0]['contains'] ? 'red' : 'white') : 'white',
 					favoriteRequestStatus: 'fulfilled'
 				});
 			})

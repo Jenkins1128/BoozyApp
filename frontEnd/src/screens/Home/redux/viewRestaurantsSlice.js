@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl } from '../../../helpers/constants';
 
 const initialState = {
 	currentState: {}
@@ -16,11 +17,11 @@ export const viewRestaurantsAsync = createAsyncThunk('viewRestaurantsAsync/statu
 	}
 	const name = state.restaurantsArray[index]['name'];
 	try {
-		const alreadyFavoritedResponse = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/favorites', {
+		const alreadyFavoritedResponse = await axios.post(`${baseUrl}/favorites`, {
 			restaurantId: restaurantId,
 			name: name
 		});
-		const alreadyRatedResponse = await axios.get(`https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/${restaurantId}/review`);
+		const alreadyRatedResponse = await axios.get(`${baseUrl}/${restaurantId}/review`);
 		const categories = state.restaurantsArray[index]['categories'] ? state.restaurantsArray[index]['categories'].map((obj) => obj.title) : [];
 		const categoriesString = categories.length ? categories.join(', ') : '';
 		const newState = {

@@ -4,9 +4,9 @@ import logo from '../../../images/logo.png';
 
 const LogInHeader = ({ state }) => {
 	return (
-		<View style={styles.header}>
-			<Image source={logo} style={styles.logoImage}></Image>
-			{state.isLoading && <ActivityIndicator style={styles.loadingIndicator} size='large' color='#fff' />}
+		<View testID={'header'} style={styles.header}>
+			<Image testID={'logoImage'} source={logo} style={styles.logoImage}></Image>
+			{state.isLoading && <ActivityIndicator testID={'loadingIndicator'} style={styles.loadingIndicator} size='large' color='#fff' />}
 		</View>
 	);
 };

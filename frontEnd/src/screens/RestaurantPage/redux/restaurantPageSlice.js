@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl, defaultRestaurantImageUrl } from '../../../helpers/constants';
 
 const initialState = {
 	currentState: {
 		restaurantId: '',
 		restaurantName: '',
-		restaurantImage: 'https://boozyimage.s3.us-east-2.amazonaws.com/logo.png',
+		restaurantImage: defaultRestaurantImageUrl,
 		phoneNumber: '',
 		allCategories: '',
 		rating: 0.0,
@@ -23,7 +24,7 @@ const initialState = {
 
 export const getMenuItemsAsync = createAsyncThunk('getMenuItemsAsync/status', async (restaurantId, { rejectWithValue }) => {
 	try {
-		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/menu/list', {
+		const response = await axios.post(`${baseUrl}/menu/list`, {
 			restaurantId: restaurantId
 		});
 		return response.data;

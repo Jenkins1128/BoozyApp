@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<LogInHeader /> should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 2,
+      "marginTop": 100,
+    }
+  }
+  testID="header"
+>
+  <Image
+    source={1}
+    style={
+      Object {
+        "height": "40%",
+        "opacity": 0.7,
+        "width": "30%",
+      }
+    }
+    testID="logoImage"
+  />
+  <ActivityIndicator
+    animating={true}
+    color="#fff"
+    hidesWhenStopped={true}
+    size="large"
+    style={
+      Object {
+        "marginTop": 20,
+      }
+    }
+    testID="loadingIndicator"
+  />
+</View>
+`;

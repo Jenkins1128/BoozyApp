@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { baseUrl } from '../../../helpers/constants';
 
 const initialState = {
 	currentState: {}
 };
 
-export const logoutAsync = createAsyncThunk('logoutAsync/status', async (data, { rejectWithValue }) => {
+export const logoutAsync = createAsyncThunk('logoutAsync/status', async (data = null, { rejectWithValue }) => {
 	try {
-		const response = await axios.post('https://qvsn1ge17c.execute-api.us-east-2.amazonaws.com/latest/api/logout');
+		const response = await axios.post(`${baseUrl}/logout`);
 		return response.status;
 	} catch (err) {
 		return rejectWithValue(err.response.data);

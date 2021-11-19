@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignUpInput /> should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "flex": 3,
+      "paddingHorizontal": 40,
+      "width": "100%",
+    }
+  }
+  testID="inputContainer"
+>
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="Email"
+    placeholderTextColor="#EB8873"
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": 30,
+        "borderTopColor": "#ededed",
+        "borderTopWidth": 2,
+        "color": "#EB8873",
+        "marginBottom": 10,
+        "padding": 30,
+      }
+    }
+    testID="emailInput"
+    underlineColorAndroid="transparent"
+    value="xxx@gmail.com"
+  />
+  <TextInput
+    allowFontScaling={true}
+    onChangeText={[Function]}
+    placeholder="Password"
+    placeholderTextColor="#EB8873"
+    rejectResponderTermination={true}
+    secureTextEntry={true}
+    style={
+      Object {
+        "backgroundColor": "#FFFFFF",
+        "borderRadius": 30,
+        "color": "#EB8873",
+        "marginBottom": 50,
+        "padding": 30,
+      }
+    }
+    testID="passwordInput"
+    underlineColorAndroid="transparent"
+    value="xxxxxx"
+  />
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "center",
+        "backgroundColor": "#EB8873",
+        "borderRadius": 70,
+        "color": "#fff",
+        "elevation": 8,
+        "height": 90,
+        "justifyContent": "center",
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+    testID="signupPressed"
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 24,
+          "fontWeight": "bold",
+        }
+      }
+      testID="signUpText"
+    >
+      Sign Up
+    </Text>
+  </View>
+</View>
+`;

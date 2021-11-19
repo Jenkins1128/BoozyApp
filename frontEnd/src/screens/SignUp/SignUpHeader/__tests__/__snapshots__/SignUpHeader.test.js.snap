@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignUpHeader /> should render correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "flex": 2,
+      "marginTop": 40,
+    }
+  }
+  testID="header"
+>
+  <View
+    accessible={true}
+    focusable={false}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "flex-end",
+        "backgroundColor": "#EB8873",
+        "borderRadius": 70,
+        "color": "#fff",
+        "height": 60,
+        "justifyContent": "center",
+        "marginRight": 5,
+        "opacity": 1,
+        "padding": 20,
+        "width": 100,
+      }
+    }
+    testID="goToLogin"
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 14,
+          "fontWeight": "bold",
+        }
+      }
+      testID="logInText"
+    >
+      Log In
+    </Text>
+  </View>
+  <Text
+    style={
+      Object {
+        "color": "#EB8873",
+        "fontFamily": "BradleyHandBold",
+        "fontSize": 90,
+      }
+    }
+    testID="boozyText"
+  >
+    Boozy
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "white",
+        "fontFamily": "BradleyHandBold",
+        "fontSize": 25,
+      }
+    }
+    testID="boozySlogan"
+  >
+    Happy hours, Happy you.
+  </Text>
+</View>
+`;

@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, FlatList, View, Alert, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { StyleSheet, Text, FlatList, View, Alert, SafeAreaView, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { getOS } from '../../helpers/os';
 import Favorite from './Favorite/Favorite';
-import { getFavoritesAsync, resetGetFavoritesRequestStatus, selectFavoritesState } from './redux/profileSlice';
+import { getFavoritesAsync, resetGetFavoritesRequestStatus, selectFavoritesState } from './redux/favoritesSlice';
 
-const Profile = ({ navigation }) => {
+const Favorites = ({ navigation }) => {
 	const state = useSelector(selectFavoritesState);
 	const dispatch = useDispatch();
 
@@ -40,23 +41,25 @@ const Profile = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.myFavoritesContainer}>
-				<Text style={styles.myFavoritesText}>My Favorites</Text>
+		<SafeAreaView testID={'container'} style={styles.container}>
+			<View testID={'myFavoritesContainer'} style={styles.myFavoritesContainer}>
+				<Text testID={'myFavoritesText'} style={styles.myFavoritesText}>
+					My Favorites
+				</Text>
 			</View>
-			<View style={styles.myFavoritesListContainer}>
+			<View testID={'myFavoritesListContainer'} style={styles.myFavoritesListContainer}>
 				<FlatList data={state.restaurantsArray} keyExtractor={(item, i) => i.toString()} renderItem={favorite} />
 			</View>
 		</SafeAreaView>
 	);
 };
 
-export default Profile;
+export default Favorites;
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+		paddingTop: getOS() === 'android' ? StatusBar.currentHeight : 0,
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -73,12 +76,5 @@ const styles = StyleSheet.create({
 		fontFamily: 'Arial',
 		fontWeight: 'bold',
 		fontSize: 30
-	},
-	header: {
-		backgroundColor: '#E91E63',
-		justifyContent: 'center',
-		alignItems: 'center',
-		borderBottomWidth: 10,
-		borderBottomColor: '#ddd'
 	}
 });

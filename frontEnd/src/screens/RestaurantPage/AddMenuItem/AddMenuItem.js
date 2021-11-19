@@ -4,18 +4,23 @@ import { View, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, Anim
 const AddMenuItem = ({ bounceValue, menuItemState, dispatch, updatePrice, updateDescription, getDataFromMenuItem, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<Animated.View style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
-				<View style={styles.addMenuItemHeader}>
-					<View style={styles.addMenuItemTitleContainer}>
-						<Text style={styles.addMenuItemTitle}>Add Menu Item</Text>
+			<Animated.View testID={'subView'} style={[styles.subView, { transform: [{ translateY: bounceValue }] }]}>
+				<View testID={'addMenuItemHeader'} style={styles.addMenuItemHeader}>
+					<View testID={'addMenuItemTitleContainer'} style={styles.addMenuItemTitleContainer}>
+						<Text testID={'addMenuItemTitle'} style={styles.addMenuItemTitle}>
+							Add Menu Item
+						</Text>
 					</View>
 					<View>
-						<TouchableOpacity onPress={dismiss} style={styles.cancelButton}>
-							<Text style={styles.cancelText}>Cancel</Text>
+						<TouchableOpacity testID={'cancelButton'} onPress={dismiss} style={styles.cancelButton}>
+							<Text testID={'cancelText'} style={styles.cancelText}>
+								Cancel
+							</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 				<TextInput
+					testID={'priceInput'}
 					style={styles.priceStyle}
 					keyboardType={'numeric'}
 					multiline={false}
@@ -26,6 +31,7 @@ const AddMenuItem = ({ bounceValue, menuItemState, dispatch, updatePrice, update
 					placeholder='Enter Price'
 				/>
 				<TextInput
+					testID={'descriptionInput'}
 					style={styles.descriptionStyle}
 					multiline={false}
 					returnKeyType='next'
@@ -33,8 +39,10 @@ const AddMenuItem = ({ bounceValue, menuItemState, dispatch, updatePrice, update
 					value={menuItemState.description}
 					placeholder='Enter menu item'
 				/>
-				<TouchableOpacity onPress={getDataFromMenuItem} style={styles.addMenuItemButton}>
-					<Text style={styles.addMenuItemText}>Submit</Text>
+				<TouchableOpacity testID={'addMenuItemButton'} onPress={getDataFromMenuItem} style={styles.addMenuItemButton}>
+					<Text testID={'addMenuItemText'} style={styles.addMenuItemText}>
+						Submit
+					</Text>
 				</TouchableOpacity>
 			</Animated.View>
 		</TouchableWithoutFeedback>
@@ -71,7 +79,6 @@ const styles = StyleSheet.create({
 		padding: 10,
 		borderRadius: 20
 	},
-
 	priceStyle: {
 		fontSize: 18,
 		textAlign: 'center',

@@ -17,38 +17,40 @@ import Settings from './src/screens/Settings/Settings';
 import Favorites from './src/screens/Favorites/Favorites';
 import { selectIsSignedIn, setSignedIn } from './appSlice';
 
-const Tab = createMaterialBottomTabNavigator();
+const BottomTabs = createMaterialBottomTabNavigator();
 
 const HomeTabNav = () => {
 	return (
-		<Tab.Navigator activeColor='#EB8873' inactiveColor='gray' barStyle={{ backgroundColor: '#fff' }}>
-			<Tab.Screen
-				name='Home'
+		<BottomTabs.Navigator activeColor='#EB8873' inactiveColor='gray' barStyle={{ backgroundColor: '#fff' }}>
+			<BottomTabs.Screen
+				name='HomeTab'
 				component={Home}
 				options={{
 					tabBarLabel: 'Home',
 					tabBarIcon: ({ color }) => <Icon name={`ios-home`} color={color} size={25} />
 				}}
 			/>
-			<Tab.Screen
-				name='Favorites'
+			<BottomTabs.Screen
+				name='FavoritesTab'
 				component={Favorites}
 				options={{
 					tabBarLabel: 'Favorites',
 					tabBarIcon: ({ color }) => <Icon name='ios-heart' color={color} size={25} />
 				}}
 			/>
-			<Tab.Screen
-				name='Settings'
+			<BottomTabs.Screen
+				name='SettingsTab'
 				component={Settings}
 				options={{
 					tabBarLabel: 'Settings',
 					tabBarIcon: ({ color }) => <Icon name='ios-settings' color={color} size={25} />
 				}}
 			/>
-		</Tab.Navigator>
+		</BottomTabs.Navigator>
 	);
 };
+
+const AppStack = createStackNavigator();
 
 const AppHome = () => {
 	const signedIn = useSelector(selectIsSignedIn);
@@ -98,8 +100,6 @@ const AppHome = () => {
 		);
 	}
 };
-
-const AppStack = createStackNavigator();
 
 export default function App() {
 	return (

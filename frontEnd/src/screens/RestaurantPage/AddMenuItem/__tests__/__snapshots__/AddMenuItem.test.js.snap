@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AddMenuItem /> should render correctly 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "backgroundColor": "#FFFFFF",
+      "borderRadius": 30,
+      "padding": 20,
+      "position": "absolute",
+      "transform": Array [
+        Object {
+          "translateY": undefined,
+        },
+      ],
+    }
+  }
+  testID="subView"
+>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "marginBottom": 20,
+      }
+    }
+    testID="addMenuItemHeader"
+  >
+    <View
+      style={
+        Object {
+          "marginRight": 20,
+        }
+      }
+      testID="addMenuItemTitleContainer"
+    >
+      <Text
+        style={
+          Object {
+            "color": "#EB8873",
+            "fontSize": 20,
+            "fontWeight": "bold",
+          }
+        }
+        testID="addMenuItemTitle"
+      >
+        Add Menu Item
+      </Text>
+    </View>
+    <View>
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#FFFFFF",
+            "borderRadius": 20,
+            "justifyContent": "center",
+            "opacity": 1,
+            "padding": 10,
+          }
+        }
+        testID="cancelButton"
+      >
+        <Text
+          style={
+            Object {
+              "color": "#EB8873",
+              "fontWeight": "bold",
+            }
+          }
+          testID="cancelText"
+        >
+          Cancel
+        </Text>
+      </View>
+    </View>
+  </View>
+  <TextInput
+    allowFontScaling={true}
+    keyboardType="numeric"
+    multiline={false}
+    onChangeText={[Function]}
+    placeholder="Enter Price"
+    rejectResponderTermination={true}
+    returnKeyType="next"
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+        "textAlign": "center",
+      }
+    }
+    testID="priceInput"
+    underlineColorAndroid="transparent"
+    value="6"
+  />
+  <TextInput
+    allowFontScaling={true}
+    multiline={false}
+    onChangeText={[Function]}
+    placeholder="Enter menu item"
+    rejectResponderTermination={true}
+    returnKeyType="next"
+    style={
+      Object {
+        "fontSize": 18,
+        "marginBottom": 20,
+        "textAlign": "center",
+      }
+    }
+    testID="descriptionInput"
+    underlineColorAndroid="transparent"
+    value="test"
+  />
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#EB8873",
+        "borderRadius": 20,
+        "justifyContent": "center",
+        "opacity": 1,
+        "padding": 10,
+      }
+    }
+    testID="addMenuItemButton"
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontWeight": "bold",
+        }
+      }
+      testID="addMenuItemText"
+    >
+      Submit
+    </Text>
+  </View>
+</View>
+`;

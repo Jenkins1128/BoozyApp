@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<MenuItem /> should render correctly 1`] = `
+<View
+  accessible={true}
+  focusable={true}
+  onClick={[Function]}
+  onResponderGrant={[Function]}
+  onResponderMove={[Function]}
+  onResponderRelease={[Function]}
+  onResponderTerminate={[Function]}
+  onResponderTerminationRequest={[Function]}
+  onStartShouldSetResponder={[Function]}
+  style={
+    Object {
+      "borderBottomColor": "#ededed",
+      "borderBottomWidth": 2,
+      "padding": 20,
+      "paddingRight": 100,
+    }
+  }
+  testID="container"
+>
+  <Text
+    style={
+      Object {
+        "color": "black",
+      }
+    }
+    testID="priceText"
+  >
+    $
+    6
+  </Text>
+  <Text
+    style={
+      Object {
+        "color": "black",
+      }
+    }
+    testID="descText"
+  >
+    test
+  </Text>
+</View>
+`;

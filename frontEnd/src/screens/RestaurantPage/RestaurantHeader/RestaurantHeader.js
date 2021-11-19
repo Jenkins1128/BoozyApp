@@ -1,30 +1,31 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import StarRating from 'react-native-star-rating';
-import background from '../../../images/background.jpeg';
 import { AntDesign } from '@expo/vector-icons';
 
 const RestaurantHeader = ({ state, onStarRatingPressed, favorite, dismiss }) => {
 	return (
-		<TouchableWithoutFeedback onPress={dismiss}>
+		<TouchableWithoutFeedback testID={'header'} onPress={dismiss}>
 			<View style={styles.header}>
-				<Image source={{ uri: state.restaurantImage }} style={styles.logoImage}></Image>
-				<View style={styles.titleHeader}>
-					<Text style={styles.restaurantName}> {state.restaurantName} </Text>
-					<TouchableOpacity onPress={favorite} style={styles.favoriteButton}>
+				<Image testID={'logoImage'} source={{ uri: state.restaurantImage }} style={styles.logoImage}></Image>
+				<View testID={'titleHeader'} style={styles.titleHeader}>
+					<Text testID={'restaurantName'} style={styles.restaurantName}>
+						{state.restaurantName}
+					</Text>
+					<TouchableOpacity testID={'favoriteButton'} onPress={favorite} style={styles.favoriteButton}>
 						<AntDesign name='heart' style={{ color: state.favoriteColor, fontSize: 30 }} />
 					</TouchableOpacity>
 				</View>
-				<View style={styles.titleBody}>
-					<View style={styles.infoContainer}>
-						<Text style={styles.categoriesText}>
+				<View testID={'titleBody'} style={styles.titleBody}>
+					<View testID={'infoContainer'} style={styles.infoContainer}>
+						<Text testID={'categoriesText'} style={styles.categoriesText}>
 							{state.allCategories} • {state.rating}★
 						</Text>
-						<Text style={styles.phoneNumberText}>
+						<Text testID={'phoneNumberText'} style={styles.phoneNumberText}>
 							{state.phoneNumber} • {state.reviews} Yelp Reviews
 						</Text>
 					</View>
-					<View style={styles.starRatingContainer}>
+					<View testID={'starRatingContainer'} style={styles.starRatingContainer}>
 						<StarRating
 							disabled={false}
 							emptyStar={'ios-star-outline'}
@@ -54,10 +55,6 @@ const styles = StyleSheet.create({
 		width: '100%',
 		justifyContent: 'center',
 		backgroundColor: '#EB8873'
-	},
-	backgroundImage: {
-		flex: 1,
-		opacity: 0.95
 	},
 	titleHeader: {
 		flexDirection: 'row',
@@ -101,6 +98,5 @@ const styles = StyleSheet.create({
 	starRatingContainer: {
 		flex: 1,
 		paddingBottom: 0
-	},
-	menuButtonContainer: {}
+	}
 });

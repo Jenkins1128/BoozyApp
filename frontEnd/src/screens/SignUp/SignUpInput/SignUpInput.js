@@ -3,9 +3,18 @@ import { View, TextInput, Text, TouchableOpacity, StyleSheet } from 'react-nativ
 
 const SignUpInput = ({ state, dispatch, updateEmail, updatePassword, signupPressed }) => {
 	return (
-		<View style={styles.inputContainer}>
-			<TextInput style={styles.emailInput} onChangeText={(email) => dispatch(updateEmail({ email: email }))} value={state.email} placeholder='Email' placeholderTextColor='#EB8873' underlineColorAndroid='transparent'></TextInput>
+		<View testID={'inputContainer'} style={styles.inputContainer}>
 			<TextInput
+				testID={'emailInput'}
+				style={styles.emailInput}
+				onChangeText={(email) => dispatch(updateEmail({ email: email }))}
+				value={state.email}
+				placeholder='Email'
+				placeholderTextColor='#EB8873'
+				underlineColorAndroid='transparent'
+			></TextInput>
+			<TextInput
+				testID={'passwordInput'}
 				style={styles.passwordInput}
 				secureTextEntry={true}
 				onChangeText={(password) => dispatch(updatePassword({ password: password }))}
@@ -14,8 +23,10 @@ const SignUpInput = ({ state, dispatch, updateEmail, updatePassword, signupPress
 				placeholderTextColor='#EB8873'
 				underlineColorAndroid='transparent'
 			></TextInput>
-			<TouchableOpacity onPress={signupPressed} style={styles.signUpButton}>
-				<Text style={styles.signUpText}>Sign Up</Text>
+			<TouchableOpacity testID={'signupPressed'} onPress={signupPressed} style={styles.signUpButton}>
+				<Text testID={'signUpText'} style={styles.signUpText}>
+					Sign Up
+				</Text>
 			</TouchableOpacity>
 		</View>
 	);

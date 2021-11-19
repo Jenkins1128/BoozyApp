@@ -7,6 +7,7 @@ const BoozyMap = ({ setMapRef, state, viewRestaurants, dismiss }) => {
 	return (
 		<TouchableWithoutFeedback onPress={dismiss}>
 			<MapView
+				testID={'mapView'}
 				ref={(ref) => {
 					setMapRef(ref);
 				}}
@@ -19,7 +20,7 @@ const BoozyMap = ({ setMapRef, state, viewRestaurants, dismiss }) => {
 					return (
 						<Marker key={index} coordinate={{ latitude: marker.lat, longitude: marker.long }}>
 							<Image style={{ width: 30, height: 40 }} source={logo} />
-							<Callout style={styles.callout} onPress={() => viewRestaurants(index)}>
+							<Callout testID={'calloutBtn'} style={styles.callout} onPress={() => viewRestaurants(index)}>
 								<Text>{marker.name}</Text>
 								<Text>{marker.address}</Text>
 							</Callout>
