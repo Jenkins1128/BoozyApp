@@ -4,7 +4,7 @@
 		"slug": "Boozy",
 		"version": "1.0.0",
 		"orientation": "portrait",
-		"icon": "./assets/icon.png",
+		"icon": "./assets/BoozyAppIcon.png",
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
@@ -15,15 +15,10 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true,
 			"bundleIdentifier": "com.Isaiah-Jenkins.Boozy"
 		},
 		"android": {
-			"package": "com.IsaiahJenkins.Boozy",
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#FFFFFF"
-			}
+			"package": "com.IsaiahJenkins.Boozy"
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
